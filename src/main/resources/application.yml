@@ -1,0 +1,87 @@
+# default
+spring:
+  profiles:
+    active: test
+    group:
+      prod: prod, auth, prod-db
+      local: local, auth, local-common
+      test: test, auth, local-common
+
+---
+# local-common ??
+spring:
+  config:
+    activate:
+      on-profile: local-common
+
+  devtools:
+    livereload:
+      enabled: true
+# cors ??
+cors:
+  allowedOrigins: '*'
+  allowedMethods: GET,POST,PUT,PATCH,DELETE,OPTIONS
+  allowedHeaders: '*'
+  maxAgeSec: 3600
+
+server:
+  port: 8080
+
+---
+# test ??
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE  # db ?? ??
+  #  sql:
+  #    init:
+  #      data-locations: classpath:data-for-h2.sql # ???? ???? script
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true # hibernate? ????? ? data.sql ???? ?? ??
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: create-drop
+logging:
+  level:
+    root: DEBUG
+    org:
+      springframework:
+        security: DEBUG
+
+---
+# local ??
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ddokddak?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: 1234
+#  sql:
+#    init:
+#      data-locations: classpath:data-for-mysql.sql # ???? ???? script
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    defer-datasource-initialization: true # hibernate? ????? ? data.sql ???? ?? ??
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update # ???? ???? ??, update? ??
+logging:
+  level:
+    root: DEBUG
+    org:
+      springframework:
+        security: DEBUG
+---
