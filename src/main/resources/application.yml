@@ -19,7 +19,7 @@ spring:
       enabled: true
 # cors 설정
 cors:
-  allowedOrigins: '*'
+  allowedOrigins: 'http://localhost:3000'
   allowedMethods: GET,POST,PUT,PATCH,DELETE,OPTIONS
   allowedHeaders: '*'
   maxAgeSec: 3600

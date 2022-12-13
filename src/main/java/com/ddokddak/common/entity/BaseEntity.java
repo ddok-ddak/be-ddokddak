@@ -1,4 +1,4 @@
-package com.ddokddak.common.domain;
+package com.ddokddak.common.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
