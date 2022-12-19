@@ -1,8 +1,12 @@
 package com.ddokddak.category.entity;
 
+import com.ddokddak.category.dto.CategoryModifyRequest;
 import com.ddokddak.common.entity.BaseTimeEntity;
 import com.ddokddak.member.Member;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -10,6 +14,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql="UPDATE category SET delete_yn = 'Y', modified_at = NOW() WHERE id = ?")
+@Where(clause = "delete_yn = 'N'")
 @Entity
 public class Category extends BaseTimeEntity {
 
@@ -28,9 +34,6 @@ public class Category extends BaseTimeEntity {
     @Column(length = 1)
     private Integer level;
 
-    @Column(length = 1)
-    private String deleteYn = "N";
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="PARENT_ID")
     private Category mainCategory;
@@ -39,8 +42,20 @@ public class Category extends BaseTimeEntity {
     @JoinColumn(name="MEMBER_ID")
     private Member member;
 
+    @Column(length = 1)
+    private String deleteYn = "N";
+
     // 이하 선택 사항
     @OneToMany(mappedBy="mainCategory")
     private List<Category> subCategories;
 
+    public void modifyAttribute(CategoryModifyRequest req) {
+        this.color = req.color();
+        this.name = req.name();
+    }
+
+    public void modifyCategoryRelation(CategoryModifyRequest req, Category mainCategory) {
+        this.level = req.level();
+        this.mainCategory = mainCategory;
+    }
 }
