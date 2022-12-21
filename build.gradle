@@ -31,6 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.projectlombok:lombok:1.18.20'
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.9' // 스웨거
+    implementation 'com.google.guava:guava:31.0.1-jre'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
