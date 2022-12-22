@@ -78,7 +78,7 @@ spring:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: create-drop # 데이터를 쌓아두기 위해, update로 지정
+      ddl-auto: create-drop # 데이터를 쌓아두려면, 해당 속성을 update로 지정
 logging:
   level:
     root: DEBUG
