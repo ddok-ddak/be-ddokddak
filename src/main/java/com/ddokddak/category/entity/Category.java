@@ -1,13 +1,16 @@
 package com.ddokddak.category.entity;
 
-import com.ddokddak.category.dto.CategoryModifyRequest;
+import com.ddokddak.category.dto.CategoryRelationModifyRequest;
+import com.ddokddak.category.dto.CategoryValueModifyRequest;
 import com.ddokddak.common.entity.BaseTimeEntity;
 import com.ddokddak.member.Member;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,8 +26,8 @@ public class Category extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO: 한 사람이 가질 수 있는 카테고리의 이름은 중복이 불가능하다.
-    // 한, 영만 가능, 특수문자 금지 - 정규식 추가
+    // 하나의 카테고리 그룹 내에서 카테고리의 이름은 중복이 불가능하다.
+    // TODO: 한, 영만 가능, 특수문자 금지 - 정규식 추가
     @Column(length = 10, nullable = false)
     private String name;
 
@@ -47,15 +50,19 @@ public class Category extends BaseTimeEntity {
 
     // 이하 선택 사항
     @OneToMany(mappedBy="mainCategory")
-    private List<Category> subCategories;
+    private List<Category> subCategories = new ArrayList<>();
 
-    public void modifyAttribute(CategoryModifyRequest req) {
-        this.color = req.color();
-        this.name = req.name();
+    public void modifyColor(String color) {
+        this.color = color;
     }
 
-    public void modifyCategoryRelation(CategoryModifyRequest req, Category mainCategory) {
-        this.level = req.level();
+    public void modifyName(String name) {
+        this.name = name;
+    }
+
+    public void modifyCategoryRelation(Integer level, @Nullable Category mainCategory) {
+        this.level = level;
         this.mainCategory = mainCategory;
     }
+
 }
