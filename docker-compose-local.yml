@@ -22,13 +22,9 @@ services:
       # ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
       timeout: 10s
       retries: 10
-
-  dd_app:
-    container_name: dd_app
-#     image:  # 도커허브에 이미지 업로드하면 변경
-    build:
-      context: .
-      dockerfile: Dockerfile
+  app:
+    container_name: dd_be_app
+    image: ddokddak/back # 도커허브에 이미지 업로드하면 변경
     ports:
       - "8080:8080"
     environment:
