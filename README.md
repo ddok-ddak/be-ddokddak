@@ -17,3 +17,11 @@ docker-compose -f ./docker-compose-local.yml up -d
 http://localhost:8080/swagger-ui/index.html
 ```
 - 로컬에서 프로젝트를 실행했을 때, 위 주소로 접속하여 api를 간단히 테스트할 수 있습니다.
+
+### rest-docs 링크 주소
+```
+http://localhost:8080/docs/index.html
+```
+- 로컬에서 프로젝트를 실행했을 때, 위 주소로 접속하여 rest-docs를 활용해 제작된 api 문서를 확인할 수 있습니다.
+- [문서의 html 파일 경로](./src/main/resources/static/docs)
+  - 위 디렉토리 이하에서 html 파일을 확인해보실 수도 있습니다.

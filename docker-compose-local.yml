@@ -24,7 +24,7 @@ services:
       retries: 10
   app:
     container_name: dd_be_app
-    image: ddokddak/back # 도커허브에 이미지 업로드하면 변경
+    image: ddokddak/back
     ports:
       - "8080:8080"
     environment:
