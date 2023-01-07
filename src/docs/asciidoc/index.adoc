@@ -1,0 +1,16 @@
+= DDOKDDAK(가제) REST Docs
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[introduction]]
+== 소개
+똑딱(가제) 앱의 API Docs 입니다.
+
+- 똑딱은 금보다도 귀한 우리의 시간을 더 효율적으로 활용하는 것을 돕기 위해 제작된 서비스입니다.
+- 소비한 시간을 기록하고 당신의 시간을 돌아보세요.
+
+include::src/docs/asciidoc/category.adoc[]
