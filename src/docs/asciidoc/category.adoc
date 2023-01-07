@@ -1,0 +1,24 @@
+[[Category-API]]
+== Category-API
+
+[[Modify-Category-Value]]
+=== Category 속성 정보 수정
+
+operation::modify-category-value[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']
+
+[[Modify-Category-Relation]]
+=== Category 관계 정보 수정
+
+operation::modify-category-relation[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']
+
+[[Modify-Category]]
+=== Category 수정
+- 요구사항에 없으나 생성해둔 API입니다.
+
+operation::modify-category[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']
+
+
+[[Delete-Category]]
+=== Category 삭제
+
+operation::delete-category[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']

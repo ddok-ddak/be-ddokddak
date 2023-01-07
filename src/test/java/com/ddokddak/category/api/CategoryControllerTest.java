@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,12 +18,18 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Slf4j
+@AutoConfigureRestDocs
 @AutoConfigureMockMvc
 @SpringBootTest
 class CategoryControllerTest {
@@ -30,7 +37,7 @@ class CategoryControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
     @MockBean
     private CategoryWriteService categoryWriteService;
 
@@ -43,7 +50,15 @@ class CategoryControllerTest {
         mockMvc.perform(delete("/api/v1/categories/3"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("delete-category",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("message").description("응답 메세지"),
+                                subsectionWithPath("result").description("결과값")
+                        )
+                ));
     }
 
     @WithMockUser
@@ -66,7 +81,21 @@ class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("modify-category-value",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("categoryId").description("카테고리 아이디"),
+                                fieldWithPath("name").description("카테고리명"),
+                                fieldWithPath("color").description("카테고리 색상"),
+                                fieldWithPath("memberId").description("멤버 아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("message").description("응답 메세지"),
+                                subsectionWithPath("result").description("결과값")
+                        )
+                ));
     }
 
     @WithMockUser
@@ -89,7 +118,21 @@ class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("modify-category-relation",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("categoryId").description("카테고리 아이디"),
+                                fieldWithPath("level").description("카테고리 레벨"),
+                                fieldWithPath("mainCategoryId").description("상위 카테고리 아이디 (자신이 대분류인 경우 null)"),
+                                fieldWithPath("memberId").description("멤버 아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("message").description("응답 메세지"),
+                                subsectionWithPath("result").description("결과값")
+                        )
+                ));
     }
 
     @WithMockUser
@@ -113,6 +156,22 @@ class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("modify-category",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("categoryId").description("카테고리 아이디"),
+                                fieldWithPath("name").description("카테고리명"),
+                                fieldWithPath("color").description("카테고리 색상"),
+                                fieldWithPath("level").description("카테고리 레벨"),
+                                fieldWithPath("mainCategoryId").description("상위 카테고리 아이디 (자신이 대분류인 경우 null)"),
+                                fieldWithPath("memberId").description("멤버 아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("message").description("응답 메세지"),
+                                subsectionWithPath("result").description("결과값")
+                        )
+                ));
     }
 }
