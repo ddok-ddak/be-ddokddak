@@ -2,7 +2,8 @@ package com.ddokddak.common.exception.type;
 
 import org.springframework.http.HttpStatus;
 
-public enum NotValidRequest {
+public enum NotValidRequest implements ExceptionType {
+
     MEMBER_ID(HttpStatus.UNPROCESSABLE_ENTITY, "Not Valid Member Id"),
 
     CATEGORY_ID(HttpStatus.UNPROCESSABLE_ENTITY, "Not Valid Category Id"),
@@ -22,11 +23,11 @@ public enum NotValidRequest {
         this.status = status;
         this.message = message;
     }
+
     public HttpStatus status() {
         return this.status;
     }
     public String message() {
         return this.message;
     }
-
 }

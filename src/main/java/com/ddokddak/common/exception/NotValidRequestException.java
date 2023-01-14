@@ -1,5 +1,6 @@
 package com.ddokddak.common.exception;
 
+import com.ddokddak.common.exception.type.ExceptionType;
 import org.springframework.http.HttpStatus;
 
 public class NotValidRequestException extends CustomApiException {
@@ -8,8 +9,8 @@ public class NotValidRequestException extends CustomApiException {
         super(message);
     }
 
-    public NotValidRequestException(String message, HttpStatus status) {
-        super(message, status);
+    public NotValidRequestException(ExceptionType exceptionType) {
+        super(exceptionType.message(), exceptionType.status());
     }
 
 }
