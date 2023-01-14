@@ -64,7 +64,7 @@ class CategoryWriteServiceTest {
         var mainCategoryId = mainCategories.get(2).getId();
 
         // when
-        categoryWriteService.removeCategoryById(mainCategoryId);
+        categoryWriteService.removeCategoryByIdAndMemberId(mainCategoryId, member.getId());
 
         // then
         var idList = this.subCategories.stream()
@@ -79,19 +79,19 @@ class CategoryWriteServiceTest {
 
     }
 
-    @DisplayName("메인 카테고리의 이름을 변경할 때 연관된 카테고리에 동일한 이름이 있으면 예외 발생")
+    @DisplayName("메인 카테고리의 이름을 변경할 때 현재 회원의 다른 메인 카테고리에 동일한 이름이 있으면 예외 발생")
     @Test
     void occurExceptionForMainCategoryNameConflictsWithOthers() {
         // given
         var mainCategory = mainCategories.get(2);
         var request = CategoryValueModifyRequest.builder()
                 .categoryId(mainCategory.getId())
-                .name(subCategories.get(1).getName())
+                .name(mainCategories.get(1).getName())
                 .color(mainCategory.getColor())
                 .build();
 
         // when, then
-        assertThatThrownBy(()->categoryWriteService.modifyCategoryValue(request))
+        assertThatThrownBy(()->categoryWriteService.modifyCategoryValue(request, member.getId()))
                 .isInstanceOf(NotValidRequestException.class);
 
     }
@@ -103,13 +103,12 @@ class CategoryWriteServiceTest {
         var subCategory = subCategories.get(3);
         var request = CategoryValueModifyRequest.builder()
                 .categoryId(subCategory.getId())
-                .name(subCategory.getMainCategory().getName())
+                .name(subCategories.get(2).getName())
                 .color(subCategory.getColor())
-                .memberId(subCategory.getMember().getId())
                 .build();
 
         // when, then
-        assertThatThrownBy(()->categoryWriteService.modifyCategoryValue(request))
+        assertThatThrownBy(()->categoryWriteService.modifyCategoryValue(request, member.getId()))
                 .isInstanceOf(NotValidRequestException.class);
 
     }
@@ -122,11 +121,10 @@ class CategoryWriteServiceTest {
         var request = CategoryRelationModifyRequest.builder()
                 .categoryId(subCategory.getId())
                 .level(0)
-                .memberId(subCategory.getMember().getId())
                 .build();
 
         // when
-        categoryWriteService.modifyCategoryRelation(request);
+        categoryWriteService.modifyCategoryRelation(request, subCategory.getMember().getId());
 
         // then
         var category = categoryRepository.findById(subCategory.getId())
@@ -144,11 +142,10 @@ class CategoryWriteServiceTest {
                 .categoryId(mainCategoryWithSub.getId())
                 .level(1)
                 .mainCategoryId(mainCategories.get(3).getId())
-                .memberId(mainCategoryWithSub.getMember().getId())
                 .build();
 
         // when, then
-        assertThatThrownBy(()->categoryWriteService.modifyCategoryRelation(request))
+        assertThatThrownBy(()->categoryWriteService.modifyCategoryRelation(request, mainCategoryWithSub.getMember().getId()))
                 .isInstanceOf(NotValidRequestException.class);
     }
 
@@ -161,10 +158,9 @@ class CategoryWriteServiceTest {
                 .categoryId(mainCategory.getId())
                 .level(1)
                 .mainCategoryId(null)
-                .memberId(mainCategory.getMember().getId())
                 .build();
         // when, then
-        assertThatThrownBy(()-> categoryWriteService.modifyCategoryRelation(request))
+        assertThatThrownBy(()-> categoryWriteService.modifyCategoryRelation(request, mainCategory.getMember().getId()))
                 .isInstanceOf(NotValidRequestException.class);
     }
 
@@ -177,11 +173,10 @@ class CategoryWriteServiceTest {
                 .categoryId(mainCategory.getId())
                 .level(1)
                 .mainCategoryId(9999L) // 유효하지 않은 아이디
-                .memberId(mainCategory.getMember().getId())
                 .build();
 
         // when, then
-        assertThatThrownBy(()->categoryWriteService.modifyCategoryRelation(request))
+        assertThatThrownBy(()->categoryWriteService.modifyCategoryRelation(request, mainCategory.getMember().getId()))
                 .isInstanceOf(NotValidRequestException.class);
     }
 
@@ -196,11 +191,10 @@ class CategoryWriteServiceTest {
                 .color(mainCategory.getColor())
                 .level(1)
                 .mainCategoryId(mainCategories.get(2).getId())
-                .memberId(mainCategory.getMember().getId())
                 .build();
 
         // when, then
-        assertThatThrownBy(()->categoryWriteService.modifyCategory(request))
+        assertThatThrownBy(()->categoryWriteService.modifyCategory(request, mainCategory.getMember().getId()))
                 .isInstanceOf(NotValidRequestException.class);
 
     }
@@ -217,10 +211,9 @@ class CategoryWriteServiceTest {
                 .color(mainCategory.getColor())
                 .level(1)
                 .mainCategoryId(mainCategories.get(2).getId()) // 다른 메인 카테고리에 등록
-                .memberId(mainCategory.getMember().getId())
                 .build();
         // when
-        categoryWriteService.modifyCategory(request);
+        categoryWriteService.modifyCategory(request, mainCategory.getMember().getId() );
 
         // then
         var category = categoryRepository.findById(mainCategory.getId())
@@ -228,5 +221,4 @@ class CategoryWriteServiceTest {
         Assertions.assertEquals( 1, category.getLevel());
         Assertions.assertEquals(name, category.getName());
     }
-
 }

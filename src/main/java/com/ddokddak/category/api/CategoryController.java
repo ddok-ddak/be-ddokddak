@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -20,35 +22,40 @@ public class CategoryController {
     private final CategoryReadService categoryReadService;
     private final CategoryWriteService categoryWriteService;
 
+    // 현재 매개변수 Long memberId 를 추후 @AuthenticationalPrincipal 활용하는 것으로 수정
     @DeleteMapping("/categories/{categoryId}")
-    public ResponseEntity<CommonResponse<Boolean>> removeCategoryById(@PathVariable Long categoryId) {
+    public ResponseEntity<CommonResponse<Boolean>> removeCategoryById(@RequestParam(required = false) Long memberId, @PathVariable Long categoryId) {
 
-        categoryWriteService.removeCategoryById(categoryId);
+        if (Objects.isNull(memberId)) memberId =1L;
+        categoryWriteService.removeCategoryByIdAndMemberId(categoryId, memberId);
 
         // enum으로 기본 응답 통일하기
         return ResponseEntity.ok(new CommonResponse<>("Successfully Deleted", Boolean.TRUE));
     }
 
     @PutMapping("/categories/value")
-    public ResponseEntity<CommonResponse<Boolean>> modifyCategoryValue(@RequestBody CategoryValueModifyRequest req) {
+    public ResponseEntity<CommonResponse<Boolean>> modifyCategoryValue(@RequestParam(required = false) Long memberId, @RequestBody CategoryValueModifyRequest req) {
 
-        categoryWriteService.modifyCategoryValue(req);
+        if (Objects.isNull(memberId)) memberId =1L;
+        categoryWriteService.modifyCategoryValue(req, memberId);
 
         return ResponseEntity.ok(new CommonResponse<>("Successfully Updated", Boolean.TRUE));
     }
 
     @PutMapping("/categories/relation")
-    public ResponseEntity<CommonResponse<Boolean>> modifyCategoryRelation(@RequestBody CategoryRelationModifyRequest req) {
+    public ResponseEntity<CommonResponse<Boolean>> modifyCategoryRelation(@RequestParam(required = false) Long memberId, @RequestBody CategoryRelationModifyRequest req) {
 
-        categoryWriteService.modifyCategoryRelation(req);
+        if (Objects.isNull(memberId)) memberId =1L;
+        categoryWriteService.modifyCategoryRelation(req, memberId);
 
         return ResponseEntity.ok(new CommonResponse<>("Successfully Updated", Boolean.TRUE));
     }
 
     @PutMapping("/categories")
-    public ResponseEntity<CommonResponse<Boolean>> modifyCategory(@RequestBody CategoryModifyRequest req) {
+    public ResponseEntity<CommonResponse<Boolean>> modifyCategory(@RequestParam(required = false) Long memberId, @RequestBody CategoryModifyRequest req) {
 
-        categoryWriteService.modifyCategory(req);
+        if (Objects.isNull(memberId)) memberId =1L;
+        categoryWriteService.modifyCategory(req, memberId);
 
         return ResponseEntity.ok(new CommonResponse<>("Successfully Updated", Boolean.TRUE));
     }
