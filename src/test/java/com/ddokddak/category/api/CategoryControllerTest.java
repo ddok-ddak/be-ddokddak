@@ -19,11 +19,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -46,14 +47,22 @@ class CategoryControllerTest {
     @Test
     void softDeleteCategoryById() throws Exception {
 
+        var categoryId = 3L;
+
         // when, then
-        mockMvc.perform(delete("/api/v1/categories/3"))
+        mockMvc.perform(delete("/api/v1/categories/{categoryId}", categoryId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("delete-category",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("memberId").optional().description("멤버 아이디(temp)")
+                        ),
+                        pathParameters(
+                                parameterWithName("categoryId").description("카테고리 아이디")
+                        ),
                         responseFields(
                                 fieldWithPath("message").description("응답 메세지"),
                                 subsectionWithPath("result").description("결과값")
@@ -70,7 +79,6 @@ class CategoryControllerTest {
                 .categoryId(1L)
                 .name("sample")
                 .color("sample")
-                .memberId(1L)
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
@@ -85,11 +93,13 @@ class CategoryControllerTest {
                 .andDo(document("modify-category-value",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("memberId").optional().description("멤버 아이디(temp)")
+                        ),
                         requestFields(
                                 fieldWithPath("categoryId").description("카테고리 아이디"),
                                 fieldWithPath("name").description("카테고리명"),
-                                fieldWithPath("color").description("카테고리 색상"),
-                                fieldWithPath("memberId").description("멤버 아이디")
+                                fieldWithPath("color").description("카테고리 색상")
                         ),
                         responseFields(
                                 fieldWithPath("message").description("응답 메세지"),
@@ -107,7 +117,6 @@ class CategoryControllerTest {
                 .categoryId(1L)
                 .level(0)
                 .mainCategoryId(3L)
-                .memberId(1L)
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
@@ -122,11 +131,13 @@ class CategoryControllerTest {
                 .andDo(document("modify-category-relation",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("memberId").optional().description("멤버 아이디(temp)")
+                        ),
                         requestFields(
                                 fieldWithPath("categoryId").description("카테고리 아이디"),
                                 fieldWithPath("level").description("카테고리 레벨"),
-                                fieldWithPath("mainCategoryId").description("상위 카테고리 아이디 (자신이 대분류인 경우 null)"),
-                                fieldWithPath("memberId").description("멤버 아이디")
+                                fieldWithPath("mainCategoryId").description("상위 카테고리 아이디 (자신이 대분류인 경우 null)")
                         ),
                         responseFields(
                                 fieldWithPath("message").description("응답 메세지"),
@@ -145,7 +156,6 @@ class CategoryControllerTest {
                 .name("sample")
                 .color("sample")
                 .level(0)
-                .memberId(1L)
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
@@ -160,13 +170,15 @@ class CategoryControllerTest {
                 .andDo(document("modify-category",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("memberId").optional().description("멤버 아이디(temp)")
+                        ),
                         requestFields(
                                 fieldWithPath("categoryId").description("카테고리 아이디"),
                                 fieldWithPath("name").description("카테고리명"),
                                 fieldWithPath("color").description("카테고리 색상"),
                                 fieldWithPath("level").description("카테고리 레벨"),
-                                fieldWithPath("mainCategoryId").description("상위 카테고리 아이디 (자신이 대분류인 경우 null)"),
-                                fieldWithPath("memberId").description("멤버 아이디")
+                                fieldWithPath("mainCategoryId").description("상위 카테고리 아이디 (자신이 대분류인 경우 null)")
                         ),
                         responseFields(
                                 fieldWithPath("message").description("응답 메세지"),

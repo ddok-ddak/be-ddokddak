@@ -1,5 +1,7 @@
 [[Category-API]]
 == Category-API
+- 필요한 경우, memberId를 url 파라미터로 전달합니다.
+- 추후 로그인이 적용되면, 이 파라미터는 제거하고 jwt를 이용할 예정입니다.
 
 [[Modify-Category-Value]]
 === Category 속성 정보 수정
