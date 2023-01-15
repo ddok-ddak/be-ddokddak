@@ -24,39 +24,30 @@ public class CategoryController {
 
     // 현재 매개변수 Long memberId 를 추후 @AuthenticationalPrincipal 활용하는 것으로 수정
     @DeleteMapping("/categories/{categoryId}")
-    public ResponseEntity<CommonResponse<Boolean>> removeCategoryById(@RequestParam(required = false) Long memberId, @PathVariable Long categoryId) {
+    public ResponseEntity<CommonResponse<Boolean>> removeCategoryById(@RequestParam(required = false, defaultValue = "1") Long memberId, @PathVariable Long categoryId) {
 
-        if (Objects.isNull(memberId)) memberId =1L;
         categoryWriteService.removeCategoryByIdAndMemberId(categoryId, memberId);
-
-        // enum으로 기본 응답 통일하기
         return ResponseEntity.ok(new CommonResponse<>("Successfully Deleted", Boolean.TRUE));
     }
 
     @PutMapping("/categories/value")
-    public ResponseEntity<CommonResponse<Boolean>> modifyCategoryValue(@RequestParam(required = false) Long memberId, @RequestBody CategoryValueModifyRequest req) {
+    public ResponseEntity<CommonResponse<Boolean>> modifyCategoryValue(@RequestParam(required = false, defaultValue = "1") Long memberId, @RequestBody CategoryValueModifyRequest req) {
 
-        if (Objects.isNull(memberId)) memberId =1L;
         categoryWriteService.modifyCategoryValue(req, memberId);
-
         return ResponseEntity.ok(new CommonResponse<>("Successfully Updated", Boolean.TRUE));
     }
 
     @PutMapping("/categories/relation")
-    public ResponseEntity<CommonResponse<Boolean>> modifyCategoryRelation(@RequestParam(required = false) Long memberId, @RequestBody CategoryRelationModifyRequest req) {
+    public ResponseEntity<CommonResponse<Boolean>> modifyCategoryRelation(@RequestParam(required = false, defaultValue = "1") Long memberId, @RequestBody CategoryRelationModifyRequest req) {
 
-        if (Objects.isNull(memberId)) memberId =1L;
         categoryWriteService.modifyCategoryRelation(req, memberId);
-
         return ResponseEntity.ok(new CommonResponse<>("Successfully Updated", Boolean.TRUE));
     }
 
     @PutMapping("/categories")
-    public ResponseEntity<CommonResponse<Boolean>> modifyCategory(@RequestParam(required = false) Long memberId, @RequestBody CategoryModifyRequest req) {
+    public ResponseEntity<CommonResponse<Boolean>> modifyCategory(@RequestParam(required = false, defaultValue = "1") Long memberId, @RequestBody CategoryModifyRequest req) {
 
-        if (Objects.isNull(memberId)) memberId =1L;
         categoryWriteService.modifyCategory(req, memberId);
-
         return ResponseEntity.ok(new CommonResponse<>("Successfully Updated", Boolean.TRUE));
     }
 }
