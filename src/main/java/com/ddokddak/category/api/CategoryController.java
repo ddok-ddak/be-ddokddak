@@ -1,8 +1,6 @@
 package com.ddokddak.category.api;
 
-import com.ddokddak.category.dto.CategoryModifyRequest;
-import com.ddokddak.category.dto.CategoryRelationModifyRequest;
-import com.ddokddak.category.dto.CategoryValueModifyRequest;
+import com.ddokddak.category.dto.*;
 import com.ddokddak.category.service.CategoryReadService;
 import com.ddokddak.category.service.CategoryWriteService;
 import com.ddokddak.common.dto.CommonResponse;
@@ -10,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,6 +17,12 @@ public class CategoryController {
 
     private final CategoryReadService categoryReadService;
     private final CategoryWriteService categoryWriteService;
+
+    @PostMapping
+    public ResponseEntity<CommonResponse<CategoryAddResponse>> addCategory(@RequestBody CategoryAddRequest req){
+        var res = categoryWriteService.addCategory(req);
+        return ResponseEntity.ok( new CommonResponse<>("Successfully Created", res) );
+    }
 
     // 현재 매개변수 Long memberId 를 추후 @AuthenticationalPrincipal 활용하는 것으로 수정
     @DeleteMapping("/categories/{categoryId}")
