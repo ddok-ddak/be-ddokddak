@@ -1,6 +1,7 @@
 package com.ddokddak.category.service;
 
 import com.ddokddak.DatabaseCleanUp;
+import com.ddokddak.category.dto.CategoryAddRequest;
 import com.ddokddak.category.dto.CategoryModifyRequest;
 import com.ddokddak.category.dto.CategoryRelationModifyRequest;
 import com.ddokddak.category.dto.CategoryValueModifyRequest;
@@ -55,6 +56,107 @@ class CategoryWriteServiceTest {
         databaseCleanUp.afterPropertiesSet();
         databaseCleanUp.execute();
         // 레포지토리를 이용해 데이터를 삭제하고자 하는 경우에는 소프트 딜리트를 사용하므로 따로 테스트용 딜리트 메소드가 필요하다.
+    }
+
+    @DisplayName("대분류 카테고리 추가일 경우, 카테고리명과 멤버아이디 중복 여부에 대한 검증")
+    @Test
+    void occurExceptionForMainCategoryNameConflictsWithOthersWhenCreating(){
+        // given
+        CategoryAddRequest duplicatedRequest = CategoryAddRequest.builder()
+                                                                .name("category0")
+                                                                .color("color0")
+                                                                .level(0)
+                                                                .mainCategoryId(null)
+                                                                .memberId(member.getId())
+                                                                .build();
+        // when
+        assertThatThrownBy( ()-> categoryWriteService.addCategory( duplicatedRequest ) )
+                .isInstanceOf( NotValidRequestException.class )
+                .hasMessage("Already Used Name");
+    }
+
+    @DisplayName("소분류 카테고리 추가일 경우, 해당 회원 아이디에 존재하는 메인 카테고리 아이디의 유효성 검증")
+    @Test
+    void occurExceptionForMainCategoryIdValidation(){
+        Category notValidatedMainCategory = Category.builder()
+                                .id(111L)
+                                .name("category11")
+                                .color("color11")
+                                .level(0)
+                                .member(member)
+                                .deleteYn("N")
+                                .build();
+
+        // given
+        CategoryAddRequest duplicatedRequest = CategoryAddRequest.builder()
+                .name("category00")
+                .color("color0")
+                .level(1)
+                .mainCategoryId(notValidatedMainCategory.getId()) // DB에 없는 아이디
+                .memberId(member.getId())
+                .build();
+
+        // when
+        assertThatThrownBy( ()-> categoryWriteService.addCategory( duplicatedRequest ) )
+                .isInstanceOf( NotValidRequestException.class )
+                .hasMessage("Null Data Exists When Should Be Not Null");
+    }
+
+    @DisplayName("소분류 카테고리 추가일 경우, 해당 회원 아이디와 대분류 아래에 서브 카테고리명 중복 여부에 대한 검증")
+    @Test
+    void occurExceptionForSubCategoryNameValidationWithMemberIdAndMainCategory(){
+        // given
+        CategoryAddRequest duplicatedRequest = CategoryAddRequest.builder()
+                .name("category1") // category2에 이미 있는 서브카테고리명
+                .color("color1")
+                .level(1)
+                .mainCategoryId(mainCategories.get(2).getId())
+                .memberId(member.getId())
+                .build();
+
+        // when
+        assertThatThrownBy( ()-> categoryWriteService.addCategory( duplicatedRequest ) )
+                .isInstanceOf( NotValidRequestException.class )
+                .hasMessage("Already Used Name");
+    }
+
+    @DisplayName("정상적인 대분류 카테고리 등록")
+    @Test
+    void addMainCategory(){
+        // given
+        CategoryAddRequest request = CategoryAddRequest.builder()
+                .name("category11")
+                .color("color11")
+                .level(0)
+                .memberId(member.getId())
+                .build();
+
+        // when
+        var createdCategoryId = categoryWriteService.addCategory( request );
+
+        // then
+        Assertions.assertTrue( categoryRepository.existsByNameAndMemberId("category11",member.getId()) );
+    }
+
+    @DisplayName("정상적인 소분류 카테고리 등록")
+    @Test
+    void addSubCategory(){
+        // given
+        CategoryAddRequest request = CategoryAddRequest.builder()
+                .name("category10")
+                .color("color10")
+                .level(1)
+                .mainCategoryId(mainCategories.get(2).getId())
+                .memberId(member.getId())
+                .build();
+
+        // when
+        var createdCategoryId = categoryWriteService.addCategory( request );
+
+        // then
+        Assertions.assertTrue(
+                categoryRepository.existsByNameAndMainCategoryIdAndMemberId("category10",mainCategories.get(2).getId(),member.getId())
+        );
     }
 
     @DisplayName("상위 카테고리 삭제시 자식 카테고리까지 잘 삭제되는지")

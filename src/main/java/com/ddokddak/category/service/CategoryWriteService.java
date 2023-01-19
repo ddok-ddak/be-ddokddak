@@ -1,12 +1,12 @@
 package com.ddokddak.category.service;
 
-import com.ddokddak.category.dto.CategoryModifyRequest;
-import com.ddokddak.category.dto.CategoryRelationModifyRequest;
-import com.ddokddak.category.dto.CategoryValueModifyRequest;
+import com.ddokddak.category.dto.*;
 import com.ddokddak.category.entity.Category;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.NotValidRequest;
+import com.ddokddak.member.Member;
+import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +19,76 @@ import java.util.Objects;
 public class CategoryWriteService {
 
     private final CategoryRepository categoryRepository;
+    private final MemberRepository memberRepository;
+
+
+    @Transactional
+    public CategoryAddResponse addCategory(CategoryAddRequest req){
+        Member member = memberRepository.findById( req.memberId() ).orElseThrow(
+                () -> new NotValidRequestException( NotValidRequest.MEMBER_ID )
+        );
+
+        Category category = null;
+        Long createdCategoryId  = null;
+
+        /*
+            1. 대분류 등록일 경우
+            대분류들간의 중복 허용 X
+        */
+
+        if( Objects.equals(req.level(),0) ){
+            // 요청 대분류 카테고리명과 멤버 아이디를 이용해서 기 카테고리명 유무 조회
+            if( categoryRepository.existsByNameAndMemberId( req.name(), member.getId() ) ){
+                throw new NotValidRequestException(NotValidRequest.USED_NAME_CONFLICTS);
+            }
+
+            category = Category.builder()
+                                .name( req.name() )
+                                .color( req.color() )
+                                .level( req.level() )
+                                .member( member )
+                                .build();
+
+            createdCategoryId = categoryRepository.save( category ).getId();
+        }
+
+        /*
+            2. 소분류(서브 카테고리 중 하나) 등록일 경우
+            유효한 대분류 카테고리 아래에서 소분류들간의 중복 허용 X
+            (단, 소분류들간의 중복되지 않는 한에서 대분류명과는 중복 가능)
+        */
+        else if( Objects.equals(req.level(),1) ){
+            /* 서브 카테고리인 경우의 검증 수행 */
+            // - 상위 카테고리 정보가 없는 경우 예외 발생
+            if( req.mainCategoryId() == null || req.mainCategoryId()==0 ){
+                throw new NotValidRequestException( NotValidRequest.NULL_DATA );
+            }
+
+            // - 메인 카테고리 아이디의 유효성 검증
+            var mainCategory = categoryRepository.findByIdAndMemberId( req.mainCategoryId(), member.getId() )
+                    .orElseThrow( () -> new NotValidRequestException(NotValidRequest.NULL_DATA) );
+
+            // - 요청 대분류, 소분류 카테고리명과 멤버 아이디를 이용해서 소분류 카테고리의 기 카테고리명 유무 조회
+            if( categoryRepository.existsByNameAndMainCategoryIdAndMemberId( req.name(), mainCategory.getId(),  member.getId() ) ){
+                throw new NotValidRequestException(NotValidRequest.USED_NAME_CONFLICTS);
+            }
+            category = Category.builder()
+                    .name( req.name() )
+                    .color( req.color() )
+                    .level( req.level() )
+                    .mainCategory( mainCategory )
+                    .member( member )
+                    .build();
+
+            Category resultCategory = categoryRepository.save(category);
+            mainCategory.getSubCategories().add( resultCategory );
+            createdCategoryId = resultCategory.getId();
+        }
+
+        var response = new CategoryAddResponse(createdCategoryId);
+
+        return response;
+    }
 
     /**
      * 카테고리 삭제

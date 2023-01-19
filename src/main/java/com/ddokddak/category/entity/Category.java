@@ -45,6 +45,7 @@ public class Category extends BaseTimeEntity {
     @JoinColumn(name="MEMBER_ID")
     private Member member;
 
+    @Builder.Default
     @Column(length = 1)
     private String deleteYn = "N";
 
