@@ -13,9 +13,25 @@ spring:
     activate:
       on-profile: local-common
 
+  jackson:
+    deserialization:
+      ADJUST_DATES_TO_CONTEXT_TIME_ZONE: false # 타임존 UTC로 자동 변경 해제
+
   devtools:
     livereload:
       enabled: true
+
+  datasource:
+    hikari:
+      data-source-properties:
+        rewriteBatchedStatements: true # 배치 인서트 쿼리 활용 설정
+
+# 벌크 인서트 제한
+jdbc:
+  batch:
+    size: 1000
+
+
 # cors 설정
 cors:
   allowedOrigins: 'http://localhost:3000'
@@ -62,7 +78,8 @@ spring:
       on-profile: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ddokddak?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    # jdbc 로그 확인 위해 옵션 수정
+    url: jdbc:mysql://localhost:3306/ddokddak?characterEncoding=UTF-8&profileSQL=true&c=Slf4JLogger&maxQuerySizeToLog=200
     username: root
     password: 1234
   sql:

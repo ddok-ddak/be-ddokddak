@@ -443,6 +443,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="Category-API">Category-API</h2>
 <div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>필요한 경우, memberId를 url 파라미터로 전달합니다.</p>
+</li>
+<li>
+<p>추후 로그인이 적용되면, 이 파라미터는 제거하고 jwt를 이용할 예정입니다.</p>
+</li>
+</ul>
+</div>
 <div class="sect2">
 <h3 id="Modify-Category-Value">Category 속성 정보 수정</h3>
 <div class="sect3">
@@ -454,8 +464,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     -d '{
   "categoryId" : 1,
   "name" : "sample",
-  "color" : "sample",
-  "memberId" : 1
+  "color" : "sample"
 }'</code></pre>
 </div>
 </div>
@@ -466,14 +475,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /api/v1/categories/value HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 88
+Content-Length: 69
 Host: localhost:8080
 
 {
   "categoryId" : 1,
   "name" : "sample",
-  "color" : "sample",
-  "memberId" : 1
+  "color" : "sample"
 }</code></pre>
 </div>
 </div>
@@ -508,8 +516,7 @@ Content-Length: 62
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ echo '{
   "categoryId" : 1,
   "name" : "sample",
-  "color" : "sample",
-  "memberId" : 1
+  "color" : "sample"
 }' | http PUT 'http://localhost:8080/api/v1/categories/value' \
     'Content-Type:application/json;charset=UTF-8'</code></pre>
 </div>
@@ -522,8 +529,7 @@ Content-Length: 62
 <pre class="highlight nowrap"><code>{
   "categoryId" : 1,
   "name" : "sample",
-  "color" : "sample",
-  "memberId" : 1
+  "color" : "sample"
 }</code></pre>
 </div>
 </div>
@@ -559,10 +565,26 @@ Content-Length: 62
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 색상</p></td>
 </tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Modify-Category-Value_request_parameters">Request parameters</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디(temp)</p></td>
 </tr>
 </tbody>
 </table>
@@ -619,8 +641,7 @@ Content-Length: 62
     -d '{
   "categoryId" : 1,
   "level" : 0,
-  "mainCategoryId" : 3,
-  "memberId" : 1
+  "mainCategoryId" : 3
 }'</code></pre>
 </div>
 </div>
@@ -631,14 +652,13 @@ Content-Length: 62
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /api/v1/categories/relation HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 84
+Content-Length: 65
 Host: localhost:8080
 
 {
   "categoryId" : 1,
   "level" : 0,
-  "mainCategoryId" : 3,
-  "memberId" : 1
+  "mainCategoryId" : 3
 }</code></pre>
 </div>
 </div>
@@ -673,8 +693,7 @@ Content-Length: 62
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ echo '{
   "categoryId" : 1,
   "level" : 0,
-  "mainCategoryId" : 3,
-  "memberId" : 1
+  "mainCategoryId" : 3
 }' | http PUT 'http://localhost:8080/api/v1/categories/relation' \
     'Content-Type:application/json;charset=UTF-8'</code></pre>
 </div>
@@ -687,8 +706,7 @@ Content-Length: 62
 <pre class="highlight nowrap"><code>{
   "categoryId" : 1,
   "level" : 0,
-  "mainCategoryId" : 3,
-  "memberId" : 1
+  "mainCategoryId" : 3
 }</code></pre>
 </div>
 </div>
@@ -724,10 +742,26 @@ Content-Length: 62
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">상위 카테고리 아이디 (자신이 대분류인 경우 null)</p></td>
 </tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Modify-Category-Relation_request_parameters">Request parameters</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디(temp)</p></td>
 </tr>
 </tbody>
 </table>
@@ -793,8 +827,7 @@ Content-Length: 62
   "name" : "sample",
   "color" : "sample",
   "level" : 0,
-  "mainCategoryId" : null,
-  "memberId" : 1
+  "mainCategoryId" : null
 }'</code></pre>
 </div>
 </div>
@@ -805,7 +838,7 @@ Content-Length: 62
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /api/v1/categories HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 132
+Content-Length: 113
 Host: localhost:8080
 
 {
@@ -813,8 +846,7 @@ Host: localhost:8080
   "name" : "sample",
   "color" : "sample",
   "level" : 0,
-  "mainCategoryId" : null,
-  "memberId" : 1
+  "mainCategoryId" : null
 }</code></pre>
 </div>
 </div>
@@ -851,8 +883,7 @@ Content-Length: 62
   "name" : "sample",
   "color" : "sample",
   "level" : 0,
-  "mainCategoryId" : null,
-  "memberId" : 1
+  "mainCategoryId" : null
 }' | http PUT 'http://localhost:8080/api/v1/categories' \
     'Content-Type:application/json;charset=UTF-8'</code></pre>
 </div>
@@ -867,8 +898,7 @@ Content-Length: 62
   "name" : "sample",
   "color" : "sample",
   "level" : 0,
-  "mainCategoryId" : null,
-  "memberId" : 1
+  "mainCategoryId" : null
 }</code></pre>
 </div>
 </div>
@@ -914,10 +944,26 @@ Content-Length: 62
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">상위 카테고리 아이디 (자신이 대분류인 경우 null)</p></td>
 </tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Modify-Category_request_parameters">Request parameters</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디(temp)</p></td>
 </tr>
 </tbody>
 </table>
@@ -1014,6 +1060,28 @@ Content-Length: 62
 </div>
 </div>
 <div class="sect3">
+<h4 id="Delete-Category_path_parameters">Path parameters</h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/v1/categories/{categoryId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categoryId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 아이디</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
 <h4 id="Delete-Category_request_body">Request body</h4>
 <div class="listingblock">
 <div class="content">
@@ -1024,6 +1092,27 @@ Content-Length: 62
 <div class="sect3">
 <h4 id="Delete-Category_request_fields">Request fields</h4>
 
+</div>
+<div class="sect3">
+<h4 id="Delete-Category_request_parameters">Request parameters</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디(temp)</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="Delete-Category_response_body">Response body</h4>
@@ -1072,7 +1161,7 @@ Content-Length: 62
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-01-08 00:40:54 +0900
+Last updated 2023-01-14 21:37:53 +0900
 </div>
 </div>
 </body>
