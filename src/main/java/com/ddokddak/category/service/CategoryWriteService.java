@@ -81,9 +81,7 @@ public class CategoryWriteService {
                     .member( member )
                     .build();
 
-            Category resultCategory = categoryRepository.save(category);
-            mainCategory.getSubCategories().add( resultCategory );
-            createdCategoryId = resultCategory.getId();
+            createdCategoryId = categoryRepository.save(category).getId();
         }
 
         return new CategoryAddResponse(createdCategoryId);
