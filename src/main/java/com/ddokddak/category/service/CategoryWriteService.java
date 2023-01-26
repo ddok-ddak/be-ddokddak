@@ -38,7 +38,7 @@ public class CategoryWriteService {
 
         if( Objects.equals(req.level(),0) ){
             // 요청 대분류 카테고리명과 멤버 아이디를 이용해서 기 카테고리명 유무 조회
-            if( categoryRepository.existsByNameAndMemberId( req.name(), member.getId() ) ){
+            if( categoryRepository.existsByLevelAndNameAndMemberId( req.level(), req.name(), member.getId() ) ){
                 throw new NotValidRequestException(NotValidRequest.USED_NAME_CONFLICTS);
             }
 
@@ -66,12 +66,13 @@ public class CategoryWriteService {
 
             // - 메인 카테고리 아이디의 유효성 검증
             var mainCategory = categoryRepository.findByIdAndMemberId( req.mainCategoryId(), member.getId() )
-                    .orElseThrow( () -> new NotValidRequestException(NotValidRequest.NULL_DATA) );
+                    .orElseThrow( () -> new NotValidRequestException(NotValidRequest.MAIN_CATEGORY_ID) );
 
             // - 요청 대분류, 소분류 카테고리명과 멤버 아이디를 이용해서 소분류 카테고리의 기 카테고리명 유무 조회
-            if( categoryRepository.existsByNameAndMainCategoryIdAndMemberId( req.name(), mainCategory.getId(),  member.getId() ) ){
+            if( Boolean.TRUE.equals(categoryRepository.existsByNameAndMainCategoryIdAndMemberId(req.name(), mainCategory.getId(),  member.getId())) ){
                 throw new NotValidRequestException(NotValidRequest.USED_NAME_CONFLICTS);
             }
+
             category = Category.builder()
                     .name( req.name() )
                     .color( req.color() )
@@ -85,9 +86,7 @@ public class CategoryWriteService {
             createdCategoryId = resultCategory.getId();
         }
 
-        var response = new CategoryAddResponse(createdCategoryId);
-
-        return response;
+        return new CategoryAddResponse(createdCategoryId);
     }
 
     /**

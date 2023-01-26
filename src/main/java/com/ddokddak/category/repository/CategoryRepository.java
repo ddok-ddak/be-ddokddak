@@ -12,7 +12,6 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Optional<Category> findByIdAndMemberId(Long categoryId, Long memberId);
-    Optional<List<Category>> findByMember(Member member);
 
     @Modifying
     @Query("UPDATE Category c SET modifiedAt = NOW(), deleteYn ='Y' WHERE c.mainCategory = :category")
@@ -20,7 +19,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findByMemberIdAndLevel(Long id, int level);
 
-    Boolean existsByNameAndMemberId(String name, Long memberId);
+    Boolean existsByLevelAndNameAndMemberId(int level, String name, Long memberId);
 
     Boolean existsByNameAndMainCategoryIdAndMemberId(String name, Long id, Long memberId);
 }
