@@ -6,7 +6,6 @@ import com.ddokddak.category.entity.Category;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.NotValidRequest;
-import com.ddokddak.member.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +26,8 @@ public class CategoryReadService {
     @Transactional(readOnly = true)
     public CategoryReadResponse readCategoriesByMemberId(Long memberId) {
 
-        Member member = memberRepository.findById(memberId).get();
-        List<Category> categories = categoryRepository.findByMember(member)
-                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_ID));
+        List<Category> categories = categoryRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_DATA));
         return new CategoryReadResponse(categories);
     }
 
