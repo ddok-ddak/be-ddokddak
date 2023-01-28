@@ -33,10 +33,8 @@ public class Category extends BaseTimeEntity {
 
     @Column(length = 10, nullable = false)
     private String color;
-
     @Column(length = 1)
     private Integer level;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="PARENT_ID")
     private Category mainCategory;
@@ -49,7 +47,6 @@ public class Category extends BaseTimeEntity {
     @Column(length = 1)
     private String deleteYn = "N";
 
-    // 이하 선택 사항
     @OneToMany(mappedBy="mainCategory")
     private List<Category> subCategories = new ArrayList<>();
 

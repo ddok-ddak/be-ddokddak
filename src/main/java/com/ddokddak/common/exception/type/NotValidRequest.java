@@ -23,7 +23,6 @@ public enum NotValidRequest implements ExceptionType {
         this.status = status;
         this.message = message;
     }
-
     public HttpStatus status() {
         return this.status;
     }
