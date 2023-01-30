@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Optional<Category> findByIdAndMemberId(Long categoryId, Long memberId);
+    Optional<List<Category>> findByMemberId(Long memberId);
 
     @Modifying
     @Query("UPDATE Category c SET modifiedAt = NOW(), deleteYn ='Y' WHERE c.mainCategory = :category")

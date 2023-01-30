@@ -25,6 +25,12 @@ public class CategoryController {
         return ResponseEntity.ok( new CommonResponse<>("Successfully Created", res) );
     }
 
+    @GetMapping("/categories")
+    public ResponseEntity<CommonResponse<CategoryReadResponse>> getCategories(@RequestParam Long memberId) {
+        CategoryReadResponse response = categoryReadService.readCategoriesByMemberId(memberId);
+        return  ResponseEntity.ok(new CommonResponse<>("Success", response));
+    }
+
     // 현재 매개변수 Long memberId 를 추후 @AuthenticationalPrincipal 활용하는 것으로 수정
     @DeleteMapping("/categories/{categoryId}")
     public ResponseEntity<CommonResponse<Boolean>> removeCategoryById(@RequestParam(required = false, defaultValue = "1") Long memberId, @PathVariable Long categoryId) {

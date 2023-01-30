@@ -5,8 +5,9 @@ import org.springframework.http.HttpStatus;
 public enum NotValidRequest implements ExceptionType {
 
     MEMBER_ID(HttpStatus.UNPROCESSABLE_ENTITY, "Not Valid Member Id"),
-
     CATEGORY_ID(HttpStatus.UNPROCESSABLE_ENTITY, "Not Valid Category Id"),
+
+    CATEGORY_DATA(HttpStatus.NOT_FOUND, "Not Exist Category Data"),
     CATEGORY_NAME(HttpStatus.UNPROCESSABLE_ENTITY, "Not Valid Category Name"),
     MAIN_CATEGORY_ID(HttpStatus.UNPROCESSABLE_ENTITY, "Not Valid Main Category Id"),
 
@@ -23,7 +24,6 @@ public enum NotValidRequest implements ExceptionType {
         this.status = status;
         this.message = message;
     }
-
     public HttpStatus status() {
         return this.status;
     }
