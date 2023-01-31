@@ -61,7 +61,7 @@ class CategoryWriteServiceTest {
     @DisplayName("대분류 카테고리 추가일 경우, 카테고리명과 멤버아이디 중복 여부에 대한 검증")
     @Test
     void occurExceptionForMainCategoryNameConflictsWithOthersWhenCreating(){
-        // given
+        // given, when
         CategoryAddRequest duplicatedRequest = CategoryAddRequest.builder()
                                                                 .name("category0")
                                                                 .color("color0")
@@ -69,7 +69,7 @@ class CategoryWriteServiceTest {
                                                                 .mainCategoryId(null)
                                                                 .memberId(member.getId())
                                                                 .build();
-        // when
+        // then
         assertThatThrownBy( ()-> categoryWriteService.addCategory( duplicatedRequest ) )
                 .isInstanceOf( NotValidRequestException.class )
                 .hasMessage("Already Used Name");
@@ -78,6 +78,7 @@ class CategoryWriteServiceTest {
     @DisplayName("소분류 카테고리 추가일 경우, 해당 회원 아이디에 존재하는 메인 카테고리 아이디의 유효성 검증")
     @Test
     void occurExceptionForMainCategoryIdValidation(){
+        // given
         Category notValidatedMainCategory = Category.builder()
                                 .id(111L)
                                 .name("category11")
@@ -87,19 +88,19 @@ class CategoryWriteServiceTest {
                                 .deleteYn("N")
                                 .build();
 
-        // given
+        // when
         CategoryAddRequest duplicatedRequest = CategoryAddRequest.builder()
                 .name("category00")
                 .color("color0")
                 .level(1)
-                .mainCategoryId(notValidatedMainCategory.getId()) // DB에 없는 아이디
+                .mainCategoryId( notValidatedMainCategory.getId() ) // DB에 없는 아이디
                 .memberId(member.getId())
                 .build();
 
-        // when
+        // then
         assertThatThrownBy( ()-> categoryWriteService.addCategory( duplicatedRequest ) )
                 .isInstanceOf( NotValidRequestException.class )
-                .hasMessage("Null Data Exists When Should Be Not Null");
+                .hasMessage("Not Valid Main Category Id");
     }
 
     @DisplayName("소분류 카테고리 추가일 경우, 해당 회원 아이디와 대분류 아래에 서브 카테고리명 중복 여부에 대한 검증")
@@ -107,11 +108,11 @@ class CategoryWriteServiceTest {
     void occurExceptionForSubCategoryNameValidationWithMemberIdAndMainCategory(){
         // given
         CategoryAddRequest duplicatedRequest = CategoryAddRequest.builder()
-                .name("category1") // category2에 이미 있는 서브카테고리명
-                .color("color1")
+                .name("category4") // category2에 이미 있는 서브카테고리명
+                .color("color4")
                 .level(1)
-                .mainCategoryId(mainCategories.get(2).getId())
-                .memberId(member.getId())
+                .mainCategoryId( mainCategories.get(2).getId() )
+                .memberId( member.getId() )
                 .build();
 
         // when
@@ -135,7 +136,7 @@ class CategoryWriteServiceTest {
         var createdCategoryId = categoryWriteService.addCategory( request );
 
         // then
-        Assertions.assertTrue( categoryRepository.existsByNameAndMemberId("category11",member.getId()) );
+        Assertions.assertTrue( categoryRepository.existsByLevelAndNameAndMemberId(request.level(),"category11",member.getId()) );
     }
 
     @DisplayName("정상적인 소분류 카테고리 등록")
