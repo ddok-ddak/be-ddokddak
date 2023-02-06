@@ -110,7 +110,7 @@ public class CategoryWriteService {
      * @param memberId 멤버 아이디
      */
     @Transactional
-    public void modifyCategoryValue(CategoryValueModifyRequest req, Long memberId) {
+    public void modifyCategoryValue(ModifyCategoryValueRequest req, Long memberId) {
 
         // 카테고리 아이디와 멤버 아이디로 조회
         var category = categoryRepository.findByIdAndMemberId(req.categoryId(), memberId)
@@ -132,7 +132,7 @@ public class CategoryWriteService {
      * @param memberId 멤버 아이디
      */
     @Transactional
-    public void modifyCategoryRelation(CategoryRelationModifyRequest req, Long memberId) {
+    public void modifyCategoryRelation(ModifyCategoryRelationRequest req, Long memberId) {
         // 카테고리 아이디와 멤버 아이디로 조회
         var category = categoryRepository.findByIdAndMemberId(req.categoryId(), memberId)
                 .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_ID));
@@ -162,7 +162,7 @@ public class CategoryWriteService {
     }
 
     @Transactional
-    public void modifyCategory(CategoryModifyRequest req, Long memberId) {
+    public void modifyCategory(ModifyCategoryRequest req, Long memberId) {
         // 카테고리 아이디와 멤버 아이디로 조회
         var category = categoryRepository.findByIdAndMemberId(req.categoryId(), memberId)
                 .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_ID));

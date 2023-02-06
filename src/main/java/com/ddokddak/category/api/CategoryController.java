@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeParseException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,21 +41,21 @@ public class CategoryController {
     }
 
     @PutMapping("/categories/value")
-    public ResponseEntity<CommonResponse<Boolean>> modifyCategoryValue(@RequestParam(required = false, defaultValue = "1") Long memberId, @RequestBody CategoryValueModifyRequest req) {
+    public ResponseEntity<CommonResponse<Boolean>> modifyCategoryValue(@RequestParam(required = false, defaultValue = "1") Long memberId, @RequestBody ModifyCategoryValueRequest req) {
 
         categoryWriteService.modifyCategoryValue(req, memberId);
         return ResponseEntity.ok(new CommonResponse<>("Successfully Updated", Boolean.TRUE));
     }
 
     @PutMapping("/categories/relation")
-    public ResponseEntity<CommonResponse<Boolean>> modifyCategoryRelation(@RequestParam(required = false, defaultValue = "1") Long memberId, @RequestBody CategoryRelationModifyRequest req) {
+    public ResponseEntity<CommonResponse<Boolean>> modifyCategoryRelation(@RequestParam(required = false, defaultValue = "1") Long memberId, @RequestBody ModifyCategoryRelationRequest req) {
 
         categoryWriteService.modifyCategoryRelation(req, memberId);
         return ResponseEntity.ok(new CommonResponse<>("Successfully Updated", Boolean.TRUE));
     }
 
     @PutMapping("/categories")
-    public ResponseEntity<CommonResponse<Boolean>> modifyCategory(@RequestParam(required = false, defaultValue = "1") Long memberId, @RequestBody CategoryModifyRequest req) {
+    public ResponseEntity<CommonResponse<Boolean>> modifyCategory(@RequestParam(required = false, defaultValue = "1") Long memberId, @RequestBody ModifyCategoryRequest req) {
 
         categoryWriteService.modifyCategory(req, memberId);
         return ResponseEntity.ok(new CommonResponse<>("Successfully Updated", Boolean.TRUE));

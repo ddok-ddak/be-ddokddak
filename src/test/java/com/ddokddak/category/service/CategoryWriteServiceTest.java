@@ -2,9 +2,9 @@ package com.ddokddak.category.service;
 
 import com.ddokddak.DatabaseCleanUp;
 import com.ddokddak.category.dto.CategoryAddRequest;
-import com.ddokddak.category.dto.CategoryModifyRequest;
-import com.ddokddak.category.dto.CategoryRelationModifyRequest;
-import com.ddokddak.category.dto.CategoryValueModifyRequest;
+import com.ddokddak.category.dto.ModifyCategoryRequest;
+import com.ddokddak.category.dto.ModifyCategoryRelationRequest;
+import com.ddokddak.category.dto.ModifyCategoryValueRequest;
 import com.ddokddak.category.entity.Category;
 import com.ddokddak.category.fixture.CategoryFixture;
 import com.ddokddak.category.repository.CategoryRepository;
@@ -187,7 +187,7 @@ class CategoryWriteServiceTest {
     void occurExceptionForMainCategoryNameConflictsWithOthers() {
         // given
         var mainCategory = mainCategories.get(2);
-        var request = CategoryValueModifyRequest.builder()
+        var request = ModifyCategoryValueRequest.builder()
                 .categoryId(mainCategory.getId())
                 .name(mainCategories.get(1).getName())
                 .color(mainCategory.getColor())
@@ -204,7 +204,7 @@ class CategoryWriteServiceTest {
     void occurExceptionForSubCategoryNameConflictsWithOthers() {
         // given
         var subCategory = subCategories.get(3);
-        var request = CategoryValueModifyRequest.builder()
+        var request = ModifyCategoryValueRequest.builder()
                 .categoryId(subCategory.getId())
                 .name(subCategories.get(2).getName())
                 .color(subCategory.getColor())
@@ -221,7 +221,7 @@ class CategoryWriteServiceTest {
     void modifyCategoryWell() {
         // given
         var subCategory = subCategories.get(3);
-        var request = CategoryRelationModifyRequest.builder()
+        var request = ModifyCategoryRelationRequest.builder()
                 .categoryId(subCategory.getId())
                 .level(0)
                 .build();
@@ -241,7 +241,7 @@ class CategoryWriteServiceTest {
     void failToModifyMainCategoryToSub() {
         // given
         var mainCategoryWithSub = mainCategories.get(2);
-        var request = CategoryRelationModifyRequest.builder()
+        var request = ModifyCategoryRelationRequest.builder()
                 .categoryId(mainCategoryWithSub.getId())
                 .level(1)
                 .mainCategoryId(mainCategories.get(3).getId())
@@ -257,7 +257,7 @@ class CategoryWriteServiceTest {
     void occurExceptionWhenCheckParentCategoryNull() {
         // given
         var mainCategory = mainCategories.get(3);
-        var request = CategoryRelationModifyRequest.builder()
+        var request = ModifyCategoryRelationRequest.builder()
                 .categoryId(mainCategory.getId())
                 .level(1)
                 .mainCategoryId(null)
@@ -272,7 +272,7 @@ class CategoryWriteServiceTest {
     void occurExceptionWhenModifyMainCategoryToSubWithNotValidMainCategoryId() {
         // given
         var mainCategory = mainCategories.get(3);
-        var request = CategoryRelationModifyRequest.builder()
+        var request = ModifyCategoryRelationRequest.builder()
                 .categoryId(mainCategory.getId())
                 .level(1)
                 .mainCategoryId(9999L) // 유효하지 않은 아이디
@@ -288,7 +288,7 @@ class CategoryWriteServiceTest {
     void occurExceptionForMainCategoryNameConflictsWithOthersWhenModifyingToSub() {
         // given
         var mainCategory = mainCategories.get(3);
-        var request = CategoryModifyRequest.builder()
+        var request = ModifyCategoryRequest.builder()
                 .categoryId(mainCategory.getId())
                 .name(subCategories.get(0).getName())
                 .color(mainCategory.getColor())
@@ -308,7 +308,7 @@ class CategoryWriteServiceTest {
         // given
         var name = "new name";
         var mainCategory = mainCategories.get(3);
-        var request = CategoryModifyRequest.builder()
+        var request = ModifyCategoryRequest.builder()
                 .categoryId(mainCategory.getId())
                 .name(name)
                 .color(mainCategory.getColor())
