@@ -8,7 +8,7 @@
 
 operation::create-activity-record[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']
 
-[[Create-ActivityRecord]]
+[[Create-ActivityRecord-404]]
 === ActivityRecord 등록 - 404 예외 발생
 
 operation::create-activity-record-404[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']

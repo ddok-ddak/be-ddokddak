@@ -13,8 +13,8 @@ public class ActivityRecordReadService {
 
     private final ActivityRecordRepository activityRecordRepository;
 
-    public Boolean existsByMemberIdAndStartedAtBetween(Long memberId, LocalDateTime startedAt, LocalDateTime finishedAt) {
-        var result = activityRecordRepository.existsByMemberIdAndStartedAtBetween(memberId, startedAt, finishedAt);
+    public Boolean existsByMemberIdAndStartedAtBetween(Long memberId, LocalDateTime fromStartedAt, LocalDateTime toStartedAt) {
+        var result = activityRecordRepository.existsByMemberIdAndStartedAtBetween(memberId, fromStartedAt, toStartedAt);
         return result;
     }
 }

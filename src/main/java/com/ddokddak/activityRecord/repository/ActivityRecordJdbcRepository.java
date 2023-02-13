@@ -39,18 +39,23 @@ public class ActivityRecordJdbcRepository {
             latestId = 0L;
         }
 
+        // 배치 인서트 수행
         batchInsert(batchSize, list);
 
         Long finalId = latestId;
-        if (list.size() < batchSize) { // TODO 리팩토링 필수
+        if (list.size() < batchSize) {
             LongStream.range(0, list.size())
                     .forEach(i -> list.get((int) i).assignId(i + finalId + 1L));
         }
     }
 
-    /*
-    * DataAccessException 을 던진다. 체크해보고, 커스텀 익셉션 던지는 걸로 처리
-    * */
+    /**
+     * 주어진 배치 사이즈 크기만큼 벌크 인서트를 나누어서 수행한다.
+     *
+     * @param batchSize 배치 인서트 수행 단위
+     * @param list 인서트를 수행할 엔티티 리스트
+     * @throws JdbcExecException 커스텀 예외로 대체 (DataAccessException이 발생하면, 대신 해당 예외를 던진다.)
+     */
     @Transactional
     public void batchInsert(int batchSize, List<ActivityRecord> list) {
 
