@@ -68,39 +68,35 @@ jacocoTestCoverageVerification {
         }
     }
 }
-
 jacocoTestReport {
     reports {
         html.enabled true
         csv.enabled true
         xml.enabled false
     }
-    finalizedBy 'jacocoTestCoverageVerification'
-}
-
-tasks.named('test') {
-    systemProperty("spring.profiles.active", "test")
-    outputs.dir snippetsDir
-    useJUnitPlatform()
-    //  finalizedBy 'jacocoTestReport'
+    //finalizedBy 'jacocoTestCoverageVerification'
 }
 
 // static/docs 폴더 비우기
 asciidoctor.doFirst {
     delete file('src/main/resources/static/docs')
 }
-
 tasks.named('asciidoctor') {
     dependsOn test
     configurations 'asciidoctorExtensions' // 위에서 작성한 configuration 적용
     inputs.dir snippetsDir
 }
-
 task copyDocument(type: Copy) {
     dependsOn asciidoctor
-
     from file("build/docs/asciidoc")
     into file("src/main/resources/static/docs")
+}
+
+tasks.named('test') {
+    systemProperty("spring.profiles.active", "test")
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
 }
 
 // 생성된 rest 문서를 jar 파일에 패키징한다.
