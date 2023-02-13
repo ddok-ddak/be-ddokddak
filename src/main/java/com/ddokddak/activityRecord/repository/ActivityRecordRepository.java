@@ -13,5 +13,5 @@ public interface ActivityRecordRepository extends JpaRepository<ActivityRecord, 
     Optional<ActivityRecord> findByIdAndMemberId(Long activityRecordId, Long memberId);
     List<ActivityRecord> findByMemberIdAndCategoryId(Long memberId, Long categoryId);
 
-    Boolean existsByMemberIdAndStartedAtBetween(Long memberId, LocalDateTime startedAt, LocalDateTime finishedAt);
+    Boolean existsByMemberIdAndStartedAtBetween(Long memberId, LocalDateTime fromStartedAt, LocalDateTime toStartedAt);
 }
