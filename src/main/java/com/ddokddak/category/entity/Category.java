@@ -1,7 +1,5 @@
 package com.ddokddak.category.entity;
 
-import com.ddokddak.category.dto.CategoryRelationModifyRequest;
-import com.ddokddak.category.dto.CategoryValueModifyRequest;
 import com.ddokddak.common.entity.BaseTimeEntity;
 import com.ddokddak.member.Member;
 import lombok.*;
@@ -33,8 +31,10 @@ public class Category extends BaseTimeEntity {
 
     @Column(length = 10, nullable = false)
     private String color;
+
     @Column(length = 1)
     private Integer level;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="PARENT_ID")
     private Category mainCategory;
