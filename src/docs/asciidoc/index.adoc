@@ -14,3 +14,4 @@
 - 소비한 시간을 기록하고 당신의 시간을 돌아보세요.
 
 include::src/docs/asciidoc/category.adoc[]
+include::src/docs/asciidoc/activityRecord.adoc[]

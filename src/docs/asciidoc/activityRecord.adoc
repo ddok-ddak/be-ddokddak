@@ -1,0 +1,14 @@
+[[ActivityRecord-API]]
+== ActivityRecord-API
+- 필요한 경우, memberId를 url 파라미터로 전달합니다.
+- 추후 로그인이 적용되면, 이 파라미터는 제거하고 jwt를 이용할 예정입니다.
+
+[[Create-ActivityRecord]]
+=== ActivityRecord 등록
+
+operation::create-activity-record[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']
+
+[[Create-ActivityRecord-404]]
+=== ActivityRecord 등록 - 404 예외 발생
+
+operation::create-activity-record-404[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']

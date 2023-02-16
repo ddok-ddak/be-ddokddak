@@ -455,6 +455,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#Delete-Category">Category 삭제</a></li>
 </ul>
 </li>
+<li><a href="#ActivityRecord-API">ActivityRecord-API</a>
+<ul class="sectlevel2">
+<li><a href="#Create-ActivityRecord">ActivityRecord 등록</a></li>
+<li><a href="#Create-ActivityRecord-404">ActivityRecord 등록 - 404 예외 발생</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -480,6 +486,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="Category-API"><a class="link" href="#Category-API">Category-API</a></h2>
 <div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>필요한 경우, memberId를 url 파라미터로 전달합니다.</p>
+</li>
+<li>
+<p>추후 로그인이 적용되면, 이 파라미터는 제거하고 jwt를 이용할 예정입니다.</p>
+</li>
+</ul>
+</div>
 <div class="sect2">
 <h3 id="Modify-Category-Value"><a class="link" href="#Modify-Category-Value">Category 속성 정보 수정</a></h3>
 <div class="sect3">
@@ -491,8 +507,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     -d '{
   "categoryId" : 1,
   "name" : "sample",
-  "color" : "sample",
-  "memberId" : 1
+  "color" : "sample"
 }'</code></pre>
 </div>
 </div>
@@ -503,14 +518,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /api/v1/categories/value HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 88
+Content-Length: 69
 Host: localhost:8080
 
 {
   "categoryId" : 1,
   "name" : "sample",
-  "color" : "sample",
-  "memberId" : 1
+  "color" : "sample"
 }</code></pre>
 </div>
 </div>
@@ -545,8 +559,7 @@ Content-Length: 62
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ echo '{
   "categoryId" : 1,
   "name" : "sample",
-  "color" : "sample",
-  "memberId" : 1
+  "color" : "sample"
 }' | http PUT 'http://localhost:8080/api/v1/categories/value' \
     'Content-Type:application/json;charset=UTF-8'</code></pre>
 </div>
@@ -559,8 +572,7 @@ Content-Length: 62
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
   "categoryId" : 1,
   "name" : "sample",
-  "color" : "sample",
-  "memberId" : 1
+  "color" : "sample"
 }</code></pre>
 </div>
 </div>
@@ -596,10 +608,26 @@ Content-Length: 62
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 색상</p></td>
 </tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Modify-Category-Value_request_parameters"><a class="link" href="#Modify-Category-Value_request_parameters">Request parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디(temp)</p></td>
 </tr>
 </tbody>
 </table>
@@ -656,8 +684,7 @@ Content-Length: 62
     -d '{
   "categoryId" : 1,
   "level" : 0,
-  "mainCategoryId" : 3,
-  "memberId" : 1
+  "mainCategoryId" : 3
 }'</code></pre>
 </div>
 </div>
@@ -668,14 +695,13 @@ Content-Length: 62
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /api/v1/categories/relation HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 84
+Content-Length: 65
 Host: localhost:8080
 
 {
   "categoryId" : 1,
   "level" : 0,
-  "mainCategoryId" : 3,
-  "memberId" : 1
+  "mainCategoryId" : 3
 }</code></pre>
 </div>
 </div>
@@ -710,8 +736,7 @@ Content-Length: 62
 <pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ echo '{
   "categoryId" : 1,
   "level" : 0,
-  "mainCategoryId" : 3,
-  "memberId" : 1
+  "mainCategoryId" : 3
 }' | http PUT 'http://localhost:8080/api/v1/categories/relation' \
     'Content-Type:application/json;charset=UTF-8'</code></pre>
 </div>
@@ -724,8 +749,7 @@ Content-Length: 62
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
   "categoryId" : 1,
   "level" : 0,
-  "mainCategoryId" : 3,
-  "memberId" : 1
+  "mainCategoryId" : 3
 }</code></pre>
 </div>
 </div>
@@ -761,10 +785,26 @@ Content-Length: 62
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">상위 카테고리 아이디 (자신이 대분류인 경우 null)</p></td>
 </tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Modify-Category-Relation_request_parameters"><a class="link" href="#Modify-Category-Relation_request_parameters">Request parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디(temp)</p></td>
 </tr>
 </tbody>
 </table>
@@ -830,8 +870,7 @@ Content-Length: 62
   "name" : "sample",
   "color" : "sample",
   "level" : 0,
-  "mainCategoryId" : null,
-  "memberId" : 1
+  "mainCategoryId" : null
 }'</code></pre>
 </div>
 </div>
@@ -842,7 +881,7 @@ Content-Length: 62
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /api/v1/categories HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 132
+Content-Length: 113
 Host: localhost:8080
 
 {
@@ -850,8 +889,7 @@ Host: localhost:8080
   "name" : "sample",
   "color" : "sample",
   "level" : 0,
-  "mainCategoryId" : null,
-  "memberId" : 1
+  "mainCategoryId" : null
 }</code></pre>
 </div>
 </div>
@@ -888,8 +926,7 @@ Content-Length: 62
   "name" : "sample",
   "color" : "sample",
   "level" : 0,
-  "mainCategoryId" : null,
-  "memberId" : 1
+  "mainCategoryId" : null
 }' | http PUT 'http://localhost:8080/api/v1/categories' \
     'Content-Type:application/json;charset=UTF-8'</code></pre>
 </div>
@@ -904,8 +941,7 @@ Content-Length: 62
   "name" : "sample",
   "color" : "sample",
   "level" : 0,
-  "mainCategoryId" : null,
-  "memberId" : 1
+  "mainCategoryId" : null
 }</code></pre>
 </div>
 </div>
@@ -951,10 +987,26 @@ Content-Length: 62
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">상위 카테고리 아이디 (자신이 대분류인 경우 null)</p></td>
 </tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Modify-Category_request_parameters"><a class="link" href="#Modify-Category_request_parameters">Request parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디(temp)</p></td>
 </tr>
 </tbody>
 </table>
@@ -1051,6 +1103,28 @@ Content-Length: 62
 </div>
 </div>
 <div class="sect3">
+<h4 id="Delete-Category_path_parameters"><a class="link" href="#Delete-Category_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/v1/categories/{categoryId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categoryId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 아이디</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
 <h4 id="Delete-Category_request_body"><a class="link" href="#Delete-Category_request_body">Request body</a></h4>
 <div class="listingblock">
 <div class="content">
@@ -1061,6 +1135,27 @@ Content-Length: 62
 <div class="sect3">
 <h4 id="Delete-Category_request_fields"><a class="link" href="#Delete-Category_request_fields">Request fields</a></h4>
 
+</div>
+<div class="sect3">
+<h4 id="Delete-Category_request_parameters"><a class="link" href="#Delete-Category_request_parameters">Request parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디(temp)</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="Delete-Category_response_body"><a class="link" href="#Delete-Category_response_body">Response body</a></h4>
@@ -1105,11 +1200,506 @@ Content-Length: 62
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="ActivityRecord-API"><a class="link" href="#ActivityRecord-API">ActivityRecord-API</a></h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>필요한 경우, memberId를 url 파라미터로 전달합니다.</p>
+</li>
+<li>
+<p>추후 로그인이 적용되면, 이 파라미터는 제거하고 jwt를 이용할 예정입니다.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="Create-ActivityRecord"><a class="link" href="#Create-ActivityRecord">ActivityRecord 등록</a></h3>
+<div class="sect3">
+<h4 id="Create-ActivityRecord_curl_request"><a class="link" href="#Create-ActivityRecord_curl_request">Curl request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/activity-records' -i -X POST \
+    -H 'Content-Type: application/json;charset=UTF-8' \
+    -d '{
+  "categoryId" : 1,
+  "startedAt" : "2023-01-01T13:00:00 KST",
+  "finishedAt" : "2023-01-01T15:30:00 KST",
+  "content" : "test-activity",
+  "timeUnit" : 30
+}'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord_http_request"><a class="link" href="#Create-ActivityRecord_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/activity-records HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 165
+Host: localhost:8080
+
+{
+  "categoryId" : 1,
+  "startedAt" : "2023-01-01T13:00:00 KST",
+  "finishedAt" : "2023-01-01T15:30:00 KST",
+  "content" : "test-activity",
+  "timeUnit" : 30
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord_http_response"><a class="link" href="#Create-ActivityRecord_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Location: http://localhost:8080/api/v1/activity-records
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+Content-Length: 1565
+
+{
+  "message" : "Successfully Created",
+  "result" : [ {
+    "activityRecordId" : 0,
+    "categoryId" : 1,
+    "categoryName" : "test",
+    "categoryColor" : "blue",
+    "content" : "test-activity",
+    "startedAt" : "2023-01-01T13:00:00 KST",
+    "finishedAt" : "2023-01-01T13:30:00 KST",
+    "timeZone" : "Asia/Seoul",
+    "timeUnit" : 30
+  }, {
+    "activityRecordId" : 1,
+    "categoryId" : 1,
+    "categoryName" : "test",
+    "categoryColor" : "blue",
+    "content" : "test-activity",
+    "startedAt" : "2023-01-01T13:30:00 KST",
+    "finishedAt" : "2023-01-01T14:00:00 KST",
+    "timeZone" : "Asia/Seoul",
+    "timeUnit" : 30
+  }, {
+    "activityRecordId" : 2,
+    "categoryId" : 1,
+    "categoryName" : "test",
+    "categoryColor" : "blue",
+    "content" : "test-activity",
+    "startedAt" : "2023-01-01T14:00:00 KST",
+    "finishedAt" : "2023-01-01T14:30:00 KST",
+    "timeZone" : "Asia/Seoul",
+    "timeUnit" : 30
+  }, {
+    "activityRecordId" : 3,
+    "categoryId" : 1,
+    "categoryName" : "test",
+    "categoryColor" : "blue",
+    "content" : "test-activity",
+    "startedAt" : "2023-01-01T14:30:00 KST",
+    "finishedAt" : "2023-01-01T15:00:00 KST",
+    "timeZone" : "Asia/Seoul",
+    "timeUnit" : 30
+  }, {
+    "activityRecordId" : 4,
+    "categoryId" : 1,
+    "categoryName" : "test",
+    "categoryColor" : "blue",
+    "content" : "test-activity",
+    "startedAt" : "2023-01-01T15:00:00 KST",
+    "finishedAt" : "2023-01-01T15:30:00 KST",
+    "timeZone" : "Asia/Seoul",
+    "timeUnit" : 30
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord_httpie_request"><a class="link" href="#Create-ActivityRecord_httpie_request">HTTPie request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ echo '{
+  "categoryId" : 1,
+  "startedAt" : "2023-01-01T13:00:00 KST",
+  "finishedAt" : "2023-01-01T15:30:00 KST",
+  "content" : "test-activity",
+  "timeUnit" : 30
+}' | http POST 'http://localhost:8080/api/v1/activity-records' \
+    'Content-Type:application/json;charset=UTF-8'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord_request_body"><a class="link" href="#Create-ActivityRecord_request_body">Request body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "categoryId" : 1,
+  "startedAt" : "2023-01-01T13:00:00 KST",
+  "finishedAt" : "2023-01-01T15:30:00 KST",
+  "content" : "test-activity",
+  "timeUnit" : 30
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord_request_fields"><a class="link" href="#Create-ActivityRecord_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categoryId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>startedAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시작 시간 (데이터 예 : 2023-01-01T16:00:00 Asia/Seoul)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>finishedAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">종료 시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">활동 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeUnit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시간 단위</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord_request_parameters"><a class="link" href="#Create-ActivityRecord_request_parameters">Request parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디(temp)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord_response_body"><a class="link" href="#Create-ActivityRecord_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "message" : "Successfully Created",
+  "result" : [ {
+    "activityRecordId" : 0,
+    "categoryId" : 1,
+    "categoryName" : "test",
+    "categoryColor" : "blue",
+    "content" : "test-activity",
+    "startedAt" : "2023-01-01T13:00:00 KST",
+    "finishedAt" : "2023-01-01T13:30:00 KST",
+    "timeZone" : "Asia/Seoul",
+    "timeUnit" : 30
+  }, {
+    "activityRecordId" : 1,
+    "categoryId" : 1,
+    "categoryName" : "test",
+    "categoryColor" : "blue",
+    "content" : "test-activity",
+    "startedAt" : "2023-01-01T13:30:00 KST",
+    "finishedAt" : "2023-01-01T14:00:00 KST",
+    "timeZone" : "Asia/Seoul",
+    "timeUnit" : 30
+  }, {
+    "activityRecordId" : 2,
+    "categoryId" : 1,
+    "categoryName" : "test",
+    "categoryColor" : "blue",
+    "content" : "test-activity",
+    "startedAt" : "2023-01-01T14:00:00 KST",
+    "finishedAt" : "2023-01-01T14:30:00 KST",
+    "timeZone" : "Asia/Seoul",
+    "timeUnit" : 30
+  }, {
+    "activityRecordId" : 3,
+    "categoryId" : 1,
+    "categoryName" : "test",
+    "categoryColor" : "blue",
+    "content" : "test-activity",
+    "startedAt" : "2023-01-01T14:30:00 KST",
+    "finishedAt" : "2023-01-01T15:00:00 KST",
+    "timeZone" : "Asia/Seoul",
+    "timeUnit" : 30
+  }, {
+    "activityRecordId" : 4,
+    "categoryId" : 1,
+    "categoryName" : "test",
+    "categoryColor" : "blue",
+    "content" : "test-activity",
+    "startedAt" : "2023-01-01T15:00:00 KST",
+    "finishedAt" : "2023-01-01T15:30:00 KST",
+    "timeZone" : "Asia/Seoul",
+    "timeUnit" : 30
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord_response_fields"><a class="link" href="#Create-ActivityRecord_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메세지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과값</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].categoryId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].categoryName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].categoryColor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 색상</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].startedAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시작 시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].finishedAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">종료 시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].timeZone</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타임존</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">활동 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].timeUnit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">시간 단위</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="Create-ActivityRecord-404"><a class="link" href="#Create-ActivityRecord-404">ActivityRecord 등록 - 404 예외 발생</a></h3>
+<div class="sect3">
+<h4 id="Create-ActivityRecord-404_curl_request"><a class="link" href="#Create-ActivityRecord-404_curl_request">Curl request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/activity-records' -i -X POST \
+    -H 'Content-Type: application/json;charset=UTF-8' \
+    -d '{
+  "categoryId" : 1,
+  "startedAt" : "2023-01-01T13:11:00 KST",
+  "finishedAt" : "2023-01-01T15:41:00 KST",
+  "content" : "test-activity",
+  "timeUnit" : 30
+}'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord-404_http_request"><a class="link" href="#Create-ActivityRecord-404_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/activity-records HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 165
+Host: localhost:8080
+
+{
+  "categoryId" : 1,
+  "startedAt" : "2023-01-01T13:11:00 KST",
+  "finishedAt" : "2023-01-01T15:41:00 KST",
+  "content" : "test-activity",
+  "timeUnit" : 30
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord-404_http_response"><a class="link" href="#Create-ActivityRecord-404_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+Content-Length: 41
+
+{
+  "message" : "Not Valid Time Data"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord-404_httpie_request"><a class="link" href="#Create-ActivityRecord-404_httpie_request">HTTPie request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ echo '{
+  "categoryId" : 1,
+  "startedAt" : "2023-01-01T13:11:00 KST",
+  "finishedAt" : "2023-01-01T15:41:00 KST",
+  "content" : "test-activity",
+  "timeUnit" : 30
+}' | http POST 'http://localhost:8080/api/v1/activity-records' \
+    'Content-Type:application/json;charset=UTF-8'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord-404_request_body"><a class="link" href="#Create-ActivityRecord-404_request_body">Request body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "categoryId" : 1,
+  "startedAt" : "2023-01-01T13:11:00 KST",
+  "finishedAt" : "2023-01-01T15:41:00 KST",
+  "content" : "test-activity",
+  "timeUnit" : 30
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord-404_request_parameters"><a class="link" href="#Create-ActivityRecord-404_request_parameters">Request parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디(temp)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord-404_response_body"><a class="link" href="#Create-ActivityRecord-404_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "message" : "Not Valid Time Data"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="Create-ActivityRecord-404_response_fields"><a class="link" href="#Create-ActivityRecord-404_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메세지</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-01-08 00:39:35 +0900
+Last updated 2023-02-07 08:20:40 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
