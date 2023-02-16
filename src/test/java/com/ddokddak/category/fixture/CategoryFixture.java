@@ -2,14 +2,8 @@ package com.ddokddak.category.fixture;
 
 import com.ddokddak.category.entity.Category;
 import com.ddokddak.member.Member;
-import org.jeasy.random.EasyRandom;
-import org.jeasy.random.EasyRandomParameters;
-import org.jeasy.random.randomizers.range.LongRangeRandomizer;
-
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class CategoryFixture {
 

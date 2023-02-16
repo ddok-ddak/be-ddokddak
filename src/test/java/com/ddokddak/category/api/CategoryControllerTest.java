@@ -1,8 +1,8 @@
 package com.ddokddak.category.api;
 
-import com.ddokddak.category.dto.CategoryModifyRequest;
-import com.ddokddak.category.dto.CategoryRelationModifyRequest;
-import com.ddokddak.category.dto.CategoryValueModifyRequest;
+import com.ddokddak.category.dto.ModifyCategoryRequest;
+import com.ddokddak.category.dto.ModifyCategoryRelationRequest;
+import com.ddokddak.category.dto.ModifyCategoryValueRequest;
 import com.ddokddak.category.service.CategoryWriteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +75,7 @@ class CategoryControllerTest {
     @Test
     void modifyCategoryValue() throws Exception {
         // given
-        var dto = CategoryValueModifyRequest.builder()
+        var dto = ModifyCategoryValueRequest.builder()
                 .categoryId(1L)
                 .name("sample")
                 .color("sample")
@@ -113,7 +113,7 @@ class CategoryControllerTest {
     @Test
     void modifyCategoryRelation() throws Exception {
         // given
-        var dto = CategoryRelationModifyRequest.builder()
+        var dto = ModifyCategoryRelationRequest.builder()
                 .categoryId(1L)
                 .level(0)
                 .mainCategoryId(3L)
@@ -151,7 +151,7 @@ class CategoryControllerTest {
     @Test
     void modifyCategory() throws Exception {
         // given
-        var dto = CategoryModifyRequest.builder()
+        var dto = ModifyCategoryRequest.builder()
                 .categoryId(1L)
                 .name("sample")
                 .color("sample")

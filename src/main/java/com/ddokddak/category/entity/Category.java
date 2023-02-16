@@ -1,7 +1,5 @@
 package com.ddokddak.category.entity;
 
-import com.ddokddak.category.dto.CategoryRelationModifyRequest;
-import com.ddokddak.category.dto.CategoryValueModifyRequest;
 import com.ddokddak.common.entity.BaseTimeEntity;
 import com.ddokddak.member.Member;
 import lombok.*;
@@ -10,6 +8,7 @@ import org.hibernate.annotations.Where;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class Category extends BaseTimeEntity {
     private Long id;
 
     // 하나의 카테고리 그룹 내에서 카테고리의 이름은 중복이 불가능하다.
-    // TODO: 한, 영만 가능, 특수문자 금지 - 정규식 추가
+    //@Pattern(regexp="[a-zA-Z가-힣0-9]{1,10}", message = "카테고리 명칭 규칙 위반")
     @Column(length = 10, nullable = false)
     private String name;
 
