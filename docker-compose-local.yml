@@ -1,6 +1,8 @@
 version: "3.8"
 services:
   mysql_db:
+#    m1의 경우 docker desktop 사용하여 compose up 시 아래의 코드를 반영합니다.
+#    platform: linux/amd64
     container_name: dd_mysql
     image: 'mysql'
     ports:
