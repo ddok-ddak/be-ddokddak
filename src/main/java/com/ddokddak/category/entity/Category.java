@@ -32,8 +32,10 @@ public class Category extends BaseTimeEntity {
 
     @Column(length = 10, nullable = false)
     private String color;
+
     @Column(length = 1)
     private Integer level;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="PARENT_ID")
     private Category mainCategory;
