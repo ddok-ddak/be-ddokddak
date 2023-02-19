@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.format.DateTimeParseException;
-
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -23,13 +21,13 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<CommonResponse<CategoryAddResponse>> addCategory(@RequestBody CategoryAddRequest req){
         var res = categoryWriteService.addCategory(req);
-        return ResponseEntity.ok( new CommonResponse<>("Successfully Created", res) );
+        return ResponseEntity.ok(new CommonResponse<>("Successfully Created", res));
     }
 
     @GetMapping("/categories")
     public ResponseEntity<CommonResponse<CategoryReadResponse>> getCategories(@RequestParam Long memberId) {
-        CategoryReadResponse response = categoryReadService.readCategoriesByMemberId(memberId);
-        return  ResponseEntity.ok(new CommonResponse<>("Success", response));
+        CategoryReadResponse res = categoryReadService.readCategoriesByMemberId(memberId);
+        return  ResponseEntity.ok(new CommonResponse<>("Successfully loaded", res));
     }
 
     // 현재 매개변수 Long memberId 를 추후 @AuthenticationalPrincipal 활용하는 것으로 수정

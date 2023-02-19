@@ -1,9 +1,11 @@
 package com.ddokddak.category.repository;
 
 import com.ddokddak.category.entity.Category;
+import com.ddokddak.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +13,9 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Optional<Category> findByIdAndMemberId(Long categoryId, Long memberId);
-    Optional<List<Category>> findByMemberId(Long memberId);
+
+    @Query("select DISTINCT category from Category category join fetch category.member where category.member = :member")
+    Optional<List<Category>> findCategoryJoinFetch(@Param("member") Member member);
 
     @Modifying
     @Query("UPDATE Category c SET modifiedAt = NOW(), deleteYn ='Y' WHERE c.mainCategory = :category")

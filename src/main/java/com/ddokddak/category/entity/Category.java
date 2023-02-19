@@ -2,13 +2,13 @@ package com.ddokddak.category.entity;
 
 import com.ddokddak.common.entity.BaseTimeEntity;
 import com.ddokddak.member.Member;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +38,12 @@ public class Category extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="PARENT_ID")
+    @JsonBackReference
     private Category mainCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="MEMBER_ID")
+    @JsonBackReference
     private Member member;
 
     @Builder.Default
@@ -49,6 +51,7 @@ public class Category extends BaseTimeEntity {
     private String deleteYn = "N";
 
     @OneToMany(mappedBy="mainCategory")
+    @JsonBackReference
     private List<Category> subCategories = new ArrayList<>();
 
     public void modifyColor(String color) {
