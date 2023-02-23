@@ -1,6 +1,6 @@
 name: Test with Gradle
 on:
-  pull-request:
+  pull_request:
     branches: dev
 permissions:
   contents: read
