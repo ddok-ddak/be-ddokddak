@@ -1,6 +1,7 @@
 package com.ddokddak.activityRecord.api;
 
 import com.ddokddak.activityRecord.dto.CreateActivityRecordRequest;
+import com.ddokddak.activityRecord.dto.ReadActivityRecordRequest;
 import com.ddokddak.activityRecord.entity.ActivityRecord;
 import com.ddokddak.activityRecord.mapper.ActivityRecordMapper;
 import com.ddokddak.category.entity.Category;
@@ -23,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
