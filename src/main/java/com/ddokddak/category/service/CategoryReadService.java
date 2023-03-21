@@ -36,7 +36,20 @@ public class CategoryReadService {
     @Transactional(readOnly = true)
     public Category findByIdAndMemberId(Long categoryId, Long memberId) {
         return categoryRepository.findByIdAndMemberId(categoryId, memberId)
-
                 .orElseThrow(() -> new NotValidRequestException(NotValidRequest.UNABLE_REQUEST));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Category> findByRefMember(Member member) {
+        var allByMember = categoryRepository.findAllByMember(member);
+        if (allByMember.size() < 1) throw new NotValidRequestException(NotValidRequest.UNABLE_REQUEST);
+        return allByMember;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Category> findByMemberId(Long memberId) {
+        var allByMember = categoryRepository.findByMemberId(memberId);
+        if (allByMember.size() < 1) throw new NotValidRequestException(NotValidRequest.UNABLE_REQUEST);
+        return allByMember;
     }
 }

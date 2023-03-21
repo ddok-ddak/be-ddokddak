@@ -2,7 +2,6 @@ package com.ddokddak.activityRecord.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 public record ActivityRecordResponse(

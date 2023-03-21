@@ -2,7 +2,6 @@ package com.ddokddak.activityRecord.service;
 
 import com.ddokddak.activityRecord.entity.ActivityRecord;
 import com.ddokddak.activityRecord.repository.ActivityRecordJdbcRepository;
-import com.ddokddak.activityRecord.repository.ActivityRecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +12,6 @@ import java.util.List;
 @Service
 public class ActivityRecordWriteService {
 
-    private final ActivityRecordRepository activityRecordRepository;
     private final ActivityRecordJdbcRepository activityRecordJdbcRepository;
 
     @Transactional

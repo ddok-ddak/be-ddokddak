@@ -60,8 +60,8 @@ public class ActivityRecordJdbcRepository {
     public void batchInsert(int batchSize, List<ActivityRecord> list) {
 
         var sql = "INSERT INTO ACTIVITY_RECORD (MEMBER_ID, CATEGORY_ID, CATEGORY_NAME, CATEGORY_COLOR, " +
-                "STARTED_AT, FINISHED_AT, TIME_ZONE, CONTENT, TIME_UNIT, DELETE_YN) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "STARTED_AT, FINISHED_AT, TIME_ZONE, CONTENT, TIME_UNIT, DELETE_YN, CREATED_AT) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
         try {
             jdbcTemplate.batchUpdate(
                     sql,
