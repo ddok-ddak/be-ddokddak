@@ -5,15 +5,9 @@ import com.ddokddak.activityRecord.dto.ReadActivityRecordRequest;
 import com.ddokddak.activityRecord.entity.ActivityRecord;
 import com.ddokddak.activityRecord.fixture.ActivityRecordFixture;
 import com.ddokddak.activityRecord.repository.ActivityRecordRepository;
-import com.ddokddak.category.dto.CategoryAddRequest;
-import com.ddokddak.category.dto.CategoryModifyRequest;
-import com.ddokddak.category.dto.CategoryRelationModifyRequest;
-import com.ddokddak.category.dto.CategoryValueModifyRequest;
 import com.ddokddak.category.entity.Category;
 import com.ddokddak.category.fixture.CategoryFixture;
 import com.ddokddak.category.repository.CategoryRepository;
-import com.ddokddak.category.service.CategoryWriteService;
-import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.member.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import org.junit.jupiter.api.*;
@@ -22,13 +16,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -82,13 +73,13 @@ class ActivityRecordServiceTest {
     @DisplayName("활동 내역 기록 조회")
     @Test
     void readActivityRecord() throws Exception {
+        var memberId = 1L;
         var req = ReadActivityRecordRequest.builder()
-                .memberId(1L)
                 .fromStartedAt( LocalDateTime.now().minusMonths(1) )
                 .toStartedAt(LocalDateTime.now())
                 .build();
         var test = activityRecordRepository.findAll();
-        var result = activityRecordReadService.findByMemberIdAndStartedAtBetween( req.memberId(), req.fromStartedAt(), req.toStartedAt() );
+        var result = activityRecordReadService.findByMemberIdAndStartedAtBetween( memberId, req.fromStartedAt(), req.toStartedAt() );
 
         assertThat(result);
     }

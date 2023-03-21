@@ -166,10 +166,11 @@ public class CategoryWriteService {
         // 카테고리 아이디와 멤버 아이디로 조회
         var category = categoryRepository.findByIdAndMemberId(req.categoryId(), memberId)
                 .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_ID));
-        Category mainCategory = null;
+        Category mainCategory = category.getMainCategory();
 
         // 1. 관계가 변경되지 않는 경우
-        if (Objects.equals(category.getLevel(), req.level()) && Objects.equals(category.getMainCategory().getId(), req.mainCategoryId())) {
+        if (Objects.equals(category.getLevel(), req.level())
+                && Objects.equals(mainCategory == null ? null : mainCategory.getId(), req.mainCategoryId())) {
 
             // 이름 변경이 있다면, 검증 수행
             if (!Objects.equals(req.name(), category.getName())) {

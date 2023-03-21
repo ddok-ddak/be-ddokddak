@@ -2,17 +2,19 @@ package com.ddokddak.activityRecord.mapper;
 
 import com.ddokddak.activityRecord.dto.ActivityRecordResponse;
 import com.ddokddak.activityRecord.dto.CreateActivityRecordRequest;
+import com.ddokddak.activityRecord.dto.StatsActivityRecordResponse;
 import com.ddokddak.activityRecord.entity.ActivityRecord;
 import com.ddokddak.category.entity.Category;
-import org.springframework.stereotype.Component;
-
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 
-@Component
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class ActivityRecordMapper {
 
-    public static ActivityRecord toEntity(Integer cnt, CreateActivityRecordRequest req, Category category) {
+    public static final ActivityRecord toEntity(Integer cnt, CreateActivityRecordRequest req, Category category) {
 
         return ActivityRecord.builder()
                 .category(category)
@@ -27,7 +29,7 @@ public class ActivityRecordMapper {
                 .build();
     }
 
-    public static ActivityRecordResponse toActivityRecordResponse(ActivityRecord activityRecord) {
+    public static final ActivityRecordResponse toActivityRecordResponse(ActivityRecord activityRecord) {
 
         return ActivityRecordResponse.builder()
                 .activityRecordId(activityRecord.getId())
@@ -42,7 +44,19 @@ public class ActivityRecordMapper {
                 .build();
     }
 
-    public static ActivityRecord toEntityForTest(int cnt, CreateActivityRecordRequest req, Category category) {
+    public static final StatsActivityRecordResponse toStatResponse(Category category, long time, List<StatsActivityRecordResponse> children) {
+        return StatsActivityRecordResponse.builder()
+                .categoryId(category.getId())
+                .categoryColor(category.getColor())
+                .categoryName(category.getName())
+                .level(category.getLevel())
+                .parentId(category.getMainCategory()==null?null:category.getMainCategory().getId())
+                .children(children)
+                .timeSum(time)
+                .build();
+    }
+
+    public static final ActivityRecord toEntityForTest(int cnt, CreateActivityRecordRequest req, Category category) {
 
         return ActivityRecord.builder()
                 .id(Long.valueOf(cnt))
