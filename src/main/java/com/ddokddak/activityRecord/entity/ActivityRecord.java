@@ -2,7 +2,7 @@ package com.ddokddak.activityRecord.entity;
 
 import com.ddokddak.category.entity.Category;
 import com.ddokddak.common.entity.BaseTimeEntity;
-import com.ddokddak.member.Member;
+import com.ddokddak.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;

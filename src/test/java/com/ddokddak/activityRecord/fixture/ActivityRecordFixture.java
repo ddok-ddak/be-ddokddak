@@ -2,12 +2,10 @@ package com.ddokddak.activityRecord.fixture;
 
 import com.ddokddak.activityRecord.entity.ActivityRecord;
 import com.ddokddak.category.entity.Category;
-import com.ddokddak.member.Member;
+import com.ddokddak.member.entity.Member;
 
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -23,7 +21,7 @@ public class ActivityRecordFixture {
                         .categoryColor(categories.get(i).getColor())
                         .startedAt(startedTime.minusMinutes(30*(i+1)).toLocalDateTime())
                         .finishedAt(startedTime.minusMinutes(30*i).toLocalDateTime())
-                        .timeZone( startedTime.getZone().toString() )
+                        .timeZone(startedTime.getZone().toString())
                         .content("content")
                         .timeUnit(30)
                         .member(member)

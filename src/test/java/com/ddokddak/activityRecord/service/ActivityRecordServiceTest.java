@@ -8,7 +8,7 @@ import com.ddokddak.activityRecord.repository.ActivityRecordRepository;
 import com.ddokddak.category.entity.Category;
 import com.ddokddak.category.fixture.CategoryFixture;
 import com.ddokddak.category.repository.CategoryRepository;
-import com.ddokddak.member.Member;
+import com.ddokddak.member.entity.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -81,10 +81,9 @@ class ActivityRecordServiceTest {
                 .fromStartedAt( LocalDateTime.now().minusMonths(1) )
                 .toStartedAt(LocalDateTime.now())
                 .build();
-        var test = activityRecordRepository.findAll();
+
         var result = activityRecordReadService.findByMemberIdAndStartedAtBetween( memberId, req.fromStartedAt(), req.toStartedAt() );
 
         assertThat(result);
     }
-
 }

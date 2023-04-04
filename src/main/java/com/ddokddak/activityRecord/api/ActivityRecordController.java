@@ -36,7 +36,7 @@ public class ActivityRecordController {
     }
 
     @PostMapping
-    public ResponseEntity<CommonResponse<List<ActivityRecordResponse>>> createCategory(
+    public ResponseEntity<CommonResponse<List<ActivityRecordResponse>>> createActivityRecord(
             @RequestParam(required = false, defaultValue = "1") Long memberId,
             @RequestBody CreateActivityRecordRequest req)
     {
@@ -51,8 +51,7 @@ public class ActivityRecordController {
 
     @GetMapping("/stats")
     public ResponseEntity<CommonResponse<List<StatsActivityRecordResponse>>> getRecordStatsGroupByCategory(
-            @RequestParam(required = false, defaultValue = "1") Long memberId,
-            StatsActivityRecordRequest req)
+            @RequestParam(required = false, defaultValue = "1") Long memberId, StatsActivityRecordRequest req)
     {
         var response = statsActivityRecordUsecase.execute(req, memberId);
         return ResponseEntity.ok(new CommonResponse<>("Success", response));
