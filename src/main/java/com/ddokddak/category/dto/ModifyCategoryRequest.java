@@ -10,7 +10,7 @@ public record ModifyCategoryRequest(
         @NotNull Long categoryId,
         @NotNull @Pattern(regexp="[a-zA-Z가-힣0-9]{1,10}", message = "카테고리 명칭 규칙 위반")
         String name,
-        @NotNull //@Pattern(regexp="[a-zA-Z가-힣0-9]{1,10}", message = "카테고리 명칭 규칙 위반")
+        @NotNull
         String color,
         @NotNull Integer level,
         @Nullable Long mainCategoryId

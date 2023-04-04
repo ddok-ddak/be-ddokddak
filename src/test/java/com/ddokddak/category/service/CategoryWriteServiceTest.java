@@ -9,7 +9,7 @@ import com.ddokddak.category.entity.Category;
 import com.ddokddak.category.fixture.CategoryFixture;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.member.Member;
+import com.ddokddak.member.entity.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

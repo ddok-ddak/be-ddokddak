@@ -1,7 +1,7 @@
 package com.ddokddak.category.entity;
 
 import com.ddokddak.common.entity.BaseTimeEntity;
-import com.ddokddak.member.Member;
+import com.ddokddak.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
