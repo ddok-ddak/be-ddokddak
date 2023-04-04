@@ -49,6 +49,8 @@ dependencies {
 
     asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    
     // queryDSL 설정
     implementation "com.querydsl:querydsl-jpa"
     implementation "com.querydsl:querydsl-core"

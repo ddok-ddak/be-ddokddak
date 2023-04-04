@@ -39,3 +39,6 @@ out/
 
 ### docker env ###
 mysqldata/
+
+### auth-properties ###
+config/application-auth.yml
