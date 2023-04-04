@@ -1,13 +1,15 @@
 package com.ddokddak.activityRecord.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 
 public record ReadActivityRecordRequest(
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         LocalDateTime fromStartedAt,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         LocalDateTime toStartedAt
 ) {
     @Builder
