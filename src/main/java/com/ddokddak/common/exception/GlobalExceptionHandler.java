@@ -1,5 +1,6 @@
 package com.ddokddak.common.exception;
 
+import com.ddokddak.common.dto.CommonErrorResponse;
 import com.ddokddak.common.dto.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +21,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleCustomApiException(CustomApiException e, WebRequest request) {
 
         HttpHeaders headers = new HttpHeaders();
-        return handleExceptionInternal(e, new CommonResponse<>(e.getMessage(), null), headers, e.getStatus(), request);
+        return handleExceptionInternal(e, new CommonErrorResponse(e.getMessage(), e.getStatus()), headers, e.getStatus(), request);
     }
 
     // 나머지 예외 처리는 오버라이드해서 커스텀할 수 있다.
@@ -28,6 +29,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
             HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         // 예외 메세지 확인을 위한 오버라이딩
-        return handleExceptionInternal(ex, new CommonResponse<>(ex.getMessage(), null), headers, status, request);
+        return handleExceptionInternal(ex, new CommonErrorResponse(ex.getMessage(), status), headers, status, request);
     }
 }
