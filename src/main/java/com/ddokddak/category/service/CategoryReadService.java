@@ -1,12 +1,13 @@
 package com.ddokddak.category.service;
 
 
-import com.ddokddak.category.dto.CategoryReadResponse;
+import com.ddokddak.category.dto.ReadCategoryResponse;
 import com.ddokddak.category.entity.Category;
+import com.ddokddak.category.mapper.CategoryMapper;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.NotValidRequest;
-import com.ddokddak.member.Member;
+import com.ddokddak.member.entity.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,13 +26,14 @@ public class CategoryReadService {
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
-    public CategoryReadResponse readCategoriesByMemberId(Long memberId) {
+    public List<ReadCategoryResponse> readCategoriesByMemberId(Long memberId) {
 
         Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new NotValidRequestException(NotValidRequest.MEMBER_ID));
-        List<Category> categories = categoryRepository.findCategoryJoinFetch(member)
-                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_DATA));
-        return new CategoryReadResponse(categories);
+        return categoryRepository.findCategoryJoinFetch(member)
+                .stream()
+                .map(CategoryMapper::toReadCategoryResponse)
+                .toList();
     }
 
     @Transactional(readOnly = true)

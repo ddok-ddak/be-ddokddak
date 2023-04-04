@@ -1,10 +1,10 @@
 package com.ddokddak.category.service;
 
-import com.ddokddak.category.dto.CategoryReadResponse;
+import com.ddokddak.category.dto.ReadCategoryResponse;
 import com.ddokddak.category.entity.Category;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.member.Member;
+import com.ddokddak.member.entity.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +45,7 @@ public class CategoryReadServiceTest {
                 .level(0)
                 .member(member)
                 .deleteYn("N")
+                .subCategories(Collections.EMPTY_LIST)
                 .build()
         );
         categories.add(Category.builder()
@@ -53,12 +55,13 @@ public class CategoryReadServiceTest {
                 .level(0)
                 .member(member)
                 .deleteYn("N")
+                .subCategories(Collections.EMPTY_LIST)
                 .build()
         );
         Mockito.when(memberRepository.findMemberById(memberId)).thenReturn(Optional.of(member));
-        Mockito.when(categoryRepository.findCategoryJoinFetch(Mockito.any())).thenReturn(Optional.of(categories));
-        CategoryReadResponse response = categoryReadService.readCategoriesByMemberId(memberId);
-        assertEquals(categories.size(), response.result().size());
+        Mockito.when(categoryRepository.findCategoryJoinFetch(Mockito.any())).thenReturn(categories);
+        List<ReadCategoryResponse> response = categoryReadService.readCategoriesByMemberId(memberId);
+        assertEquals(categories.size(), response.size());
     }
 
     @DisplayName("Member가 존재하지 않을 경우, NotValidRequestException 발생 테스트")
@@ -72,18 +75,15 @@ public class CategoryReadServiceTest {
         });
     }
 
-    @DisplayName("Categories가 존재하지 않을 경우, NotValidRequestException 발생 테스트")
-    @Test
-    public void readCategoriesByMemberId_categoryNotFound() {
-        Long memberId = 1L;
-        Member member = Member.builder().id(memberId).build();
-        Mockito.when(memberRepository.findMemberById(memberId)).thenReturn(Optional.of(member));
-        Mockito.when(categoryRepository.findCategoryJoinFetch(member)).thenReturn(Optional.empty());
-
-        assertThrows(NotValidRequestException.class, () -> {
-            categoryReadService.readCategoriesByMemberId(memberId);
-        });
-    }
+//    @DisplayName("Categories가 존재하지 않을 경우, NotValidRequestException 발생 테스트")
+//    @Test
+//    public void readCategoriesByMemberId_categoryNotFound() {
+//        Long memberId = 1L;
+//        Member member = Member.builder().id(memberId).build();
+//        Mockito.when(memberRepository.findMemberById(memberId)).thenReturn(Optional.of(member));
+//        Mockito.when(categoryRepository.findCategoryJoinFetch(member)).thenReturn(Collections.EMPTY_LIST);
+//
+//    }
 
     @DisplayName("Id와 MemberId 탐색 성공 테스트")
     @Test

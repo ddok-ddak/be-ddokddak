@@ -3,9 +3,10 @@ package com.ddokddak.category.service;
 import com.ddokddak.category.dto.*;
 import com.ddokddak.category.entity.Category;
 import com.ddokddak.category.repository.CategoryRepository;
+import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.NotValidRequest;
-import com.ddokddak.member.Member;
+import com.ddokddak.member.entity.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -116,14 +117,21 @@ public class CategoryWriteService {
         var category = categoryRepository.findByIdAndMemberId(req.categoryId(), memberId)
                 .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_ID));
 
-        if (Objects.equals(req.name(), category.getName())) throw new NotValidRequestException(NotValidRequest.CATEGORY_NAME);
+        var isEqualName = Objects.equals(req.name(), category.getName());
+        var isEqualColor = Objects.equals(req.color(), category.getColor());
 
-        // 이름 검증 후 변경
-        List<Category> categories = this.getCategoriesToCompareName(category, category.getMainCategory());
-        this.checkCategoryNameAbleToUse(req.name(), category.getId(), categories);
-
-        category.modifyName(req.name());
-        category.modifyColor(req.color());
+        if (isEqualName && isEqualColor) {
+            throw new CustomApiException(NotValidRequest.UNABLE_REQUEST);
+        }
+        if (!isEqualName) {
+            // 이름 검증 후 변경
+            List<Category> categories = this.getCategoriesToCompareName(category, category.getMainCategory());
+            this.checkCategoryNameAbleToUse(req.name(), category.getId(), categories);
+            category.modifyName(req.name());
+        }
+        if (!isEqualColor) {
+            category.modifyColor(req.color());
+        }
     }
 
     /**
@@ -281,5 +289,8 @@ public class CategoryWriteService {
         if (Objects.equals(category.getLevel(), 1) && Objects.equals(category.getMainCategory().getId(), reqMainCategoryId)) {
             throw new NotValidRequestException(NotValidRequest.MAIN_CATEGORY_ID);
         }
+    }
+
+    public void createTemplateCategory(Member member) {
     }
 }

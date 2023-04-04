@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -25,8 +27,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponse<CategoryReadResponse>> getCategories(@RequestParam Long memberId) {
-        CategoryReadResponse res = categoryReadService.readCategoriesByMemberId(memberId);
+    public ResponseEntity<CommonResponse<List<ReadCategoryResponse>>> getCategories(@RequestParam Long memberId) {
+        List<ReadCategoryResponse> res = categoryReadService.readCategoriesByMemberId(memberId);
         return  ResponseEntity.ok(new CommonResponse<>("Successfully loaded", res));
     }
 
