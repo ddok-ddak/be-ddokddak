@@ -8,4 +8,4 @@ COPY ${JAR_FILE} app.jar
 ARG PROFILE=local
 ENV SPRING_PROFILES_ACTIVE=${PROFILE}
 
-ENTRYPOINT ["java","-jar", "-Dspring.config.location=classpath:/application.yml" ,"app.jar"]
+ENTRYPOINT ["java","-jar", "-Dspring.config.location=/config/application-auth.yml, classpath:/application.yml" ,"app.jar"]

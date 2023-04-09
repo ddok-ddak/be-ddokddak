@@ -8,12 +8,13 @@ import org.springframework.lang.Nullable;
 @Getter
 @Setter
 public class CommonResponse<T> {
-
+    private CommonStatus status;
     private String message;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    T result;
+    private T result;
 
     public CommonResponse(String message, @Nullable T result) {
+        this.status = CommonStatus.SUCCESS;
         this.message = message;
         this.result = result;
     }

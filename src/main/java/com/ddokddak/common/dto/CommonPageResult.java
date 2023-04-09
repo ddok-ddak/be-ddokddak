@@ -6,8 +6,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Getter
-public class CommonPageResponse<T> {
+public class CommonPageResult<T> {
     private List<T> content;
+
     private boolean first;
     private boolean last;
     private boolean empty;
@@ -19,7 +20,7 @@ public class CommonPageResponse<T> {
     private int pageSize;
     private long offset;
 
-    public CommonPageResponse(Page<T> page) {
+    public CommonPageResult(Page<T> page) {
         Pageable pageable = page.getPageable();
 
         this.content = page.getContent();
