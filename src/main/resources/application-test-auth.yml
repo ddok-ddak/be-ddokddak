@@ -1,0 +1,22 @@
+spring:
+  config:
+    activate:
+      on-profile: test-auth
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: emptyValueForTest
+            clientSecret: emptyValueForTest
+            scope: profile,email
+
+# 토큰 관련 secret Key 및 RedirectUri 설정
+auth:
+  token:
+    tokenSecret: emptyValueForTest
+    tokenExpirationMS: 1800000
+    refreshTokenExpiry: 604800000
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000
