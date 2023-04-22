@@ -5,13 +5,13 @@ import lombok.Builder;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 
-public record CategoryAddRequest(
+public record CategoryTemplateJdbcDto(
+        @NotNull Long memberId,
         @NotNull String name,
         @NotNull String color,
         @NotNull Integer level,
-        @Nullable Long mainCategoryId
-){
+        @Nullable String mainCategoryName
+) {
     @Builder
-    public CategoryAddRequest {}
-
+    public CategoryTemplateJdbcDto{}
 }

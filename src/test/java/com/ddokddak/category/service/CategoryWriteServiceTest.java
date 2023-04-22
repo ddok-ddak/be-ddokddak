@@ -67,10 +67,9 @@ class CategoryWriteServiceTest {
                                                                 .color("color0")
                                                                 .level(0)
                                                                 .mainCategoryId(null)
-                                                                .memberId(member.getId())
                                                                 .build();
         // then
-        assertThatThrownBy( ()-> categoryWriteService.addCategory( duplicatedRequest ) )
+        assertThatThrownBy( ()-> categoryWriteService.addCategory( member.getId(), duplicatedRequest ) )
                 .isInstanceOf( NotValidRequestException.class )
                 .hasMessage("Already Used Name");
     }
@@ -94,11 +93,10 @@ class CategoryWriteServiceTest {
                 .color("color0")
                 .level(1)
                 .mainCategoryId( notValidatedMainCategory.getId() ) // DB에 없는 아이디
-                .memberId(member.getId())
                 .build();
 
         // then
-        assertThatThrownBy( ()-> categoryWriteService.addCategory( duplicatedRequest ) )
+        assertThatThrownBy( ()-> categoryWriteService.addCategory( member.getId(), duplicatedRequest ) )
                 .isInstanceOf( NotValidRequestException.class )
                 .hasMessage("Not Valid Main Category Id");
     }
@@ -112,11 +110,10 @@ class CategoryWriteServiceTest {
                 .color("color4")
                 .level(1)
                 .mainCategoryId( mainCategories.get(2).getId() )
-                .memberId( member.getId() )
                 .build();
 
         // when
-        assertThatThrownBy( ()-> categoryWriteService.addCategory( duplicatedRequest ) )
+        assertThatThrownBy( ()-> categoryWriteService.addCategory( member.getId(), duplicatedRequest ) )
                 .isInstanceOf( NotValidRequestException.class )
                 .hasMessage("Already Used Name");
     }
@@ -129,11 +126,10 @@ class CategoryWriteServiceTest {
                 .name("category11")
                 .color("color11")
                 .level(0)
-                .memberId(member.getId())
                 .build();
 
         // when
-        var createdCategoryId = categoryWriteService.addCategory( request );
+        var createdCategoryId = categoryWriteService.addCategory( member.getId(), request );
 
         // then
         Assertions.assertTrue( categoryRepository.existsByLevelAndNameAndMemberId(request.level(),"category11",member.getId()) );
@@ -148,11 +144,10 @@ class CategoryWriteServiceTest {
                 .color("color10")
                 .level(1)
                 .mainCategoryId(mainCategories.get(2).getId())
-                .memberId(member.getId())
                 .build();
 
         // when
-        var createdCategoryId = categoryWriteService.addCategory( request );
+        var createdCategoryId = categoryWriteService.addCategory( member.getId(), request );
 
         // then
         Assertions.assertTrue(
