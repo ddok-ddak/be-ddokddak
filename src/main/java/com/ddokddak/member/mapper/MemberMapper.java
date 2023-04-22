@@ -2,10 +2,7 @@ package com.ddokddak.member.mapper;
 
 import com.ddokddak.member.dto.MemberResponse;
 import com.ddokddak.member.dto.RegisterMemberRequest;
-import com.ddokddak.member.entity.AuthProviderType;
-import com.ddokddak.member.entity.Member;
-import com.ddokddak.member.entity.RoleType;
-import com.ddokddak.member.entity.Status;
+import com.ddokddak.member.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -21,6 +18,7 @@ public class MemberMapper {
                 .role(RoleType.USER)
                 .authProviderType(AuthProviderType.DEFAULT)
                 .status(Status.NORMAL)
+                .templateType(TemplateType.NONE)
                 .build();
     }
 

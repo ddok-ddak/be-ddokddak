@@ -1,9 +1,7 @@
 package com.ddokddak.auth.domain.oauth;
 
-import com.ddokddak.member.entity.AuthProviderType;
-import com.ddokddak.member.entity.Member;
-import com.ddokddak.member.entity.RoleType;
-import com.ddokddak.member.entity.Status;
+import com.ddokddak.member.entity.*;
+
 import java.util.Map;
 
 public abstract class OAuth2UserInfo {
@@ -27,6 +25,7 @@ public abstract class OAuth2UserInfo {
             .role(RoleType.USER)
             .status(Status.NORMAL)
             .authProviderType(getProviderType())
+            .templateType(TemplateType.NONE)
             .build();
   }
 

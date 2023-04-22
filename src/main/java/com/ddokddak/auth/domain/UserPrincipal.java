@@ -1,7 +1,6 @@
 package com.ddokddak.auth.domain;
 
 import com.ddokddak.member.entity.Member;
-import com.ddokddak.member.entity.RoleType;
 import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
