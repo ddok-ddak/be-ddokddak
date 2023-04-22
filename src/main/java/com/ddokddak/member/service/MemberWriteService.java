@@ -41,9 +41,6 @@ public class MemberWriteService {
         var member = MemberMapper.fromRegisterMemberRequest(registerMemberRequest, this.passwordEncoder);
         memberRepository.save(member);
 
-        // TODO
-        categoryWriteService.createTemplateCategory(member);
-
         return MemberMapper.toMemberResponse(member);
     }
 
@@ -62,9 +59,6 @@ public class MemberWriteService {
 
         Member member = oAuth2UserInfo.toEntity(tempName);
         memberRepository.save(member);
-
-        // TODO
-        categoryWriteService.createTemplateCategory(member);
 
         return member;
     }

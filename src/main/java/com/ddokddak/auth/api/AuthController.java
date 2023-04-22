@@ -71,7 +71,9 @@ public class AuthController {
 //                .authorization("Bearer " + accessToken)
 //                .build();
 
-        return new ResponseEntity<>(new CommonResponse<>("Signed in Successfully", null), httpHeaders, HttpStatus.MOVED_PERMANENTLY);
+        return new ResponseEntity<>(new CommonResponse<>("Signed in Successfully", null),
+                httpHeaders,
+                HttpStatus.MOVED_PERMANENTLY);
 //                .headers(httpHeaders)
 //                .body(new CommonResponse<>(, signinResponse));
     }

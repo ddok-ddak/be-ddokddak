@@ -72,4 +72,8 @@ public class Member extends BaseTimeEntity {
     public String getRoleCode() {
         return this.role.getCode();
     }
+
+    public void registerTemplateType(TemplateType templateType) {
+        this.templateType = templateType;
+    }
 }
