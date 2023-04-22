@@ -3,34 +3,26 @@ spring:
   profiles:
     active: local
     group:
-      local: local, local-common, auth
-      test: test, local-common, auth
-      prod: prod, auth, prod-db
+      local: local, common, auth
+      test: test, common, test-auth
+      prod: common, prod, auth, prod-db
 ---
-# local-common 환경
+# common 환경
 spring:
   config:
     activate:
-      on-profile: local-common
-
+      on-profile: common
   jackson:
     deserialization:
       ADJUST_DATES_TO_CONTEXT_TIME_ZONE: false # 타임존 UTC로 자동 변경 해제
-
-  devtools:
-    livereload:
-      enabled: true
-
   datasource:
     hikari:
       data-source-properties:
         rewriteBatchedStatements: true # 배치 인서트 쿼리 활용 설정
-
 # 벌크 인서트 제한
 jdbc:
   batch:
     size: 1000
-
 
 # cors 설정
 cors:
@@ -38,7 +30,6 @@ cors:
   allowedMethods: GET,POST,PUT,PATCH,DELETE,OPTIONS
   allowedHeaders: '*'
   maxAgeSec: 3600
-
 server:
   port: 8080
 
@@ -96,6 +87,9 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: create-drop # 데이터를 쌓아두려면, 해당 속성을 update로 지정
+  devtools:
+    livereload:
+      enabled: true
 logging:
   level:
     root: DEBUG
@@ -103,3 +97,27 @@ logging:
       springframework:
         security: DEBUG
 ---
+# prod 환경
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+logging:
+  level:
+#    root: DEBUG
+    org:
+      springframework:
+        security: DEBUG
+
+# cors 설정
+cors:
+  allowedOrigins: 'http://localhost:80'
+  allowedMethods: GET,POST,PUT,PATCH,DELETE,OPTIONS
+  allowedHeaders: '*'
+  maxAgeSec: 3600

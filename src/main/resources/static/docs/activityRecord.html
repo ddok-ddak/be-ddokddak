@@ -505,9 +505,10 @@ X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
-Content-Length: 1565
+Content-Length: 1590
 
 {
+  "status" : "SUCCESS",
   "message" : "Successfully Created",
   "result" : [ {
     "activityRecordId" : 0,
@@ -663,6 +664,7 @@ Content-Length: 1565
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code>{
+  "status" : "SUCCESS",
   "message" : "Successfully Created",
   "result" : [ {
     "activityRecordId" : 0,
@@ -735,6 +737,11 @@ Content-Length: 1565
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 상태</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
@@ -939,7 +946,7 @@ Content-Length: 41
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-03-22 01:27:18 +0900
+Last updated 2023-04-09 15:16:30 +0900
 </div>
 </div>
 </body>
