@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  app:
+    container_name: dd_be_app
+    image: ddokddak/back
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./config:/config
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+networks:
+  default:
+    external:
+      name: dd # docker network create dd 외부에 미리 생성해둔 네트워크
