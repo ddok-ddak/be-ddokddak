@@ -64,6 +64,7 @@ class CategoryControllerTest {
                                 parameterWithName("categoryId").description("카테고리 아이디")
                         ),
                         responseFields(
+                                fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("응답 메세지"),
                                 subsectionWithPath("result").description("결과값")
                         )
@@ -102,6 +103,7 @@ class CategoryControllerTest {
                                 fieldWithPath("color").description("카테고리 색상")
                         ),
                         responseFields(
+                                fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("응답 메세지"),
                                 subsectionWithPath("result").description("결과값")
                         )
@@ -140,6 +142,7 @@ class CategoryControllerTest {
                                 fieldWithPath("mainCategoryId").description("상위 카테고리 아이디 (자신이 대분류인 경우 null)")
                         ),
                         responseFields(
+                                fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("응답 메세지"),
                                 subsectionWithPath("result").description("결과값")
                         )
@@ -181,6 +184,7 @@ class CategoryControllerTest {
                                 fieldWithPath("mainCategoryId").description("상위 카테고리 아이디 (자신이 대분류인 경우 null)")
                         ),
                         responseFields(
+                                fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("응답 메세지"),
                                 subsectionWithPath("result").description("결과값")
                         )

@@ -1,31 +1,39 @@
 package com.ddokddak.category.service;
 
+import com.ddokddak.activityRecord.repository.ActivityRecordJdbcRepository;
 import com.ddokddak.category.dto.*;
 import com.ddokddak.category.entity.Category;
+import com.ddokddak.category.enums.BaseTemplate;
+import com.ddokddak.category.enums.CategoryTemplate;
+import com.ddokddak.category.repository.CategoryJdbcRepository;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.NotValidRequest;
 import com.ddokddak.member.entity.Member;
+import com.ddokddak.member.entity.TemplateType;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryWriteService {
 
     private final CategoryRepository categoryRepository;
+    private final CategoryJdbcRepository categoryJdbcRepository;
     private final MemberRepository memberRepository;
 
 
     @Transactional
-    public CategoryAddResponse addCategory(CategoryAddRequest req){
-        Member member = memberRepository.findById( req.memberId() ).orElseThrow(
+    public CategoryAddResponse addCategory(Long memberId, CategoryAddRequest req) {
+        Member member = memberRepository.findById( memberId ).orElseThrow(
                 () -> new NotValidRequestException( NotValidRequest.MEMBER_ID )
         );
 
@@ -36,7 +44,6 @@ public class CategoryWriteService {
             1. 대분류 등록일 경우
             대분류들간의 중복 허용 X
         */
-
         if( Objects.equals(req.level(),0) ){
             // 요청 대분류 카테고리명과 멤버 아이디를 이용해서 기 카테고리명 유무 조회
             if( categoryRepository.existsByLevelAndNameAndMemberId( req.level(), req.name(), member.getId() ) ){
@@ -291,6 +298,29 @@ public class CategoryWriteService {
         }
     }
 
-    public void createTemplateCategory(Member member) {
+    @Transactional
+    public void addCategoryTemplate(AddCategoryTemplateRequest req, Long memberId) {
+        var member = memberRepository.findById(memberId)
+                .orElseThrow(()->new CustomApiException(NotValidRequest.MEMBER_ID));
+        var templateType = req.templateType();
+        if (!member.getTemplateType().equals(TemplateType.NONE)) {
+            // 타입을 변경하려면, 멤버 수정 api 활용
+            throw new CustomApiException(NotValidRequest.ALREADY_EXISTS);
+        }
+        member.registerTemplateType(req.templateType());
+//        var categoryTemplateJdbcDtoList = Arrays.stream(CategoryTemplate.values())
+//                //.filter(categoryEnum -> categoryEnum.getParentName()==null)
+//                .map(categoryEnum -> {
+//                    return CategoryTemplateJdbcDto.builder()
+//                            .name(categoryEnum.getName())
+//                            .color(categoryEnum.getColor())
+//                            .level(categoryEnum.getParentName() == null ? 0 : 1)
+//                            .memberId(memberId)
+//                            .mainCategoryName(categoryEnum.getParentName())
+//                            .build();
+//                })
+//                .toList();
+        var values = templateType.getTemplates();
+        categoryJdbcRepository.batchInsert(values, memberId);
     }
 }
