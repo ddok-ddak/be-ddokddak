@@ -4,6 +4,8 @@ import com.ddokddak.activityRecord.dto.CreateActivityRecordRequest;
 import com.ddokddak.activityRecord.entity.ActivityRecord;
 import com.ddokddak.activityRecord.mapper.ActivityRecordMapper;
 import com.ddokddak.category.entity.Category;
+import com.ddokddak.common.exception.NotValidRequestException;
+import com.ddokddak.common.exception.type.NotValidRequest;
 import com.ddokddak.member.entity.Member;
 import com.ddokddak.usecase.CreateActivityRecordUsecase;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,8 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 class ActivityRecordControllerTest {
-    @Autowired
-    private ActivityRecordController controller;
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -124,6 +125,7 @@ class ActivityRecordControllerTest {
                                 fieldWithPath("timeUnit").description("시간 단위")
                         ),
                         responseFields(
+                                fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("응답 메세지"),
                                 subsectionWithPath("result").description("결과값"),
                                 fieldWithPath("result[].categoryId").description("카테고리 아이디"),
@@ -138,49 +140,50 @@ class ActivityRecordControllerTest {
                 ));
     }
 
-//    @WithMockUser
-//    @DisplayName("활동 내역 기록 시도 중 잘못된 시간 데이터 전달시 예외 발생_400")
-//    @Test
-//    void createActivityRecordWithException() throws Exception {
-//        // given
-//        var localStartedTime = LocalDateTime.of(2023,1,1,13,11);
-//        var startedTime = ZonedDateTime.of(localStartedTime, ZoneId.of("Asia/Seoul"));
-//        var request = CreateActivityRecordRequest.builder()
-//                .categoryId(1L)
-//                .startedAt(startedTime)
-//                .finishedAt(startedTime.plusMinutes(150))
-//                .timeUnit(30)
-//                .content("test-activity")
-//                .build();
-//        var content = objectMapper.writeValueAsString(request);
-//
-//        List<ActivityRecord> activityRecords = IntStream.range(0, 150/30)
-//                .mapToObj(i -> ActivityRecordMapper.toEntityForTest(i, request, category))
-//                .toList();
-//
-//        var response = activityRecords.stream()
-//                .map(ActivityRecordMapper::toActivityRecordResponse)
-//                .toList();
-//
-//        // when, then
-//        given(createActivityRecordUsecase.execute(any(), any())).willThrow(new NotValidRequestException(NotValidRequest.WRONG_TIME_DATA));
-//
-//        mockMvc.perform(post("/api/v1/activity-records")
-//                        .content(content)
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isBadRequest())
-//                .andDo(print())
-//                .andDo(document("create-activity-record-400",
-//                        preprocessRequest(prettyPrint()),
-//                        preprocessResponse(prettyPrint()),
-//                        requestParameters(
-//                                parameterWithName("memberId").optional().description("멤버 아이디(temp)")
-//                        )
-//                        ,
-//                        responseFields(
-//                                fieldWithPath("message").description("응답 메세지")
-//                        )
-//                ));
-//    }
+    @WithMockUser
+    @DisplayName("활동 내역 기록 시도 중 잘못된 시간 데이터 전달시 예외 발생_400")
+    @Test
+    void createActivityRecordWithException() throws Exception {
+        // given
+        var localStartedTime = LocalDateTime.of(2023,1,1,13,11);
+        var startedTime = ZonedDateTime.of(localStartedTime, ZoneId.of("Asia/Seoul"));
+        var request = CreateActivityRecordRequest.builder()
+                .categoryId(1L)
+                .startedAt(startedTime)
+                .finishedAt(startedTime.plusMinutes(150))
+                .timeUnit(30)
+                .content("test-activity")
+                .build();
+        var content = objectMapper.writeValueAsString(request);
+
+        List<ActivityRecord> activityRecords = IntStream.range(0, 150/30)
+                .mapToObj(i -> ActivityRecordMapper.toEntityForTest(i, request, category))
+                .toList();
+
+        var response = activityRecords.stream()
+                .map(ActivityRecordMapper::toActivityRecordResponse)
+                .toList();
+
+        // when, then
+        given(createActivityRecordUsecase.execute(any(), any())).willThrow(new NotValidRequestException(NotValidRequest.WRONG_TIME_DATA));
+
+        mockMvc.perform(post("/api/v1/activity-records")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andDo(print())
+                .andDo(document("create-activity-record-400",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("memberId").optional().description("멤버 아이디(temp)")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("statusCode").description("응답 코드"),
+                                fieldWithPath("message").description("응답 메세지")
+                        )
+                ));
+    }
 }

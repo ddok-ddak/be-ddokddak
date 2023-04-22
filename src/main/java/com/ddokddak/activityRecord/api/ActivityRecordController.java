@@ -38,6 +38,15 @@ public class ActivityRecordController {
         return ResponseEntity.ok(new CommonResponse<>("Success", response));
     }
 
+    @GetMapping("/stats")
+    public ResponseEntity<CommonResponse<List<StatsActivityRecordResponse>>> getRecordStatsGroupByCategory(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            StatsActivityRecordRequest req)
+    {
+        var response = statsActivityRecordUsecase.execute(req, userPrincipal.getId());
+        return ResponseEntity.ok(new CommonResponse<>("Success", response));
+    }
+
     @PostMapping
     public ResponseEntity<CommonResponse<List<ActivityRecordResponse>>> createActivityRecord(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
@@ -50,14 +59,5 @@ public class ActivityRecordController {
 
         return ResponseEntity.created(location)
                 .body(new CommonResponse<>("Successfully Created", response));
-    }
-
-    @GetMapping("/stats")
-    public ResponseEntity<CommonResponse<List<StatsActivityRecordResponse>>> getRecordStatsGroupByCategory(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-            StatsActivityRecordRequest req)
-    {
-        var response = statsActivityRecordUsecase.execute(req, userPrincipal.getId());
-        return ResponseEntity.ok(new CommonResponse<>("Success", response));
     }
 }
