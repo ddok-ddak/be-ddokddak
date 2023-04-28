@@ -1,4 +1,4 @@
-package com.ddokddak.auth.util;
+package com.ddokddak.auth.filter;
 
 import com.ddokddak.common.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;

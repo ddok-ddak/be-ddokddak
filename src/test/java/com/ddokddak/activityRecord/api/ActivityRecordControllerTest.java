@@ -59,10 +59,7 @@ class ActivityRecordControllerTest {
 
     @BeforeEach
     void setUp() {
-//        this.mockMvc = MockMvcBuilders
-//                .standaloneSetup(controller)
-//                .setControllerAdvice(GlobalExceptionHandler.class)
-//                .build();
+
         this.category = Category.builder()
                 .id(1L)
                 .name("test")

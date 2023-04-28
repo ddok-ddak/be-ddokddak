@@ -33,6 +33,9 @@ cors:
 server:
   port: 8080
 
+# 버전
+app:
+  version: v1.0.0
 ---
 # test 환경
 spring:
