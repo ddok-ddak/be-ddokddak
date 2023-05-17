@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql="UPDATE activity_record SET delete_yn = 'Y', modified_at = NOW() WHERE id = ?")
 @Where(clause = "delete_yn = 'N'")
 @Entity
 public class ActivityRecord extends BaseTimeEntity {
@@ -60,4 +59,16 @@ public class ActivityRecord extends BaseTimeEntity {
         this.id = id;
     }
 
+    public void modifyCategory(Category newCategory) {
+        this.category = newCategory.getMainCategory();
+    }
+
+    public void modifyContent(String newContent) {
+        this.content = newContent;
+    }
+
+    public void modifyDate(LocalDateTime newStartAt, LocalDateTime newFinishedAt) {
+        this.startedAt = newStartAt;
+        this.finishedAt = newFinishedAt;
+    }
 }
