@@ -6,6 +6,13 @@ import com.ddokddak.activityRecord.dto.CreateActivityRecordRequest;
 import com.ddokddak.activityRecord.dto.ReadActivityRecordRequest;
 import com.ddokddak.activityRecord.service.ActivityRecordReadService;
 import com.ddokddak.auth.domain.UserPrincipal;
+import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
+import com.ddokddak.auth.domain.UserPrincipal;
+import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
+import com.ddokddak.auth.domain.UserPrincipal;
+import com.ddokddak.auth.domain.UserPrincipal;
+import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
+import com.ddokddak.auth.domain.UserPrincipal;
 import com.ddokddak.common.dto.CommonResponse;
 import com.ddokddak.usecase.CreateActivityRecordUsecase;
 import com.ddokddak.usecase.StatsActivityRecordUsecase;
@@ -28,6 +35,22 @@ public class ActivityRecordController {
     private final CreateActivityRecordUsecase createActivityRecordUsecase;
     private final StatsActivityRecordUsecase statsActivityRecordUsecase;
     private final ActivityRecordReadService activityRecordReadService;
+    private final ActivityRecordWriteService activityRecordWriteService;
+
+    @PutMapping
+    public ResponseEntity<CommonResponse<Boolean>> modifyActivityRecord(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ModifyActivityRecordRequest req){
+        activityRecordWriteService.modifyActivityRecord( userPrincipal.getId(), req );
+        return ResponseEntity.ok( new CommonResponse<>("Successfully Modified", Boolean.TRUE) );
+    }
+
+    @DeleteMapping
+    public ResponseEntity<CommonResponse<Boolean>> removeActivityRecordById(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+        @PathVariable Long activityRecordId
+    ) {
+        activityRecordWriteService.removeActivityRecordByMemberIdAndId( userPrincipal.getId(), activityRecordId );
+        return  ResponseEntity.ok( new CommonResponse<>( "Successfully Deleted", Boolean.TRUE) );
+    }
 
     @GetMapping
     public ResponseEntity<CommonResponse<List<ActivityRecordResponse>>> getActivityRecord(

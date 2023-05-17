@@ -3,8 +3,11 @@ package com.ddokddak.activityRecord.repository;
 import com.ddokddak.activityRecord.dto.StatsActivityRecordRequest;
 import com.ddokddak.activityRecord.dto.StatsActivityRecordResult;
 import com.ddokddak.activityRecord.entity.ActivityRecord;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,4 +31,10 @@ public interface ActivityRecordRepository extends JpaRepository<ActivityRecord, 
             "AND ar.startedAt >= :#{#request.fromStartedAt} AND ar.finishedAt <= :#{#request.toFinishedAt} " +
             "GROUP BY ar.category") //, function('date_format', ar.startedAt, '%Y-%m')" )
     List<StatsActivityRecordResult> statsByMemberIdAndPeriodGroupByCategory(StatsActivityRecordRequest request, Long memberId); //LocalDateTime fromStartedAt, LocalDateTime toFinishedAt
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE ActivityRecord ar SET ar.deleteYn = 'Y', ar.modifiedAt = NOW() WHERE ar.member.id=:id AND ar.id = :activityRecordId")
+    void softDeleteByMemberIdAndId(Long id, Long activityRecordId);
+
 }
