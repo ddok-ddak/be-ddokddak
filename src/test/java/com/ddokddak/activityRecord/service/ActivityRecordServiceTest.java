@@ -51,7 +51,7 @@ class ActivityRecordServiceTest {
 
     @BeforeEach
     void setUp() {
-        this.member = Member.builder().id(1L).build();
+        this.member = Member.builder().build();
         memberRepository.save(member);
 
         this.mainCategories = CategoryFixture.createMainCategories(0, 4, member);
@@ -114,7 +114,7 @@ class ActivityRecordServiceTest {
     @DisplayName("활동 내역 기록 조회")
     @Test
     void readActivityRecord() throws Exception {
-        var memberId = 1L;
+        var memberId = member.getId();
         var req = ReadActivityRecordRequest.builder()
                 .fromStartedAt( LocalDateTime.now().minusMonths(1) )
                 .toStartedAt(LocalDateTime.now())
