@@ -49,7 +49,7 @@ public class CategoryJdbcRepository implements JdbcRepository<CategoryTemplateJd
 
     @Transactional
     public void batchInsert(List<CategoryTemplate> list, Long memberId) {
-        var sql = "INSERT INTO CATEGORY (MEMBER_ID, NAME, COLOR, LEVEL, PARENT_ID, DELETE_YN, CREATED_AT) " +
+        var sql = "INSERT INTO category (MEMBER_ID, NAME, COLOR, LEVEL, PARENT_ID, DELETE_YN, CREATED_AT) " +
                 "VALUES " +
                 "( ?, ?, ?, ?, (SELECT ID FROM (SELECT ID FROM CATEGORY WHERE MEMBER_ID=? AND NAME=?) AS SUB), 'N', NOW())";
         try {

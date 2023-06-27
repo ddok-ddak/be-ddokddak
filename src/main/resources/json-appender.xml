@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<included>
+    <appender name="JSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
+<!--        <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">-->
+<!--            <jsonFormatter-->
+<!--                    class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">-->
+<!--                <prettyPrint>true</prettyPrint>-->
+<!--            </jsonFormatter>-->
+<!--            <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>-->
+<!--        </layout>-->
+
+        <!--아래 인코더 라이브러리는 위에 활용한 라이브러리를 의존한다. 로그 스태시용으로 래핑한 라이브러리라고 볼 수 있을 듯?-->
+        <!--일단 예시가 좀 더 있고 뭔가 기능적으로 더 편해보여서 아래로 활용한다.-->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" >
+            <includeContext>true</includeContext>
+            <includeCallerData>true</includeCallerData>
+            <timestampPattern>yyyy-MM-dd HH:mm:ss.SSS</timestampPattern>
+            <fieldNames>
+                <timestamp>timestamp</timestamp>
+                <thread>thread</thread>
+                <message>message</message>
+                <stackTrace>exception</stackTrace>
+                <mdc>context</mdc>
+            </fieldNames>
+        </encoder>
+        <file>${JSON_FILE}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${JSON_FILE}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <cleanHistoryOnStart>${LOGBACK_ROLLINGPOLICY_CLEAN_HISTORY_ON_START:-false}</cleanHistoryOnStart>
+            <maxFileSize>${LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE:-10MB}</maxFileSize>
+            <totalSizeCap>${LOGBACK_ROLLINGPOLICY_TOTAL_SIZE_CAP:-0}</totalSizeCap>
+            <maxHistory>${LOGBACK_ROLLINGPOLICY_MAX_HISTORY:-7}</maxHistory>
+        </rollingPolicy>
+    </appender>
+</included>

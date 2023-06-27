@@ -42,3 +42,6 @@ mysqldata/
 
 ### auth-properties ###
 config/application-auth.yml
+
+### logs ###
+logs/
