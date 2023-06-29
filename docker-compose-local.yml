@@ -30,6 +30,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db/ddokddak?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     volumes:
       - ./config:/config
+      - ./logs:/logs
     depends_on:
       mysql_db:
         condition: service_healthy
