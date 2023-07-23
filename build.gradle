@@ -61,6 +61,8 @@ dependencies {
 
     // 로그백-json 포맷 파일
     implementation 'net.logstash.logback:logstash-logback-encoder:7.3'
+
+    // validation
     //implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
