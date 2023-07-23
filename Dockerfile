@@ -5,7 +5,7 @@ ARG JAR_FILE=./build/libs/be-ddokddak-${VERSION}-SNAPSHOT.jar
 
 COPY ${JAR_FILE} app.jar
 
-ARG PROFILE=local
-ENV SPRING_PROFILES_ACTIVE=${PROFILE}
+#ARG PROFILE=prod
+#ENV SPRING_PROFILES_ACTIVE=${PROFILE}
 
 ENTRYPOINT ["java","-jar", "-Dspring.config.location=/config/application-auth.yml, classpath:/application.yml" ,"app.jar"]
