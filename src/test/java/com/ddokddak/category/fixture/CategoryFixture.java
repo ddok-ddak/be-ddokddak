@@ -15,7 +15,7 @@ public class CategoryFixture {
                         .color("color"+i)
                         .level(0)
                         .member(member)
-                        .deleteYn("N")
+                        .isDeleted(Boolean.FALSE)
                         .build()
                 ).toList();
         return categoryList;
@@ -31,7 +31,7 @@ public class CategoryFixture {
                         .level(1)
                         .mainCategory(mainCategory)
                         .member(member)
-                        .deleteYn("N")
+                        .isDeleted(Boolean.FALSE)
                         .build()
                 ).toList();
         return categoryList;

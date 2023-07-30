@@ -73,16 +73,12 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # jdbc 로그 확인 위해 옵션 수정
-    url: jdbc:mysql://localhost:3306/ddokddak?characterEncoding=UTF-8&profileSQL=true&c=Slf4JLogger&maxQuerySizeToLog=200
+    url: jdbc:mysql://localhost:3306/dodone?characterEncoding=UTF-8&profileSQL=true&c=Slf4JLogger&maxQuerySizeToLog=200
     username: root
     password: 1234
-  sql:
-    init:
-      mode: always
-      data-locations: classpath:data.sql
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
     defer-datasource-initialization: true # hibernate가 초기화되기 전 data.sql 실행하는 것을 방지
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: true
     show-sql: true
     properties:
@@ -90,6 +86,10 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: create-drop # 데이터를 쌓아두려면, 해당 속성을 update로 지정
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
   devtools:
     livereload:
       enabled: true
@@ -120,7 +120,8 @@ logging:
 
 # cors 설정
 cors:
-  allowedOrigins: 'http://localhost:80'
+  allowedOrigins:
+    - 'https://dodonenow.com'
   allowedMethods: GET,POST,PUT,PATCH,DELETE,OPTIONS
   allowedHeaders: '*'
   maxAgeSec: 3600

@@ -44,7 +44,7 @@ public class CategoryReadServiceTest {
                 .color("color11")
                 .level(0)
                 .member(member)
-                .deleteYn("N")
+                .isDeleted(Boolean.FALSE)
                 .subCategories(Collections.EMPTY_LIST)
                 .build()
         );
@@ -54,7 +54,7 @@ public class CategoryReadServiceTest {
                 .color("color22")
                 .level(0)
                 .member(member)
-                .deleteYn("N")
+                .isDeleted(Boolean.FALSE)
                 .subCategories(Collections.EMPTY_LIST)
                 .build()
         );
@@ -78,11 +78,11 @@ public class CategoryReadServiceTest {
 //    @DisplayName("Categories가 존재하지 않을 경우, NotValidRequestException 발생 테스트")
 //    @Test
 //    public void readCategoriesByMemberId_categoryNotFound() {
+
 //        Long memberId = 1L;
 //        Member member = Member.builder().id(memberId).build();
 //        Mockito.when(memberRepository.findMemberById(memberId)).thenReturn(Optional.of(member));
 //        Mockito.when(categoryRepository.findCategoryJoinFetch(member)).thenReturn(Collections.EMPTY_LIST);
-//
 //    }
 
     @DisplayName("Id와 MemberId 탐색 성공 테스트")
@@ -97,10 +97,10 @@ public class CategoryReadServiceTest {
                 .color("color11")
                 .level(0)
                 .member(member)
-                .deleteYn("N")
+                .isDeleted(Boolean.FALSE)
                 .build();
 
-        Mockito.when(categoryRepository.findByIdAndMemberId(categoryId, memberId)).thenReturn(Optional.of(mockCategory));
+        Mockito.when(categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(categoryId, memberId)).thenReturn(Optional.of(mockCategory));
         Category category = categoryReadService.findByIdAndMemberId(categoryId, memberId);
         assertEquals(category.getId(), mockCategory.getId());
         assertEquals(category.getMember().getId(), mockCategory.getMember().getId());
@@ -111,7 +111,7 @@ public class CategoryReadServiceTest {
     public void findByIdAndMemberId_categoryNotFound() {
         Long categoryId = 1L;
         Long memberId = 1L;
-        Mockito.when(categoryRepository.findByIdAndMemberId(categoryId, memberId)).thenReturn(Optional.empty());
+        Mockito.when(categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(categoryId, memberId)).thenReturn(Optional.empty());
 
         assertThrows(NotValidRequestException.class, () -> {
             categoryReadService.findByIdAndMemberId(categoryId, memberId);

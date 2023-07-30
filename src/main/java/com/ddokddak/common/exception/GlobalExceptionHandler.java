@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ValidationException;
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -22,6 +24,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         HttpHeaders headers = new HttpHeaders();
         return handleExceptionInternal(e, new CommonErrorResponse(e.getMessage(), e.getStatus()), headers, e.getStatus(), request);
+    }
+
+    @ExceptionHandler(value = {ValidationException.class})
+    protected ResponseEntity<Object> handleValidationException(ValidationException e, WebRequest request) {
+
+        HttpHeaders headers = new HttpHeaders();
+        return handleExceptionInternal(e, new CommonErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST), headers, HttpStatus.BAD_REQUEST, request);
     }
 
     // 나머지 예외 처리는 오버라이드해서 커스텀할 수 있다.

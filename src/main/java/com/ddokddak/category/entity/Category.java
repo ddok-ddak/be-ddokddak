@@ -4,6 +4,7 @@ import com.ddokddak.common.entity.BaseTimeEntity;
 import com.ddokddak.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.lang.Nullable;
@@ -16,8 +17,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql="UPDATE category SET delete_yn = 'Y', modified_at = NOW() WHERE id = ?")
-@Where(clause = "delete_yn = 'N'")
+@SQLDelete(sql="UPDATE category SET modified_at = NOW(), is_deleted = 1 WHERE id = ?")
+//@Where(clause = "delete_yn = 'N'")
 @Entity
 public class Category extends BaseTimeEntity {
 
@@ -38,20 +39,17 @@ public class Category extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="PARENT_ID")
-    @JsonBackReference
     private Category mainCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="MEMBER_ID")
-    @JsonBackReference
     private Member member;
 
     @Builder.Default
-    @Column(length = 1)
-    private String deleteYn = "N";
+    @ColumnDefault("0")
+    private Boolean isDeleted = Boolean.FALSE;
 
     @OneToMany(mappedBy="mainCategory")
-    @JsonBackReference
     private List<Category> subCategories = new ArrayList<>();
 
     public void modifyColor(String color) {
@@ -67,4 +65,23 @@ public class Category extends BaseTimeEntity {
         this.mainCategory = mainCategory;
     }
 
+    public void delete() {
+        this.isDeleted = Boolean.TRUE;
+    }
+
+    public void deleteGroup() {
+        this.isDeleted = Boolean.TRUE;
+        this.getSubCategories()
+                .forEach(category -> category.delete());
+    }
+
+    private void undelete() {
+        this.isDeleted = Boolean.FALSE;
+    }
+
+    public void undeleteGroup() {
+        this.isDeleted = Boolean.FALSE;
+        this.getSubCategories()
+                .forEach(category -> category.undelete());
+    }
 }

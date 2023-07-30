@@ -17,35 +17,11 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
-public class CategoryJdbcRepository implements JdbcRepository<CategoryTemplateJdbcDto> {
+public class CategoryJdbcRepository { //implements JdbcRepository<CategoryTemplateJdbcDto> {
 
     @Value("${jdbc.batch.size}")
     private int batchSize;
     private final JdbcTemplate jdbcTemplate;
-
-    @Override
-    public void batchInsert(int batchSize, List<CategoryTemplateJdbcDto> list) {
-        var sql = "INSERT INTO CATEGORY (MEMBER_ID, NAME, COLOR, LEVEL, PARENT_ID, DELETE_YN, CREATED_AT) " +
-                "SELECT ?, ?, ?, ?, ID, ?, NOW() FROM CATEGORY WHERE MEMBER_ID=? AND NAME=?";
-        try {
-            jdbcTemplate.batchUpdate(
-                    sql,
-                    list,
-                    batchSize,
-                    (ps, arg) -> {
-                        ps.setLong(1, arg.memberId());
-                        ps.setString(2, arg.name());
-                        ps.setString(3, arg.color());
-                        ps.setInt(4, arg.level());
-                        ps.setString(5, "N");
-                        ps.setLong(6, arg.memberId());
-                        ps.setString(7, arg.mainCategoryName());
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new JdbcExecException(FailedJdbcExec.BATCH_INSERTION_FAIL);
-        }
-    }
 
     @Transactional
     public void batchInsert(List<CategoryTemplate> list, Long memberId) {

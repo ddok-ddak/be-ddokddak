@@ -29,6 +29,9 @@ public class MemberMapper {
                 .role(member.getRole())
                 .authProviderType(member.getAuthProviderType())
                 .status(member.getStatus())
+                .templateType(member.getTemplateType())
+                .startDay(member.getStartDay())
+                .startTime(member.getStartTime())
                 .build();
     }
 }
