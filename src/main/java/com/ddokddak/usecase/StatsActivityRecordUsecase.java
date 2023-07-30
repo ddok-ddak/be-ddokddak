@@ -43,15 +43,24 @@ public class StatsActivityRecordUsecase {
                         .map(main -> {
                             long sum = statsTempResult.get(main.getId()) == null ? 0L : statsTempResult.get(main.getId()).timeSum();
                             List<StatsActivityRecordResponse> tempChildren = new ArrayList<>();
-                            for (Category child :  categoriesMap.get(main.getId())) {
+                            for (Category child : categoriesMap.get(main.getId())) {
                                 var time = statsTempResult.get(child.getId()) == null ? 0L : statsTempResult.get(child.getId()).timeSum();
                                 sum += time;
                                 tempChildren.add(
                                         ActivityRecordMapper.toStatResponse(child, time, null));
                             }
+                            // 정렬
+                            tempChildren.sort(((o1, o2) -> {
+                                long l = o1.timeSum() - o2.timeSum();
+                                return (int) l;
+                            }));
                             return ActivityRecordMapper.toStatResponse(main, sum, tempChildren);
                         })
                 )
+                .sorted((o1, o2)-> {
+                    long l = o1.timeSum() - o2.timeSum();
+                    return (int) l;
+                })
                 .toList();
 
         return responseList;
