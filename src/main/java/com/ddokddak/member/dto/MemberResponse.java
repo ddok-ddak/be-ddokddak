@@ -1,9 +1,6 @@
 package com.ddokddak.member.dto;
 
-import com.ddokddak.member.entity.AuthProviderType;
-import com.ddokddak.member.entity.RoleType;
-import com.ddokddak.member.entity.Status;
-import com.ddokddak.member.entity.TemplateType;
+import com.ddokddak.member.entity.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -16,7 +13,9 @@ public record MemberResponse(
         RoleType role,
         Status status,
         AuthProviderType authProviderType,
-        TemplateType templateType
+        TemplateType templateType,
+        CustomOpt.StartDay startDay,
+        CustomOpt.StartTime startTime
 ) {
     @Builder
     public MemberResponse {}

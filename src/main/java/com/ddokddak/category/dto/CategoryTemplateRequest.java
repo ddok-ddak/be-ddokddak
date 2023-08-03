@@ -4,14 +4,14 @@ import com.ddokddak.member.entity.TemplateType;
 import lombok.Builder;
 import javax.validation.constraints.NotNull;
 
-public record AddCategoryTemplateRequest(
+public record CategoryTemplateRequest(
         @NotNull TemplateType templateType
 ) {
     @Builder
-    public AddCategoryTemplateRequest(TemplateType templateType) {
+    public CategoryTemplateRequest(TemplateType templateType) {
         this.templateType = templateType;
     }
-    public AddCategoryTemplateRequest(String name) {
+    public CategoryTemplateRequest(String name) {
         this(TemplateType.valueOf(name));
     }
 }

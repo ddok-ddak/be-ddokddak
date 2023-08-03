@@ -76,12 +76,12 @@ public class CategoryController {
         return ResponseEntity.ok(new CommonResponse<>("Successfully Updated", Boolean.TRUE));
     }
 
-    @PostMapping("/template")
-    public ResponseEntity<CommonResponse<Boolean>> addCategoryTemplate(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @RequestBody AddCategoryTemplateRequest req) {
-
-        categoryWriteService.addCategoryTemplate(req, userPrincipal.getId());
-        return ResponseEntity.ok(new CommonResponse<>("Successfully Updated", Boolean.TRUE));
-    }
+//    @PostMapping("/template")
+//    public ResponseEntity<CommonResponse<Boolean>> addCategoryTemplate(
+//            @AuthenticationPrincipal UserPrincipal userPrincipal,
+//            @RequestBody CategoryTemplateRequest req) {
+//
+//        createCategoryTemplateUsecase.execute(req, userPrincipal.getId());
+//        return ResponseEntity.ok(new CommonResponse<>("Successfully Updated", Boolean.TRUE));
+//    }
 }

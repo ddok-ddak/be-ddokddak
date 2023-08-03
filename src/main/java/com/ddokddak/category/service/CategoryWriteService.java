@@ -1,10 +1,7 @@
 package com.ddokddak.category.service;
 
-import com.ddokddak.activityRecord.repository.ActivityRecordJdbcRepository;
 import com.ddokddak.category.dto.*;
 import com.ddokddak.category.entity.Category;
-import com.ddokddak.category.enums.BaseTemplate;
-import com.ddokddak.category.enums.CategoryTemplate;
 import com.ddokddak.category.repository.CategoryJdbcRepository;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.CustomApiException;
@@ -17,10 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +41,7 @@ public class CategoryWriteService {
         */
         if( Objects.equals(req.level(),0) ){
             // 요청 대분류 카테고리명과 멤버 아이디를 이용해서 기 카테고리명 유무 조회
-            if( categoryRepository.existsByLevelAndNameAndMemberId( req.level(), req.name(), member.getId() ) ){
+            if( categoryRepository.existsByLevelAndNameAndMemberIdAndIsDeletedFalse( req.level(), req.name(), member.getId() ) ){
                 throw new NotValidRequestException(NotValidRequest.USED_NAME_CONFLICTS);
             }
 
@@ -73,11 +68,11 @@ public class CategoryWriteService {
             }
 
             // - 메인 카테고리 아이디의 유효성 검증
-            var mainCategory = categoryRepository.findByIdAndMemberId( req.mainCategoryId(), member.getId() )
+            var mainCategory = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse( req.mainCategoryId(), member.getId() )
                     .orElseThrow( () -> new NotValidRequestException(NotValidRequest.MAIN_CATEGORY_ID) );
 
             // - 요청 대분류, 소분류 카테고리명과 멤버 아이디를 이용해서 소분류 카테고리의 기 카테고리명 유무 조회
-            if( Boolean.TRUE.equals(categoryRepository.existsByNameAndMainCategoryIdAndMemberId(req.name(), mainCategory.getId(),  member.getId())) ){
+            if( Boolean.TRUE.equals(categoryRepository.existsByNameAndMainCategoryIdAndMemberIdAndIsDeletedFalse(req.name(), mainCategory.getId(),  member.getId())) ){
                 throw new NotValidRequestException(NotValidRequest.USED_NAME_CONFLICTS);
             }
 
@@ -97,13 +92,13 @@ public class CategoryWriteService {
 
     /**
      * 카테고리 삭제
-     * 소프트 딜리트 수행하여, delete_yn 컬럼의 값 'Y'로 변경
+     * 소프트 딜리트 수행하여, is_deleted 컬럼의 값 '1'(Boolean.True)로 변경
      * @param categoryId 카테고리 아이디
      * @param memberId 멤버 아이디
      */
     @Transactional
     public void removeCategoryByIdAndMemberId(Long categoryId, Long memberId) {
-        var category = categoryRepository.findByIdAndMemberId(categoryId, memberId)
+        var category = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(categoryId, memberId)
                 .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_ID));
 
         // 메인 카테고리이면, 서브 카테고리도 삭제 확인
@@ -121,7 +116,7 @@ public class CategoryWriteService {
     public void modifyCategoryValue(ModifyCategoryValueRequest req, Long memberId) {
 
         // 카테고리 아이디와 멤버 아이디로 조회
-        var category = categoryRepository.findByIdAndMemberId(req.categoryId(), memberId)
+        var category = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(req.categoryId(), memberId)
                 .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_ID));
 
         var isEqualName = Objects.equals(req.name(), category.getName());
@@ -149,7 +144,7 @@ public class CategoryWriteService {
         @Transactional
         public void modifyCategoryRelation(ModifyCategoryRelationRequest req, Long memberId) {
             // 카테고리 아이디와 멤버 아이디로 조회
-            var category = categoryRepository.findByIdAndMemberId(req.categoryId(), memberId)
+            var category = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(req.categoryId(), memberId)
                 .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_ID));
         Category mainCategory = null;
 
@@ -179,7 +174,7 @@ public class CategoryWriteService {
     @Transactional
     public void modifyCategory(ModifyCategoryRequest req, Long memberId) {
         // 카테고리 아이디와 멤버 아이디로 조회
-        var category = categoryRepository.findByIdAndMemberId(req.categoryId(), memberId)
+        var category = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(req.categoryId(), memberId)
                 .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_ID));
         Category mainCategory = category.getMainCategory();
 
@@ -228,7 +223,7 @@ public class CategoryWriteService {
      */
     private Category checkMainCategoryToChange(Long reqMainCategoryId, Long memberId) {
 
-        return categoryRepository.findByIdAndMemberId(reqMainCategoryId, memberId)
+        return categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(reqMainCategoryId, memberId)
                 .orElseThrow(() ->
                         new NotValidRequestException(NotValidRequest.MAIN_CATEGORY_ID));
     }
@@ -265,7 +260,7 @@ public class CategoryWriteService {
         List<Category> categories;
         if (Objects.isNull(mainCategory)) {
             // 대분류인 경우, 다른 대분류와 비교한다.
-            categories = categoryRepository.findByMemberIdAndLevel(category.getMember().getId(), 0);
+            categories = categoryRepository.findByMemberIdAndLevelAndIsDeleted(category.getMember().getId(), 0, Boolean.FALSE);
         } else {
             // 한 그룹의 모든 카테고리
             // 서브 카테고리와 메인 카테고리는 이름이 같아도 된다.
@@ -299,28 +294,47 @@ public class CategoryWriteService {
     }
 
     @Transactional
-    public void addCategoryTemplate(AddCategoryTemplateRequest req, Long memberId) {
-        var member = memberRepository.findById(memberId)
-                .orElseThrow(()->new CustomApiException(NotValidRequest.MEMBER_ID));
-        var templateType = req.templateType();
-        if (!member.getTemplateType().equals(TemplateType.NONE)) {
-            // 타입을 변경하려면, 멤버 수정 api 활용
-            throw new CustomApiException(NotValidRequest.ALREADY_EXISTS);
-        }
-        member.registerTemplateType(req.templateType());
-//        var categoryTemplateJdbcDtoList = Arrays.stream(CategoryTemplate.values())
-//                //.filter(categoryEnum -> categoryEnum.getParentName()==null)
-//                .map(categoryEnum -> {
-//                    return CategoryTemplateJdbcDto.builder()
-//                            .name(categoryEnum.getName())
-//                            .color(categoryEnum.getColor())
-//                            .level(categoryEnum.getParentName() == null ? 0 : 1)
-//                            .memberId(memberId)
-//                            .mainCategoryName(categoryEnum.getParentName())
-//                            .build();
-//                })
-//                .toList();
-        var values = templateType.getTemplates();
+    public void addCategoryTemplate(CategoryTemplateRequest req, Long memberId) {
+        var values = req.templateType().getTemplates();
         categoryJdbcRepository.batchInsert(values, memberId);
+    }
+
+    @Transactional
+    public void modifyCategoryTemplate(CategoryTemplateRequest req, Long memberId, TemplateType previousTemplateType) {
+
+        // 전체 카테고리를 조회해와서 확인 후 제거 및 업데이트 수행
+        var categories = categoryRepository.findByMemberIdAndLevel(memberId, 0);
+
+        // 기존 템플릿에서 학생이면 학업, 직장이면 업무 카테고리 그룹 제거
+        var pValues = previousTemplateType.getTemplates();
+        var mainCategory = pValues.stream()
+                .filter(v->v.getParentName()==null)
+                .findFirst()
+                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.NULL_DATA));
+
+        categories.stream()
+                .filter(category -> !category.getIsDeleted() && category.getName() == mainCategory.getName())
+                .forEach(category-> category.deleteGroup());
+
+        // 학생이면 학업, 직장이면 업무 카테고리 그룹 추가
+        var newValues = req.templateType().getTemplates();
+        var newMainCategory = newValues.stream()
+                .filter(v->v.getParentName()==null)
+                .findFirst()
+                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.NULL_DATA));
+
+        var alreadyExistsCategory = categories.stream()
+                .filter(category -> category.getName() == newMainCategory.getName())
+                .findFirst();
+        if (alreadyExistsCategory.isPresent()) {
+            alreadyExistsCategory.get().undeleteGroup();
+            return;
+        }
+
+        // 대분류 카테 갯수 제한
+        if (categories.size() > 8) {
+            throw new NotValidRequestException(NotValidRequest.UNABLE_REQUEST);
+        }
+        categoryJdbcRepository.batchInsert(newValues, memberId);
     }
 }

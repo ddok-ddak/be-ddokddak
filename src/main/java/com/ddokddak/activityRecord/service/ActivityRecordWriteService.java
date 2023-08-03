@@ -57,7 +57,7 @@ public class ActivityRecordWriteService {
          */
 
         /* 카테고리 검증 */
-        var category = categoryRepository.findByIdAndMemberId(req.categoryId(), memberId)
+        var category = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(req.categoryId(), memberId)
                 .orElseThrow(() -> new NotValidRequestException((NotValidRequest.CATEGORY_ID)));
 
         /* 리뷰 아이디 검증 */

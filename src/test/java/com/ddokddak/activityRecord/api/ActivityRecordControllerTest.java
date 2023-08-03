@@ -67,7 +67,7 @@ class ActivityRecordControllerTest {
                 .level(0)
                 .mainCategory(null)
                 .member(Member.builder().id(1L).build())
-                .deleteYn("N")
+                .isDeleted(Boolean.FALSE)
                 .build();
     }
 

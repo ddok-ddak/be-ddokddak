@@ -3,6 +3,7 @@ package com.ddokddak.member.service;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.member.dto.MemberResponse;
 import com.ddokddak.member.entity.Member;
+import com.ddokddak.member.mapper.MemberMapper;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,11 +31,9 @@ public class MemberReadService {
 
     @Transactional(readOnly = true)
     public MemberResponse getUserDtoByEmail(String email) {
-        var member = this.findUserByEmail(email);
-        return MemberResponse.builder()
-                .email(member.getEmail())
-                .nickname(member.getNickname())
-                .build();
+        var member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Not Registered User Mail"));
+        return MemberMapper.toMemberResponse(member);
     }
 
     @Transactional(readOnly = true)

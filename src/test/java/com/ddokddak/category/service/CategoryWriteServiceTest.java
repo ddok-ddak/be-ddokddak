@@ -46,6 +46,7 @@ class CategoryWriteServiceTest {
 
         this.mainCategories = CategoryFixture.createMainCategories(0, 4, member);
         categoryRepository.saveAll(mainCategories);
+
         // 전달하는 숫자 파라미터에 따라 이름이 정해짐
         this.subCategories = CategoryFixture.createSubCategories(4, 8, member, mainCategories.get(2));
         categoryRepository.saveAll(subCategories);
@@ -84,7 +85,7 @@ class CategoryWriteServiceTest {
                                 .color("color11")
                                 .level(0)
                                 .member(member)
-                                .deleteYn("N")
+                                .isDeleted(Boolean.FALSE)
                                 .build();
 
         // when
@@ -132,7 +133,7 @@ class CategoryWriteServiceTest {
         var createdCategoryId = categoryWriteService.addCategory( member.getId(), request );
 
         // then
-        Assertions.assertTrue( categoryRepository.existsByLevelAndNameAndMemberId(request.level(),"category11",member.getId()) );
+        Assertions.assertTrue( categoryRepository.existsByLevelAndNameAndMemberIdAndIsDeletedFalse(request.level(),"category11",member.getId()) );
     }
 
     @DisplayName("정상적인 소분류 카테고리 등록")
@@ -151,7 +152,7 @@ class CategoryWriteServiceTest {
 
         // then
         Assertions.assertTrue(
-                categoryRepository.existsByNameAndMainCategoryIdAndMemberId("category10",mainCategories.get(2).getId(),member.getId())
+                categoryRepository.existsByNameAndMainCategoryIdAndMemberIdAndIsDeletedFalse("category10",mainCategories.get(2).getId(),member.getId())
         );
     }
 
@@ -168,12 +169,12 @@ class CategoryWriteServiceTest {
         var idList = this.subCategories.stream()
                 .map(category -> category.getId())
                 .toList();
-        var deleteStatusList = categoryRepository.findAllById(idList)
+        var undeletedList = categoryRepository.findAllById(idList)
                 .stream()
-                .map(category -> category.getDeleteYn())
+                .filter(category -> !category.getIsDeleted())
                 .toList();
 
-        Assertions.assertEquals(0, deleteStatusList.size());
+        Assertions.assertEquals(0, undeletedList.size());
 
     }
 
