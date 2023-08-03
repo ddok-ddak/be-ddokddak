@@ -5,7 +5,7 @@
 
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
     <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
-    <logger name="org.apache.coyote.http11.Http11InputBuffer" level="DEBUG"/>
+
 
     <springProfile name="test">
         <root level="INFO">
@@ -14,11 +14,12 @@
     </springProfile>
 
     <springProfile name="prod">
+        <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
+        <property name="JSON_FILE" value="${LOG_TEMP}/spring.log.json}"/>
+
         <include resource="org/springframework/boot/logging/logback/file-appender.xml" />
         <include resource="json-appender.xml" />
 
-        <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
-        <property name="JSON_FILE" value="${LOG_TEMP}/spring.log.json}"/>
         <root level="INFO">
             <appender-ref ref="JSON" />
             <appender-ref ref="FILE" />
@@ -26,17 +27,19 @@
     </springProfile>
 
     <springProfile name="!(prod|test)">
+        <!-- 선언 순서가 중요함, 인클루드를 불러오기 전에 프로퍼티를 설정해줘야 인클루드 된 xml 파일에서 제대로 프로퍼티를 읽을 수 있다. -->
+        <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
+        <property name="JSON_FILE" value="${LOG_TEMP}/spring.log.json}"/>
+
         <include resource="org/springframework/boot/logging/logback/file-appender.xml" />
         <include resource="json-appender.xml" />
 
-        <!-- 파일명을 설정하면, 파일에 로깅이 수행되지 않더라도 해당 파일을 생성한다. -->
-        <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
-        <property name="JSON_FILE" value="${LOG_TEMP}/spring.log.json}"/>
-<!--        <include resource="org/springframework/boot/logging/logback/file-appender.xml" />-->
-        <root level="INFO">
+        <root level="DEBUG">
             <appender-ref ref="CONSOLE" />
             <appender-ref ref="JSON" />
             <appender-ref ref="FILE" />
         </root>
     </springProfile>
+
+    <logger name="org.apache.coyote.http11.Http11InputBuffer" level="DEBUG"/>
 </configuration>
