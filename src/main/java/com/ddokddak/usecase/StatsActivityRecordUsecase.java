@@ -51,14 +51,14 @@ public class StatsActivityRecordUsecase {
                             }
                             // 정렬
                             tempChildren.sort(((o1, o2) -> {
-                                long l = o1.timeSum() - o2.timeSum();
+                                long l = o2.timeSum() - o1.timeSum();
                                 return (int) l;
                             }));
                             return ActivityRecordMapper.toStatResponse(main, sum, tempChildren);
                         })
                 )
                 .sorted((o1, o2)-> {
-                    long l = o1.timeSum() - o2.timeSum();
+                    long l = o2.timeSum() - o1.timeSum();
                     return (int) l;
                 })
                 .toList();
