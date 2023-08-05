@@ -38,7 +38,7 @@ public class Member extends BaseTimeEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("'ROLE_USER'")
+    @ColumnDefault("'USER'")
     @Builder.Default
     private RoleType role = RoleType.USER;
 
@@ -63,9 +63,9 @@ public class Member extends BaseTimeEntity {
     private CustomOpt.StartDay startDay = CustomOpt.StartDay.SUNDAY;
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("'4AM'")
+    @ColumnDefault("'AM4'")
     @Builder.Default
-    private CustomOpt.StartTime startTime = CustomOpt.StartTime._4AM;
+    private CustomOpt.StartTime startTime = CustomOpt.StartTime.AM4;
 
     @ColumnDefault("0")
     @Builder.Default
