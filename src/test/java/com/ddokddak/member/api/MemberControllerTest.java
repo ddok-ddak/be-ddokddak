@@ -145,7 +145,7 @@ class MemberControllerTest {
 
         //given
         var request = ModifyStartTimeRequest.builder()
-                .startTime(CustomOpt.StartTime._12AM)
+                .startTime(CustomOpt.StartTime.AM12)
                 .build();
         var content = objectMapper.writeValueAsString(request);
 
