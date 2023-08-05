@@ -17,8 +17,8 @@ public class CustomOpt {
     @Getter
     @RequiredArgsConstructor
     public enum StartTime {
-        _4AM("4AM", "4AM"),
-        _12AM("12AM", "4AM");
+        AM4("AM4", "4AM"),
+        AM12("AM12", "4AM");
 
         private final String code;
         private final String displayName;
