@@ -186,7 +186,8 @@ class CategoryWriteServiceTest {
         var request = ModifyCategoryValueRequest.builder()
                 .categoryId(mainCategory.getId())
                 .name(mainCategories.get(1).getName())
-                .color(mainCategory.getColor())
+                .iconName(mainCategory.getIconName())
+                //.color(mainCategory.getColor())
                 .build();
 
         // when, then
@@ -203,7 +204,8 @@ class CategoryWriteServiceTest {
         var request = ModifyCategoryValueRequest.builder()
                 .categoryId(subCategory.getId())
                 .name(subCategories.get(2).getName())
-                .color(subCategory.getColor())
+                .iconName(subCategory.getIconName())
+                //.color(subCategory.getColor())
                 .build();
 
         // when, then
@@ -288,6 +290,7 @@ class CategoryWriteServiceTest {
                 .categoryId(mainCategory.getId())
                 .name(subCategories.get(0).getName())
                 .color(mainCategory.getColor())
+                .iconName(mainCategory.getIconName())
                 .level(1)
                 .mainCategoryId(mainCategories.get(2).getId())
                 .build();
@@ -308,6 +311,7 @@ class CategoryWriteServiceTest {
                 .categoryId(mainCategory.getId())
                 .name(name)
                 .color(mainCategory.getColor())
+                .iconName(mainCategory.getIconName())
                 .level(1)
                 .mainCategoryId(mainCategories.get(2).getId()) // 다른 메인 카테고리에 등록
                 .build();

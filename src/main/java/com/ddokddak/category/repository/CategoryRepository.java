@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    @Query("select DISTINCT category from Category category join fetch category.member where category.member = :member and level = 0")
+    @Query("SELECT DISTINCT c FROM Category c JOIN FETCH c.member WHERE c.member = :member and c.level = 0 and c.isDeleted = 0")
     List<Category> findCategoryJoinFetch(@Param("member") Member member);
 
     @Modifying

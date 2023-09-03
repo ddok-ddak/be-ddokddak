@@ -8,10 +8,10 @@ import javax.validation.constraints.Pattern;
 
 public record ModifyCategoryRequest(
         @NotNull Long categoryId,
-        @NotNull @Pattern(regexp="[a-zA-Z가-힣0-9]{1,10}", message = "카테고리 명칭 규칙 위반")
+        @NotNull //@Pattern(regexp="[a-zA-Z가-힣0-9]{1,10}", message = "카테고리 명칭 규칙 위반")
         String name,
-        @NotNull
-        String color,
+        @NotNull String color,
+        @NotNull String iconName,
         @NotNull Integer level,
         @Nullable Long mainCategoryId
 ) {

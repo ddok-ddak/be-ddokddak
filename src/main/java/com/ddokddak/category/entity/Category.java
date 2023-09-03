@@ -2,11 +2,9 @@ package com.ddokddak.category.entity;
 
 import com.ddokddak.common.entity.BaseTimeEntity;
 import com.ddokddak.member.entity.Member;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -34,6 +32,8 @@ public class Category extends BaseTimeEntity {
     @Column(length = 10, nullable = false)
     private String color;
 
+    private String iconName;
+
     @Column(length = 1)
     private Integer level;
 
@@ -58,6 +58,10 @@ public class Category extends BaseTimeEntity {
 
     public void modifyName(String name) {
         this.name = name;
+    }
+
+    public void modifyIconName(String iconName) {
+        this.iconName = iconName;
     }
 
     public void modifyCategoryRelation(Integer level, @Nullable Category mainCategory) {
