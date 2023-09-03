@@ -5,6 +5,7 @@ spring:
     group:
       local: local, common, auth
       test: test, common, test-auth
+      dev:  common, dev, auth, prod-db
       prod: common, prod, auth, prod-db
 ---
 # common 환경
@@ -26,15 +27,16 @@ jdbc:
 
 # cors 설정
 cors:
-  allowedOrigins: 'http://localhost:3000'
+  allowedOriginPatterns: 'http://localhost:3000'
   allowedMethods: GET,POST,PUT,PATCH,DELETE,OPTIONS
   allowedHeaders: '*'
   maxAgeSec: 3600
 server:
   port: 8080
 
-# 버전
+# 앱 속성
 app:
+  baseUrl: 'http://localhost:3000'
   version: v1.0.0
 ---
 # test 환경
@@ -99,6 +101,7 @@ logging:
     org:
       springframework:
         security: DEBUG
+
 ---
 # prod 환경
 spring:
@@ -110,18 +113,49 @@ spring:
     generate-ddl: true
     show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 logging:
   level:
 #    root: DEBUG
     org:
       springframework:
         security: DEBUG
-
 # cors 설정
 cors:
-  allowedOrigins:
-    - 'https://dodonenow.com'
+  allowedOriginPatterns: 'https://dodonenow.com'
   allowedMethods: GET,POST,PUT,PATCH,DELETE,OPTIONS
   allowedHeaders: '*'
   maxAgeSec: 3600
+
+app:
+  baseUrl: 'https://dodonenow.com'
+
+---
+# dev 환경
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+logging:
+  level:
+    #    root: DEBUG
+    org:
+      springframework:
+        security: DEBUG
+
+# cors 설정
+cors:
+  allowedOriginPatterns: '*'
+#    - 'http://localhost:3000'
+#    - 'https://dodonenow.com'
+  allowedMethods: GET,POST,PUT,PATCH,DELETE,OPTIONS
+  allowedHeaders: '*'
+  maxAgeSec: 3600
+app:
+  baseUrl: 'https://dodonenow.com'

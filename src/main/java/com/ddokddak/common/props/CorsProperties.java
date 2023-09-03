@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "cors")
 public class CorsProperties {
 
-    private String[] allowedOrigins;
+    private String[] allowedOriginPatterns;
     private String[] allowedMethods;
     private String[] allowedHeaders;
     private long maxAgeSec;
