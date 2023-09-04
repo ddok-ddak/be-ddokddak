@@ -2,13 +2,20 @@ insert into member (template_type, created_at, modified_at) values ('STUDENT', n
 insert into member (template_type, created_at, modified_at) values ('WORKER', now(), now());
 
 -- 1
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#FFC5CC', '학업', 0, null, 1, now(), now());
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#FFCDA0', '성장', 0, null, 1, now(), now());
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#FFE49F', '관계', 0, null, 1, now(), now());
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#B5F9AA', '건강', 0, null, 1, now(), now());
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#B9E2FF', '낭비', 0, null, 1, now(), now());
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#D2C7FF', '취미', 0, null, 1, now(), now());
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#ECB8FF', '기타', 0, null, 1, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#FFC5CC', '학업', 0, null, 1, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#FFCDA0', '성장', 0, null, 1, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#FFE49F', '관계', 0, null, 1, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#B5F9AA', '건강', 0, null, 1, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#B9E2FF', '낭비', 0, null, 1, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#D2C7FF', '취미', 0, null, 1, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#ECB8FF', '기타', 0, null, 1, now(), now());
 
 insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
 values (1, '#FFC5CC', '강의', 0, (select id from (select id from category where member_id=1 and name='학업') tmp), 1, now(), now());
@@ -66,13 +73,20 @@ insert into category(`level`, color, name, is_deleted, parent_id, member_id, cre
 values (1, '#ECB8FF', '이동시간', 0, (select id from (select id from category where member_id=1 and name='기타') tmp), 1, now(), now());
 
 -- 2
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#FFC5CC', '직장', 0, null, 2, now(), now());
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#FFCDA0', '성장', 0, null, 2, now(), now());
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#FFE49F', '관계', 0, null, 2, now(), now());
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#B5F9AA', '건강', 0, null, 2, now(), now());
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#B9E2FF', '낭비', 0, null, 2, now(), now());
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#D2C7FF', '취미', 0, null, 2, now(), now());
-insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at) values (0, '#ECB8FF', '기타', 0, null, 2, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#FFC5CC', '직장', 0, null, 2, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#FFCDA0', '성장', 0, null, 2, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#FFE49F', '관계', 0, null, 2, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#B5F9AA', '건강', 0, null, 2, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#B9E2FF', '낭비', 0, null, 2, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#D2C7FF', '취미', 0, null, 2, now(), now());
+insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
+values (0, '#ECB8FF', '기타', 0, null, 2, now(), now());
 
 insert into category(`level`, color, name, is_deleted, parent_id, member_id, created_at, modified_at)
 values (1, '#FFC5CC', '업무', 0, (select id from (select id from category where member_id=2 and name='직장') tmp), 2, now(), now());

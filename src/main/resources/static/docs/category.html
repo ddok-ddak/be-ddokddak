@@ -464,7 +464,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
     -d '{
   "categoryId" : 1,
   "name" : "sample",
-  "color" : "sample"
+  "iconName" : "sample"
 }'</code></pre>
 </div>
 </div>
@@ -475,13 +475,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /api/v1/categories/value HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 69
+Content-Length: 72
 Host: localhost:8080
 
 {
   "categoryId" : 1,
   "name" : "sample",
-  "color" : "sample"
+  "iconName" : "sample"
 }</code></pre>
 </div>
 </div>
@@ -517,7 +517,7 @@ Content-Length: 87
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ echo '{
   "categoryId" : 1,
   "name" : "sample",
-  "color" : "sample"
+  "iconName" : "sample"
 }' | http PUT 'http://localhost:8080/api/v1/categories/value' \
     'Content-Type:application/json;charset=UTF-8'</code></pre>
 </div>
@@ -530,7 +530,7 @@ Content-Length: 87
 <pre class="highlight nowrap"><code>{
   "categoryId" : 1,
   "name" : "sample",
-  "color" : "sample"
+  "iconName" : "sample"
 }</code></pre>
 </div>
 </div>
@@ -562,9 +562,9 @@ Content-Length: 87
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>color</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iconName</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 색상</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">아이콘 파일명</p></td>
 </tr>
 </tbody>
 </table>
@@ -840,6 +840,7 @@ Content-Length: 87
   "categoryId" : 1,
   "name" : "sample",
   "color" : "sample",
+  "iconName" : "sample",
   "level" : 0,
   "mainCategoryId" : null
 }'</code></pre>
@@ -852,13 +853,14 @@ Content-Length: 87
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /api/v1/categories HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 113
+Content-Length: 139
 Host: localhost:8080
 
 {
   "categoryId" : 1,
   "name" : "sample",
   "color" : "sample",
+  "iconName" : "sample",
   "level" : 0,
   "mainCategoryId" : null
 }</code></pre>
@@ -897,6 +899,7 @@ Content-Length: 87
   "categoryId" : 1,
   "name" : "sample",
   "color" : "sample",
+  "iconName" : "sample",
   "level" : 0,
   "mainCategoryId" : null
 }' | http PUT 'http://localhost:8080/api/v1/categories' \
@@ -912,6 +915,7 @@ Content-Length: 87
   "categoryId" : 1,
   "name" : "sample",
   "color" : "sample",
+  "iconName" : "sample",
   "level" : 0,
   "mainCategoryId" : null
 }</code></pre>
@@ -943,6 +947,11 @@ Content-Length: 87
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iconName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 아이콘 파일명</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>color</code></p></td>

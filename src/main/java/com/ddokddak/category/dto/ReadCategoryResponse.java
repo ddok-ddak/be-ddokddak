@@ -6,6 +6,7 @@ public record ReadCategoryResponse(
         Long categoryId,
         String name,
         String color,
+        String iconName,
         Integer level,
         Long mainCategoryId,
         List<ReadCategoryResponse> subCategories

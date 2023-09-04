@@ -79,7 +79,8 @@ class CategoryControllerTest {
         var dto = ModifyCategoryValueRequest.builder()
                 .categoryId(1L)
                 .name("sample")
-                .color("sample")
+                //.color("sample")
+                .iconName("sample")
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
@@ -100,7 +101,7 @@ class CategoryControllerTest {
                         requestFields(
                                 fieldWithPath("categoryId").description("카테고리 아이디"),
                                 fieldWithPath("name").description("카테고리명"),
-                                fieldWithPath("color").description("카테고리 색상")
+                                fieldWithPath("iconName").description("아이콘 파일명")
                         ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
@@ -157,6 +158,7 @@ class CategoryControllerTest {
         var dto = ModifyCategoryRequest.builder()
                 .categoryId(1L)
                 .name("sample")
+                .iconName("sample")
                 .color("sample")
                 .level(0)
                 .build();
@@ -179,6 +181,7 @@ class CategoryControllerTest {
                         requestFields(
                                 fieldWithPath("categoryId").description("카테고리 아이디"),
                                 fieldWithPath("name").description("카테고리명"),
+                                fieldWithPath("iconName").description("카테고리 아이콘 파일명"),
                                 fieldWithPath("color").description("카테고리 색상"),
                                 fieldWithPath("level").description("카테고리 레벨"),
                                 fieldWithPath("mainCategoryId").description("상위 카테고리 아이디 (자신이 대분류인 경우 null)")

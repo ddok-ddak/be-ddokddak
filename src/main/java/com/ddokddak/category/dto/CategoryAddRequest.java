@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 public record CategoryAddRequest(
         @NotNull String name,
         @NotNull String color,
+        @NotNull String iconName,
         @NotNull Integer level,
         @Nullable Long mainCategoryId
 ){
