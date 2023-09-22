@@ -6,7 +6,8 @@ import com.ddokddak.category.entity.Category;
 import com.ddokddak.category.mapper.CategoryMapper;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.common.exception.type.NotValidRequest;
+import com.ddokddak.common.exception.type.BaseException;
+import com.ddokddak.common.exception.type.MemberException;
 import com.ddokddak.member.entity.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class CategoryReadService {
     public List<ReadCategoryResponse> readCategoriesByMemberId(Long memberId) {
 
         Member member = memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.MEMBER_ID));
+                .orElseThrow(() -> new NotValidRequestException(MemberException.MEMBER_ID));
         return categoryRepository.findCategoryJoinFetch(member)
                 .stream()
                 .map(CategoryMapper::toReadCategoryResponse)
@@ -39,20 +40,20 @@ public class CategoryReadService {
     @Transactional(readOnly = true)
     public Category findByIdAndMemberId(Long categoryId, Long memberId) {
         return categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(categoryId, memberId)
-                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.UNABLE_REQUEST));
+                .orElseThrow(() -> new NotValidRequestException(BaseException.UNABLE_REQUEST));
     }
 
     @Transactional(readOnly = true)
     public List<Category> findByRefMember(Member member) {
         var allByMember = categoryRepository.findAllByMemberAndIsDeletedFalse(member);
-        if (allByMember.size() < 1) throw new NotValidRequestException(NotValidRequest.UNABLE_REQUEST);
+        if (allByMember.size() < 1) throw new NotValidRequestException(BaseException.UNABLE_REQUEST);
         return allByMember;
     }
 
     @Transactional(readOnly = true)
     public List<Category> findByMemberId(Long memberId) {
         var allByMember = categoryRepository.findByMemberIdAndIsDeletedFalse(memberId);
-        if (allByMember.size() < 1) throw new NotValidRequestException(NotValidRequest.UNABLE_REQUEST);
+        if (allByMember.size() < 1) throw new NotValidRequestException(BaseException.UNABLE_REQUEST);
         return allByMember;
     }
 }

@@ -8,7 +8,7 @@ import com.ddokddak.category.dto.ModifyCategoryValueRequest;
 import com.ddokddak.category.entity.Category;
 import com.ddokddak.category.fixture.CategoryFixture;
 import com.ddokddak.category.repository.CategoryRepository;
-import com.ddokddak.common.exception.NotValidRequestException;
+import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.member.entity.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import org.junit.jupiter.api.*;
@@ -71,7 +71,7 @@ class CategoryWriteServiceTest {
                                                                 .build();
         // then
         assertThatThrownBy( ()-> categoryWriteService.addCategory( member.getId(), duplicatedRequest ) )
-                .isInstanceOf( NotValidRequestException.class )
+                .isInstanceOf( CustomApiException.class )
                 .hasMessage("Already Used Name");
     }
 
@@ -98,7 +98,7 @@ class CategoryWriteServiceTest {
 
         // then
         assertThatThrownBy( ()-> categoryWriteService.addCategory( member.getId(), duplicatedRequest ) )
-                .isInstanceOf( NotValidRequestException.class )
+                .isInstanceOf( CustomApiException.class )
                 .hasMessage("Not Valid Main Category Id");
     }
 
@@ -115,7 +115,7 @@ class CategoryWriteServiceTest {
 
         // when
         assertThatThrownBy( ()-> categoryWriteService.addCategory( member.getId(), duplicatedRequest ) )
-                .isInstanceOf( NotValidRequestException.class )
+                .isInstanceOf( CustomApiException.class )
                 .hasMessage("Already Used Name");
     }
 
@@ -192,8 +192,7 @@ class CategoryWriteServiceTest {
 
         // when, then
         assertThatThrownBy(()->categoryWriteService.modifyCategoryValue(request, member.getId()))
-                .isInstanceOf(NotValidRequestException.class);
-
+                .isInstanceOf(CustomApiException.class);
     }
 
     @DisplayName("서브 카테고리의 이름을 변경할 때 연관된 카테고리에 동일한 이름이 있으면 예외 발생")
@@ -210,7 +209,7 @@ class CategoryWriteServiceTest {
 
         // when, then
         assertThatThrownBy(()->categoryWriteService.modifyCategoryValue(request, member.getId()))
-                .isInstanceOf(NotValidRequestException.class);
+                .isInstanceOf(CustomApiException.class);
 
     }
 
@@ -247,7 +246,7 @@ class CategoryWriteServiceTest {
 
         // when, then
         assertThatThrownBy(()->categoryWriteService.modifyCategoryRelation(request, mainCategoryWithSub.getMember().getId()))
-                .isInstanceOf(NotValidRequestException.class);
+                .isInstanceOf(CustomApiException.class);
     }
 
     @DisplayName("메인 카테고리를 서브 레벨로 변경할 때 연관된 메인 카테고리 아이디 값이 널이면 예외 발생")
@@ -262,7 +261,7 @@ class CategoryWriteServiceTest {
                 .build();
         // when, then
         assertThatThrownBy(()-> categoryWriteService.modifyCategoryRelation(request, mainCategory.getMember().getId()))
-                .isInstanceOf(NotValidRequestException.class);
+                .isInstanceOf(CustomApiException.class);
     }
 
     @DisplayName("메인 카테고리를 서브 레벨로 변경할 때 연관된 메인 카테고리가 유효하지 않으면 예외 발생")
@@ -278,7 +277,7 @@ class CategoryWriteServiceTest {
 
         // when, then
         assertThatThrownBy(()->categoryWriteService.modifyCategoryRelation(request, mainCategory.getMember().getId()))
-                .isInstanceOf(NotValidRequestException.class);
+                .isInstanceOf(CustomApiException.class);
     }
 
     @DisplayName("메인 카테고리를 서브 레벨로 변경할 때 연관된 카테고리에 동일한 이름이 있으면 예외 발생")
@@ -297,7 +296,7 @@ class CategoryWriteServiceTest {
 
         // when, then
         assertThatThrownBy(()->categoryWriteService.modifyCategory(request, mainCategory.getMember().getId()))
-                .isInstanceOf(NotValidRequestException.class);
+                .isInstanceOf(CustomApiException.class);
 
     }
 

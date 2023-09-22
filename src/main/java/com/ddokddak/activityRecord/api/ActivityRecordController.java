@@ -71,16 +71,16 @@ public class ActivityRecordController {
     }
 
     @PostMapping
-    public ResponseEntity<CommonResponse<List<ActivityRecordResponse>>> createActivityRecord(
+    public ResponseEntity<CommonResponse<Boolean>> createActivityRecord(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody CreateActivityRecordRequest req)
     {
-        var response = createActivityRecordUsecase.execute(req, userPrincipal.getId());
+        createActivityRecordUsecase.execute(req, userPrincipal.getId());
         URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .build()
                 .toUri();
 
         return ResponseEntity.created(location)
-                .body(new CommonResponse<>("Successfully Created", response));
+                .body(new CommonResponse<>("Successfully Created", Boolean.TRUE));
     }
 }

@@ -1,5 +1,6 @@
 package com.ddokddak.common.dto;
 
+import com.ddokddak.common.exception.type.ExceptionType;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -7,11 +8,11 @@ import org.springframework.http.HttpStatus;
 public class CommonErrorResponse {
     private CommonStatus status;
     private String message;
-    private int statusCode;
+    private String errorCode;
 
-    public CommonErrorResponse(String message, HttpStatus status) {
+    public CommonErrorResponse(String message, ExceptionType exceptionType) {
         this.status = CommonStatus.FAIL;
         this.message = message;
-        this.statusCode = status.value();
+        this.errorCode = exceptionType.getErrorCode();
     }
 }

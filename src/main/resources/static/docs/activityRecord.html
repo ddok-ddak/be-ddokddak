@@ -505,62 +505,12 @@ X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
-Content-Length: 1590
+Content-Length: 87
 
 {
   "status" : "SUCCESS",
   "message" : "Successfully Created",
-  "result" : [ {
-    "activityRecordId" : 0,
-    "categoryId" : 1,
-    "categoryName" : "test",
-    "categoryColor" : "blue",
-    "content" : "test-activity",
-    "startedAt" : "2023-01-01T13:00:00 KST",
-    "finishedAt" : "2023-01-01T13:30:00 KST",
-    "timeZone" : "Asia/Seoul",
-    "timeUnit" : 30
-  }, {
-    "activityRecordId" : 1,
-    "categoryId" : 1,
-    "categoryName" : "test",
-    "categoryColor" : "blue",
-    "content" : "test-activity",
-    "startedAt" : "2023-01-01T13:30:00 KST",
-    "finishedAt" : "2023-01-01T14:00:00 KST",
-    "timeZone" : "Asia/Seoul",
-    "timeUnit" : 30
-  }, {
-    "activityRecordId" : 2,
-    "categoryId" : 1,
-    "categoryName" : "test",
-    "categoryColor" : "blue",
-    "content" : "test-activity",
-    "startedAt" : "2023-01-01T14:00:00 KST",
-    "finishedAt" : "2023-01-01T14:30:00 KST",
-    "timeZone" : "Asia/Seoul",
-    "timeUnit" : 30
-  }, {
-    "activityRecordId" : 3,
-    "categoryId" : 1,
-    "categoryName" : "test",
-    "categoryColor" : "blue",
-    "content" : "test-activity",
-    "startedAt" : "2023-01-01T14:30:00 KST",
-    "finishedAt" : "2023-01-01T15:00:00 KST",
-    "timeZone" : "Asia/Seoul",
-    "timeUnit" : 30
-  }, {
-    "activityRecordId" : 4,
-    "categoryId" : 1,
-    "categoryName" : "test",
-    "categoryColor" : "blue",
-    "content" : "test-activity",
-    "startedAt" : "2023-01-01T15:00:00 KST",
-    "finishedAt" : "2023-01-01T15:30:00 KST",
-    "timeZone" : "Asia/Seoul",
-    "timeUnit" : 30
-  } ]
+  "result" : true
 }</code></pre>
 </div>
 </div>
@@ -666,57 +616,7 @@ Content-Length: 1590
 <pre class="highlight nowrap"><code>{
   "status" : "SUCCESS",
   "message" : "Successfully Created",
-  "result" : [ {
-    "activityRecordId" : 0,
-    "categoryId" : 1,
-    "categoryName" : "test",
-    "categoryColor" : "blue",
-    "content" : "test-activity",
-    "startedAt" : "2023-01-01T13:00:00 KST",
-    "finishedAt" : "2023-01-01T13:30:00 KST",
-    "timeZone" : "Asia/Seoul",
-    "timeUnit" : 30
-  }, {
-    "activityRecordId" : 1,
-    "categoryId" : 1,
-    "categoryName" : "test",
-    "categoryColor" : "blue",
-    "content" : "test-activity",
-    "startedAt" : "2023-01-01T13:30:00 KST",
-    "finishedAt" : "2023-01-01T14:00:00 KST",
-    "timeZone" : "Asia/Seoul",
-    "timeUnit" : 30
-  }, {
-    "activityRecordId" : 2,
-    "categoryId" : 1,
-    "categoryName" : "test",
-    "categoryColor" : "blue",
-    "content" : "test-activity",
-    "startedAt" : "2023-01-01T14:00:00 KST",
-    "finishedAt" : "2023-01-01T14:30:00 KST",
-    "timeZone" : "Asia/Seoul",
-    "timeUnit" : 30
-  }, {
-    "activityRecordId" : 3,
-    "categoryId" : 1,
-    "categoryName" : "test",
-    "categoryColor" : "blue",
-    "content" : "test-activity",
-    "startedAt" : "2023-01-01T14:30:00 KST",
-    "finishedAt" : "2023-01-01T15:00:00 KST",
-    "timeZone" : "Asia/Seoul",
-    "timeUnit" : 30
-  }, {
-    "activityRecordId" : 4,
-    "categoryId" : 1,
-    "categoryName" : "test",
-    "categoryColor" : "blue",
-    "content" : "test-activity",
-    "startedAt" : "2023-01-01T15:00:00 KST",
-    "finishedAt" : "2023-01-01T15:30:00 KST",
-    "timeZone" : "Asia/Seoul",
-    "timeUnit" : 30
-  } ]
+  "result" : true
 }</code></pre>
 </div>
 </div>
@@ -749,48 +649,8 @@ Content-Length: 1590
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>result</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">결과값</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].categoryId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 아이디</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].categoryName</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 이름</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].categoryColor</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 색상</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].startedAt</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">시작 시간</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].finishedAt</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">종료 시간</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].timeZone</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타임존</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].content</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">활동 내용</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].timeUnit</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">시간 단위</p></td>
 </tr>
 </tbody>
 </table>
@@ -808,7 +668,7 @@ Content-Length: 1590
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-04-22 12:33:08 +0900
+Last updated 2023-08-30 22:29:53 +0900
 </div>
 </div>
 </body>

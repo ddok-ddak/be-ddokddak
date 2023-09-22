@@ -6,7 +6,9 @@ import com.ddokddak.category.repository.CategoryJdbcRepository;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.common.exception.type.NotValidRequest;
+import com.ddokddak.common.exception.type.BaseException;
+import com.ddokddak.common.exception.type.CategoryException;
+import com.ddokddak.common.exception.type.MemberException;
 import com.ddokddak.member.entity.Member;
 import com.ddokddak.member.entity.TemplateType;
 import com.ddokddak.member.repository.MemberRepository;
@@ -31,7 +33,7 @@ public class CategoryWriteService {
     @Transactional
     public CategoryAddResponse addCategory(Long memberId, CategoryAddRequest req) {
         Member member = memberRepository.findById( memberId ).orElseThrow(
-                () -> new NotValidRequestException( NotValidRequest.MEMBER_ID )
+                () -> new CustomApiException( MemberException.MEMBER_ID )
         );
 
         Category category = null;
@@ -44,7 +46,7 @@ public class CategoryWriteService {
         if( Objects.equals(req.level(),0) ){
             // 요청 대분류 카테고리명과 멤버 아이디를 이용해서 기 카테고리명 유무 조회
             if( categoryRepository.existsByLevelAndNameAndMemberIdAndIsDeletedFalse( req.level(), req.name(), member.getId() ) ){
-                throw new NotValidRequestException(NotValidRequest.USED_NAME_CONFLICTS);
+                throw new CustomApiException(CategoryException.USED_NAME_CONFLICTS);
             }
 
             category = fromCategoryAddRequest(req, member, null);
@@ -60,16 +62,16 @@ public class CategoryWriteService {
             /* 서브 카테고리인 경우의 검증 수행 */
             // - 상위 카테고리 정보가 없는 경우 예외 발생
             if( req.mainCategoryId() == null || req.mainCategoryId()==0 ){
-                throw new NotValidRequestException( NotValidRequest.NULL_DATA );
+                throw new CustomApiException( BaseException.NULL_DATA );
             }
 
             // - 메인 카테고리 아이디의 유효성 검증
             var mainCategory = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse( req.mainCategoryId(), member.getId() )
-                    .orElseThrow( () -> new NotValidRequestException(NotValidRequest.MAIN_CATEGORY_ID) );
+                    .orElseThrow( () -> new CustomApiException(CategoryException.MAIN_CATEGORY_ID) );
 
             // - 요청 대분류, 소분류 카테고리명과 멤버 아이디를 이용해서 소분류 카테고리의 기 카테고리명 유무 조회
             if( Boolean.TRUE.equals(categoryRepository.existsByNameAndMainCategoryIdAndMemberIdAndIsDeletedFalse(req.name(), mainCategory.getId(),  member.getId())) ){
-                throw new NotValidRequestException(NotValidRequest.USED_NAME_CONFLICTS);
+                throw new CustomApiException(CategoryException.USED_NAME_CONFLICTS);
             }
 
             category = fromCategoryAddRequest(req, member, mainCategory);
@@ -88,7 +90,7 @@ public class CategoryWriteService {
     @Transactional
     public void removeCategoryByIdAndMemberId(Long categoryId, Long memberId) {
         var category = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(categoryId, memberId)
-                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_ID));
+                .orElseThrow(() -> new NotValidRequestException(CategoryException.CATEGORY_ID));
 
         // 메인 카테고리이면, 서브 카테고리도 삭제 확인
         // 즉, 자식이 있을 경우 함께 삭제
@@ -106,14 +108,14 @@ public class CategoryWriteService {
 
         // 카테고리 아이디와 멤버 아이디로 조회
         var category = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(req.categoryId(), memberId)
-                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_ID));
+                .orElseThrow(() -> new NotValidRequestException(CategoryException.CATEGORY_ID));
 
         var isEqualName = Objects.equals(req.name(), category.getName());
 //        var isEqualColor = Objects.equals(req.color(), category.getColor());
         var isEqualIconName = Objects.equals(req.iconName(), category.getIconName());
 
         if (isEqualName && isEqualIconName) { // isEqualColor &&
-            throw new CustomApiException(NotValidRequest.UNABLE_REQUEST);
+            throw new CustomApiException(BaseException.UNABLE_REQUEST);
         }
         if (!isEqualName) {
             // 이름 검증 후 변경
@@ -141,7 +143,7 @@ public class CategoryWriteService {
                 .map(Category::getName)
                 .anyMatch(nameCompared -> nameCompared.equals(reqName));
         if (result) {
-            throw new NotValidRequestException(NotValidRequest.USED_NAME_CONFLICTS);
+            throw new NotValidRequestException(CategoryException.USED_NAME_CONFLICTS);
         }
     }
 
@@ -183,7 +185,7 @@ public class CategoryWriteService {
         var mainCategory = pValues.stream()
                 .filter(v->v.getParentName()==null)
                 .findFirst()
-                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.NULL_DATA));
+                .orElseThrow(() -> new NotValidRequestException(BaseException.NULL_DATA));
 
         categories.stream()
                 .filter(category -> !category.getIsDeleted() && category.getName() == mainCategory.getName())
@@ -194,7 +196,7 @@ public class CategoryWriteService {
         var newMainCategory = newValues.stream()
                 .filter(v->v.getParentName()==null)
                 .findFirst()
-                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.NULL_DATA));
+                .orElseThrow(() -> new NotValidRequestException(BaseException.NULL_DATA));
 
         var alreadyExistsCategory = categories.stream()
                 .filter(category -> category.getName() == newMainCategory.getName())
@@ -206,7 +208,7 @@ public class CategoryWriteService {
 
         // 대분류 카테 갯수 제한
         if (categories.size() > 8) {
-            throw new NotValidRequestException(NotValidRequest.UNABLE_REQUEST);
+            throw new NotValidRequestException(BaseException.UNABLE_REQUEST);
         }
         categoryJdbcRepository.batchInsert(newValues, memberId);
     }
@@ -222,7 +224,7 @@ public class CategoryWriteService {
     public void modifyCategoryRelation(ModifyCategoryRelationRequest req, Long memberId) {
         // 카테고리 아이디와 멤버 아이디로 조회
         var category = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(req.categoryId(), memberId)
-                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_ID));
+                .orElseThrow(() -> new NotValidRequestException(CategoryException.CATEGORY_ID));
         Category mainCategory = null;
 
         // 1. 메인 카테고리로 변경하는 경우
@@ -230,7 +232,7 @@ public class CategoryWriteService {
         if (Objects.equals(req.level(), 0) && (
                 Objects.equals(category.getLevel(), 0) ||
                         !(Objects.isNull(req.mainCategoryId()) || Objects.equals(req.mainCategoryId(), 0L)) )) {
-            throw new NotValidRequestException(NotValidRequest.IRONIC_REQUEST);
+            throw new NotValidRequestException(BaseException.IRONIC_REQUEST);
         }
 
         // 2. 서브 카테고리로 변경 및 유지
@@ -252,7 +254,7 @@ public class CategoryWriteService {
     public void modifyCategory(ModifyCategoryRequest req, Long memberId) {
         // 카테고리 아이디와 멤버 아이디로 조회
         var category = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(req.categoryId(), memberId)
-                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.CATEGORY_ID));
+                .orElseThrow(() -> new NotValidRequestException(CategoryException.CATEGORY_ID));
         Category mainCategory = category.getMainCategory();
 
         // 1. 관계가 변경되지 않는 경우
@@ -270,7 +272,7 @@ public class CategoryWriteService {
             // 2-1. 서브 카테고리가 메인 카테고리가 되는 경우 (req.level() == 0)
             // req.mainCategoryId() 값을 갖는 경우(not Null && not 0L) 예외 발생
             if (req.level() == 0 && (Objects.nonNull(req.mainCategoryId()) && !Objects.equals(req.mainCategoryId(), 0L))) {
-                throw new NotValidRequestException(NotValidRequest.IRONIC_REQUEST);
+                throw new CustomApiException(BaseException.IRONIC_REQUEST);
             }
 
             // 2-2. 메인 카데고리가 서브 카테고리가 되는 경우 (category.getLevel() == 0 && req.level() == 1 )
@@ -298,19 +300,19 @@ public class CategoryWriteService {
 
         // 1-0. 상위 카테고리 정보가 없는 경우 예외 발생
         if (Objects.isNull(reqMainCategoryId)) {
-            throw new NotValidRequestException(NotValidRequest.NULL_DATA);
+            throw new CustomApiException(BaseException.NULL_DATA);
         }
 
         // 1-1. 서브 카테고리로 변경
         // - 기존에 메인 카테고리 && 서브 카테고리를 갖고 있는 경우 변경 불가하므로 예외 발생
         if (Objects.equals(category.getLevel(), 0) && !category.getSubCategories().isEmpty()) {
-            throw new NotValidRequestException(NotValidRequest.UNABLE_REQUEST);
+            throw new CustomApiException(BaseException.UNABLE_REQUEST);
         }
 
         // 1-2. 서브 카테고리로 유지
         // - 메인 카테고리 아이디가 이전과 동일한 경우
         if (Objects.equals(category.getLevel(), 1) && Objects.equals(category.getMainCategory().getId(), reqMainCategoryId)) {
-            throw new NotValidRequestException(NotValidRequest.MAIN_CATEGORY_ID);
+            throw new CustomApiException(CategoryException.MAIN_CATEGORY_ID);
         }
     }
 
@@ -326,6 +328,6 @@ public class CategoryWriteService {
 
         return categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(reqMainCategoryId, memberId)
                 .orElseThrow(() ->
-                        new NotValidRequestException(NotValidRequest.MAIN_CATEGORY_ID));
+                        new CustomApiException(CategoryException.MAIN_CATEGORY_ID));
     }
 }

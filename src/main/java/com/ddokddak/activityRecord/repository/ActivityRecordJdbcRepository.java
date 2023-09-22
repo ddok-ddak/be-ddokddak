@@ -3,17 +3,15 @@ package com.ddokddak.activityRecord.repository;
 import com.ddokddak.activityRecord.entity.ActivityRecord;
 import com.ddokddak.common.exception.JdbcExecException;
 
-import com.ddokddak.common.exception.type.FailedJdbcExec;
+import com.ddokddak.common.exception.type.DbException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.stream.LongStream;
 
 @RequiredArgsConstructor
 @Repository
@@ -31,22 +29,22 @@ public class ActivityRecordJdbcRepository {
     @Transactional // TODO 리팩토링 - 트랜잭션, id 체크 여부
     public void bulkSave(List<ActivityRecord> list) {
 
-        Long latestId;
-        try {
-            latestId = jdbcTemplate.queryForObject("SELECT id FROM activity_record ORDER BY id DESC LIMIT 1", Long.class);
-        } catch (DataAccessException e) {
-            e.printStackTrace();
-            latestId = 0L;
-        }
+//        Long latestId;
+//        try {
+//            latestId = jdbcTemplate.queryForObject("SELECT id FROM activity_record ORDER BY id DESC LIMIT 1", Long.class);
+//        } catch (DataAccessException e) {
+//            e.printStackTrace();
+//            latestId = 0L;
+//        }
 
         // 배치 인서트 수행
         batchInsert(batchSize, list);
 
-        Long finalId = latestId;
-        if (list.size() < batchSize) {
-            LongStream.range(0, list.size())
-                    .forEach(i -> list.get((int) i).assignId(i + finalId + 1L));
-        }
+//        Long finalId = latestId;
+//        if (list.size() < batchSize) {
+//            LongStream.range(0, list.size())
+//                    .forEach(i -> list.get((int) i).assignId(i + finalId + 1L));
+//        }
     }
 
     /**
@@ -82,7 +80,7 @@ public class ActivityRecordJdbcRepository {
             
         } catch (Exception e) {
             e.printStackTrace();
-            throw new JdbcExecException(FailedJdbcExec.BATCH_INSERTION_FAIL);
+            throw new JdbcExecException(DbException.BATCH_INSERTION_FAIL);
         }
     }
 }
