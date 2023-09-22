@@ -2,6 +2,7 @@ package com.ddokddak.common.exception;
 
 import com.ddokddak.common.dto.CommonErrorResponse;
 import com.ddokddak.common.dto.CommonResponse;
+import com.ddokddak.common.exception.type.BaseException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,14 +24,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleCustomApiException(CustomApiException e, WebRequest request) {
 
         HttpHeaders headers = new HttpHeaders();
-        return handleExceptionInternal(e, new CommonErrorResponse(e.getMessage(), e.getStatus()), headers, e.getStatus(), request);
+        return handleExceptionInternal(e, new CommonErrorResponse(e.getMessage(), e.getExceptionType()), headers, e.getStatus(), request);
     }
 
     @ExceptionHandler(value = {ValidationException.class})
     protected ResponseEntity<Object> handleValidationException(ValidationException e, WebRequest request) {
 
         HttpHeaders headers = new HttpHeaders();
-        return handleExceptionInternal(e, new CommonErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST), headers, HttpStatus.BAD_REQUEST, request);
+        return handleExceptionInternal(e, new CommonErrorResponse(e.getMessage(), BaseException.INVALID_INPUT), headers, HttpStatus.BAD_REQUEST, request);
     }
 
     // 나머지 예외 처리는 오버라이드해서 커스텀할 수 있다.
@@ -38,6 +39,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
             HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         // 예외 메세지 확인을 위한 오버라이딩
-        return handleExceptionInternal(ex, new CommonErrorResponse(ex.getMessage(), status), headers, status, request);
+        return handleExceptionInternal(ex, new CommonErrorResponse(ex.getMessage(), BaseException.SERVER_ERROR), headers, status, request);
     }
 }

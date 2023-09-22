@@ -1,11 +1,9 @@
 package com.ddokddak.activityRecord.api;
 
 import com.ddokddak.activityRecord.dto.CreateActivityRecordRequest;
-import com.ddokddak.activityRecord.entity.ActivityRecord;
-import com.ddokddak.activityRecord.mapper.ActivityRecordMapper;
 import com.ddokddak.category.entity.Category;
 import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.common.exception.type.NotValidRequest;
+import com.ddokddak.common.exception.type.ActivityException;
 import com.ddokddak.member.entity.Member;
 import com.ddokddak.usecase.CreateActivityRecordUsecase;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,11 +24,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.stream.IntStream;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -54,7 +51,6 @@ class ActivityRecordControllerTest {
     private ObjectMapper objectMapper;
     @MockBean
     private CreateActivityRecordUsecase createActivityRecordUsecase;
-
     private Category category;
 
     @BeforeEach
@@ -64,6 +60,7 @@ class ActivityRecordControllerTest {
                 .id(1L)
                 .name("test")
                 .color("blue")
+                .iconName("icon.jpg")
                 .level(0)
                 .mainCategory(null)
                 .member(Member.builder().id(1L).build())
@@ -91,17 +88,8 @@ class ActivityRecordControllerTest {
                 .build();
         var content = objectMapper.writeValueAsString(request);
 
-        List<ActivityRecord> activityRecords = IntStream.range(0, 150/30)
-                .mapToObj(i -> ActivityRecordMapper.toEntityForTest(i, request, this.category))
-                .toList();
-
-        var response = activityRecords.stream()
-                .map(ActivityRecordMapper::toActivityRecordResponse)
-                .toList();
-
         // when, then
-        given(createActivityRecordUsecase.execute(any(), any())).willReturn(response);
-
+        doNothing().when(createActivityRecordUsecase).execute(any(), any());
         mockMvc.perform(post("/api/v1/activity-records")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -124,15 +112,7 @@ class ActivityRecordControllerTest {
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("message").description("응답 메세지"),
-                                subsectionWithPath("result").description("결과값"),
-                                fieldWithPath("result[].categoryId").description("카테고리 아이디"),
-                                fieldWithPath("result[].categoryName").description("카테고리 이름"),
-                                fieldWithPath("result[].categoryColor").description("카테고리 색상"),
-                                fieldWithPath("result[].startedAt").description("시작 시간"),
-                                fieldWithPath("result[].finishedAt").description("종료 시간"),
-                                fieldWithPath("result[].timeZone").description("타임존"),
-                                fieldWithPath("result[].content").description("활동 내용"),
-                                fieldWithPath("result[].timeUnit").description("시간 단위")
+                                subsectionWithPath("result").description("결과값")
                         )
                 ));
     }
@@ -153,17 +133,8 @@ class ActivityRecordControllerTest {
                 .build();
         var content = objectMapper.writeValueAsString(request);
 
-        List<ActivityRecord> activityRecords = IntStream.range(0, 150/30)
-                .mapToObj(i -> ActivityRecordMapper.toEntityForTest(i, request, category))
-                .toList();
-
-        var response = activityRecords.stream()
-                .map(ActivityRecordMapper::toActivityRecordResponse)
-                .toList();
-
         // when, then
-        given(createActivityRecordUsecase.execute(any(), any())).willThrow(new NotValidRequestException(NotValidRequest.WRONG_TIME_DATA));
-
+        doThrow(new NotValidRequestException(ActivityException.WRONG_TIME_DATA)).when(createActivityRecordUsecase).execute(any(), any());
         mockMvc.perform(post("/api/v1/activity-records")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -178,7 +149,7 @@ class ActivityRecordControllerTest {
                         ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
-                                fieldWithPath("statusCode").description("응답 코드"),
+                                fieldWithPath("errorCode").description("응답 코드"),
                                 fieldWithPath("message").description("응답 메세지")
                         )
                 ));

@@ -5,7 +5,7 @@ import com.ddokddak.category.dto.CategoryTemplateRequest;
 import com.ddokddak.category.service.CategoryWriteService;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.common.exception.type.NotValidRequest;
+import com.ddokddak.common.exception.type.MemberException;
 import com.ddokddak.member.dto.MemberResponse;
 import com.ddokddak.member.dto.ModifyStartDayRequest;
 import com.ddokddak.member.dto.ModifyStartTimeRequest;
@@ -15,7 +15,6 @@ import com.ddokddak.member.mapper.MemberMapper;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,10 +33,10 @@ public class MemberWriteService {
     public MemberResponse register(RegisterMemberRequest registerMemberRequest) throws CustomApiException {
 
         if (memberRepository.existsByEmail(registerMemberRequest.email())) {
-            throw new CustomApiException("Already Exists User Mail", HttpStatus.CONFLICT);
+            throw new CustomApiException(MemberException.ALREADY_EXISTS_EMAIL);
         }
         if (memberRepository.existsByNickname(registerMemberRequest.nickname())) {
-            throw new CustomApiException("Already Exists User Name", HttpStatus.CONFLICT);
+            throw new CustomApiException(MemberException.ALREADY_EXISTS_NAME);
         }
 
         var member = MemberMapper.fromRegisterMemberRequest(registerMemberRequest, this.passwordEncoder);
@@ -67,35 +66,35 @@ public class MemberWriteService {
     @Transactional
     public void countFailedPasswordTry(String email) {
         var member = memberRepository.findByEmail(email)
-                .orElseThrow(()->new NotValidRequestException(NotValidRequest.MEMBER_ID));
+                .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
         member.plusFailedPasswordTryCount();
     }
 
     @Transactional
     public void updateStartTime(Long memberId, ModifyStartTimeRequest req) {
         var member = memberRepository.findById(memberId)
-                .orElseThrow(()->new NotValidRequestException(NotValidRequest.MEMBER_ID));
+                .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
         member.modifyStartTime(req.startTime());
     }
 
     @Transactional
     public void updateStartDay(Long memberId, ModifyStartDayRequest req) {
         var member = memberRepository.findById(memberId)
-                .orElseThrow(()->new NotValidRequestException(NotValidRequest.MEMBER_ID));
+                .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
         member.modifyStartDay(req.startDay());
     }
 
     @Transactional
     public void setCategoryTemplate(Long memberId, CategoryTemplateRequest req) {
         var member = memberRepository.findById(memberId)
-                .orElseThrow(()->new NotValidRequestException(NotValidRequest.MEMBER_ID));
+                .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
         member.setCategoryTemplateType(req.templateType());
     }
 
     @Transactional
     public TemplateType modifyCategoryTemplate(Long memberId, CategoryTemplateRequest req) {
         var member = memberRepository.findById(memberId)
-                .orElseThrow(()->new NotValidRequestException(NotValidRequest.MEMBER_ID));
+                .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
         var previousTemplateType = member.modifyCategoryTemplateType(req.templateType());
         return previousTemplateType;
     }

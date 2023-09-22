@@ -4,24 +4,11 @@ import com.ddokddak.activityRecord.dto.ModifyActivityRecordRequest;
 import com.ddokddak.activityRecord.entity.ActivityRecord;
 import com.ddokddak.activityRecord.repository.ActivityRecordJdbcRepository;
 import com.ddokddak.activityRecord.repository.ActivityRecordRepository;
-import com.ddokddak.auth.domain.UserPrincipal;
 import com.ddokddak.category.repository.CategoryRepository;
-import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.common.exception.type.NotValidRequest;
-import com.ddokddak.activityRecord.repository.ActivityRecordRepository;
-import com.ddokddak.activityRecord.repository.ActivityRecordRepository;
-import com.ddokddak.auth.domain.UserPrincipal;
-import com.ddokddak.category.repository.CategoryRepository;
-import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.common.exception.type.NotValidRequest;
-import com.ddokddak.activityRecord.repository.ActivityRecordRepository;
-import com.ddokddak.auth.domain.UserPrincipal;
-import com.ddokddak.category.repository.CategoryRepository;
-import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.common.exception.type.NotValidRequest;
+import com.ddokddak.common.exception.CustomApiException;
+import com.ddokddak.common.exception.type.ActivityException;
+import com.ddokddak.common.exception.type.CategoryException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +22,7 @@ public class ActivityRecordWriteService {
     private final ActivityRecordJdbcRepository activityRecordJdbcRepository;
     private final ActivityRecordRepository activityRecordRepository;
     private final CategoryRepository categoryRepository;
+
     @Transactional
     public void saveBulkActivityRecords(List<ActivityRecord> activityRecords) {
         activityRecordJdbcRepository.bulkSave(activityRecords);
@@ -58,16 +46,16 @@ public class ActivityRecordWriteService {
 
         /* 카테고리 검증 */
         var category = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(req.categoryId(), memberId)
-                .orElseThrow(() -> new NotValidRequestException((NotValidRequest.CATEGORY_ID)));
+                .orElseThrow(() -> new CustomApiException((CategoryException.CATEGORY_ID)));
 
         /* 리뷰 아이디 검증 */
         var existingActivityRecord = activityRecordRepository.findByIdAndMemberId(req.id(), memberId)
-                .orElseThrow(() -> new NotValidRequestException(NotValidRequest.ACTIVITYRECORD_ID));
+                .orElseThrow(() -> new CustomApiException(ActivityException.ACTIVITYRECORD_ID));
 
         /* 시간 검증 */
         // 1. 유효성
         if (req.finishedAt().isBefore(req.startedAt())) {
-            throw new NotValidRequestException(NotValidRequest.WRONG_TIME_DATA);
+            throw new CustomApiException(ActivityException.WRONG_TIME_DATA);
         }
 
         // 2. 종료 시간이 시작 시간의 일자를 넘어가는 경우, 당일 끝시간으로 지정

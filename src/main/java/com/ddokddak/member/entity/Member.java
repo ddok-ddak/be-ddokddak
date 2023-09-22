@@ -1,8 +1,9 @@
 package com.ddokddak.member.entity;
 
 import com.ddokddak.common.entity.BaseTimeEntity;
-import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.common.exception.type.NotValidRequest;
+import com.ddokddak.common.exception.CustomApiException;
+import com.ddokddak.common.exception.type.BaseException;
+import com.ddokddak.common.exception.type.CategoryException;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -109,7 +110,7 @@ public class Member extends BaseTimeEntity {
 
     public void setCategoryTemplateType(TemplateType templateType) {
         if (!this.templateType.equals(TemplateType.NONE)) {
-            throw new NotValidRequestException(NotValidRequest.ALREADY_EXISTS); // 최초 등록한 경우가 아니면 비즈니스 로직 예외 처리
+            throw new CustomApiException(CategoryException.ALREADY_EXISTS); // 최초 등록한 경우가 아니면 비즈니스 로직 예외 처리
         }
         this.templateType = templateType;
     }
@@ -117,11 +118,11 @@ public class Member extends BaseTimeEntity {
     public TemplateType modifyCategoryTemplateType(TemplateType templateType) {
 
         if (this.templateType.equals(TemplateType.NONE)) {
-            throw new NotValidRequestException(NotValidRequest.UNABLE_REQUEST); // 최초 등록 전이면 비즈니스 로직 예외 처리
+            throw new CustomApiException(BaseException.UNABLE_REQUEST); // 최초 등록 전이면 비즈니스 로직 예외 처리
         }
 
         if (this.templateType.equals(templateType)) {
-            throw new NotValidRequestException(NotValidRequest.ALREADY_EXISTS); // 동일한 템플릿이면 비즈니스 로직 예외 처리
+            throw new CustomApiException(CategoryException.ALREADY_EXISTS); // 동일한 템플릿이면 비즈니스 로직 예외 처리
         }
 
         var previousTemplateType = this.templateType;

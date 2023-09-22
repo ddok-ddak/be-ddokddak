@@ -2,7 +2,7 @@ package com.ddokddak.category.repository;
 
 import com.ddokddak.category.enums.CategoryTemplate;
 import com.ddokddak.common.exception.CustomApiException;
-import com.ddokddak.common.exception.type.FailedJdbcExec;
+import com.ddokddak.common.exception.type.DbException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,7 +41,7 @@ public class CategoryJdbcRepository {
                     });
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CustomApiException(FailedJdbcExec.BATCH_INSERTION_FAIL);
+            throw new CustomApiException(DbException.BATCH_INSERTION_FAIL);
         }
     }
 }
