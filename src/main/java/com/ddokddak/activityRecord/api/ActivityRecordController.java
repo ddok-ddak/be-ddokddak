@@ -45,9 +45,7 @@ public class ActivityRecordController {
 
     @DeleteMapping
     public ResponseEntity<CommonResponse<Boolean>> removeActivityRecordById(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-        @PathVariable Long activityRecordId
-    ) {
+            @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long activityRecordId) {
         activityRecordWriteService.removeActivityRecordByMemberIdAndId( userPrincipal.getId(), activityRecordId );
         return  ResponseEntity.ok( new CommonResponse<>( "Successfully Deleted", Boolean.TRUE) );
     }

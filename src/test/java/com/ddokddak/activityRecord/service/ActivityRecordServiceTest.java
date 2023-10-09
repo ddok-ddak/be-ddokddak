@@ -1,6 +1,6 @@
 package com.ddokddak.activityRecord.service;
 
-import com.ddokddak.DatabaseCleanUp;
+import com.ddokddak.utils.DatabaseCleanUp;
 import com.ddokddak.activityRecord.dto.ModifyActivityRecordRequest;
 import com.ddokddak.activityRecord.dto.ReadActivityRecordRequest;
 import com.ddokddak.activityRecord.entity.ActivityRecord;
@@ -99,15 +99,12 @@ class ActivityRecordServiceTest {
         var targetId = activityRecords.get(0).getId();
 
         // when
-        activityRecordWriteService.removeActivityRecordByMemberIdAndId( member.getId(), activityRecords.get(0).getId() );
+        activityRecordWriteService.removeActivityRecordByMemberIdAndId(member.getId(), targetId);
 
         // then
-        var deletedTargetList = activityRecordRepository.findById(targetId)
-                .stream()
-                .map( activityRecord -> activityRecord.getDeleteYn() )
-                .toList();
+        var undeleted = activityRecordRepository.findByIdAndIsDeletedFalse(targetId);
 
-        Assertions.assertEquals( deletedTargetList.size(), 0 );
+        Assertions.assertEquals(false, undeleted.isPresent());
     }
 
     @WithMockUser

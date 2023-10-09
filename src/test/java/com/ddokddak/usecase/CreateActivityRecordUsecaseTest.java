@@ -90,7 +90,7 @@ class CreateActivityRecordUsecaseTest {
         var activityRecordRequest = CreateActivityRecordRequest.builder()
                 .categoryId(1L)
                 .startedAt(startedTime)
-                .finishedAt(startedTime.plusMinutes(150))
+                .finishedAt(startedTime.plusMinutes(23))
                 .timeUnit(30)
                 .content("test content")
                 .build();

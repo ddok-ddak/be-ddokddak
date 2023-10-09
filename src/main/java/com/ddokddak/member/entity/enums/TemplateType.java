@@ -1,4 +1,4 @@
-package com.ddokddak.member.entity;
+package com.ddokddak.member.entity.enums;
 
 import com.ddokddak.category.enums.BaseTemplate;
 import com.ddokddak.category.enums.CategoryTemplate;

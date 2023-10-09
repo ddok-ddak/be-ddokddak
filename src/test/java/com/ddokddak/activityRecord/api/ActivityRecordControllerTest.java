@@ -6,6 +6,7 @@ import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.ActivityException;
 import com.ddokddak.member.entity.Member;
 import com.ddokddak.usecase.CreateActivityRecordUsecase;
+import com.ddokddak.utils.security.WithMockCustomUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -72,7 +73,7 @@ class ActivityRecordControllerTest {
     void tearDown() {
     }
 
-    @WithMockUser
+    @WithMockCustomUser
     @DisplayName("활동 내역 기록이 잘 수행되는지 확인_201")
     @Test
     void createActivityRecord() throws Exception {
@@ -91,6 +92,7 @@ class ActivityRecordControllerTest {
         // when, then
         doNothing().when(createActivityRecordUsecase).execute(any(), any());
         mockMvc.perform(post("/api/v1/activity-records")
+                        .header("Authorization", "Bearer {ACCESS_TOKEN}")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -99,9 +101,6 @@ class ActivityRecordControllerTest {
                 .andDo(document("create-activity-record",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("memberId").optional().description("멤버 아이디(temp)")
-                        ),
                         requestFields(
                                 fieldWithPath("categoryId").description("카테고리 아이디"),
                                 fieldWithPath("startedAt").description("시작 시간 (데이터 예 : 2023-01-01T16:00:00 Asia/Seoul)"),
@@ -117,7 +116,7 @@ class ActivityRecordControllerTest {
                 ));
     }
 
-    @WithMockUser
+    @WithMockCustomUser
     @DisplayName("활동 내역 기록 시도 중 잘못된 시간 데이터 전달시 예외 발생_400")
     @Test
     void createActivityRecordWithException() throws Exception {
@@ -136,17 +135,16 @@ class ActivityRecordControllerTest {
         // when, then
         doThrow(new NotValidRequestException(ActivityException.WRONG_TIME_DATA)).when(createActivityRecordUsecase).execute(any(), any());
         mockMvc.perform(post("/api/v1/activity-records")
+                        .header("Authorization", "Bearer {ACCESS_TOKEN}")
                         .content(content)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andDo(document("create-activity-record-400",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("memberId").optional().description("멤버 아이디(temp)")
-                        ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
                                 fieldWithPath("errorCode").description("응답 코드"),
