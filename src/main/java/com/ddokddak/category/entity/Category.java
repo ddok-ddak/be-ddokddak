@@ -32,6 +32,9 @@ public class Category extends BaseTimeEntity {
     @Column(length = 10, nullable = false)
     private String color;
 
+    @Column(length = 10)
+    private String highlightColor;
+
     private String iconName;
 
     @Column(length = 1)
