@@ -1,6 +1,6 @@
 package com.ddokddak.auth.domain.oauth;
 
-import com.ddokddak.member.entity.AuthProviderType;
+import com.ddokddak.member.entity.enums.AuthProviderType;
 
 import java.util.Map;
 

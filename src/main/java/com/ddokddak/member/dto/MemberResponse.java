@@ -1,7 +1,6 @@
 package com.ddokddak.member.dto;
 
-import com.ddokddak.member.entity.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ddokddak.member.entity.enums.*;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;

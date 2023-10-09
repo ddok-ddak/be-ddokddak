@@ -4,11 +4,13 @@ import com.ddokddak.common.entity.BaseTimeEntity;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.type.BaseException;
 import com.ddokddak.common.exception.type.CategoryException;
+import com.ddokddak.member.entity.enums.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -16,6 +18,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Member extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,9 +26,6 @@ public class Member extends BaseTimeEntity {
     // 유니크... 같은 메일이면서 다른 소셜 로그인 활용하는 경우는 없도록
     @Column(unique = true, length = 100)
     private String email;
-
-    @Column(unique = true)
-    private String oauthId;
 
     @Column(length = 100)
     private String password;
@@ -49,11 +49,6 @@ public class Member extends BaseTimeEntity {
     private Status status = Status.NORMAL;
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("'DEFAULT'")
-    @Builder.Default
-    private AuthProviderType authProviderType = AuthProviderType.DEFAULT;
-
-    @Enumerated(EnumType.STRING)
     @ColumnDefault("'NONE'")
     @Builder.Default
     private TemplateType templateType = TemplateType.NONE;
@@ -71,6 +66,17 @@ public class Member extends BaseTimeEntity {
     @ColumnDefault("0")
     @Builder.Default
     private Short failedPasswordCount = 0;
+
+    @Column(length = 256)
+    private String accessToken;
+
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault("'DEFAULT'")
+    @Builder.Default
+    private AuthProviderType authProvider = AuthProviderType.DEFAULT;
+
+    @Column(name = "oauth2_id", unique = true)
+    private String oauth2Id;
 
     @PrePersist // 사용자 상태 - 수정 필요
     public void prePersist() {

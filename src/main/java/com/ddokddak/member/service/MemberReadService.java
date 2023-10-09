@@ -49,7 +49,7 @@ public class MemberReadService {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {
             throw new CustomApiException(
-                    "Already Exists User Mail with " + member.get().getAuthProviderType(), HttpStatus.CONFLICT);
+                    "Already Exists User Mail with " + member.get().getAuthProvider(), HttpStatus.CONFLICT);
         }
     }
 

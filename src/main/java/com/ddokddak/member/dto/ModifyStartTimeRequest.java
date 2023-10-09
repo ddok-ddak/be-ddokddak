@@ -1,6 +1,6 @@
 package com.ddokddak.member.dto;
 
-import com.ddokddak.member.entity.CustomOpt;
+import com.ddokddak.member.entity.enums.CustomOpt;
 import lombok.Builder;
 
 import javax.validation.constraints.NotNull;
