@@ -11,6 +11,7 @@ import com.ddokddak.member.dto.ModifyStartDayRequest;
 import com.ddokddak.member.dto.ModifyStartTimeRequest;
 import com.ddokddak.member.dto.RegisterMemberRequest;
 import com.ddokddak.member.entity.*;
+import com.ddokddak.member.entity.enums.TemplateType;
 import com.ddokddak.member.mapper.MemberMapper;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;

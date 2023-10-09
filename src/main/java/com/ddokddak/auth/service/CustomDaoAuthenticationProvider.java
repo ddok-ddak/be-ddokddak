@@ -13,7 +13,7 @@ public class CustomDaoAuthenticationProvider extends DaoAuthenticationProvider {
 
     private final PasswordEncoder passwordEncoder;
     @Override
-    @SuppressWarnings("deprecation")
+    //@SuppressWarnings("deprecation")
     protected void additionalAuthenticationChecks(UserDetails userDetails,
                                                   UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
         if (authentication.getCredentials() == null) {

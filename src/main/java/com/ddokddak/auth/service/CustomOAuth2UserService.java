@@ -4,7 +4,7 @@ import com.ddokddak.auth.domain.UserPrincipal;
 import com.ddokddak.auth.domain.oauth.OAuth2UserInfo;
 import com.ddokddak.auth.domain.oauth.OAuth2UserInfoFactory;
 import com.ddokddak.common.exception.CustomApiException;
-import com.ddokddak.member.entity.AuthProviderType;
+import com.ddokddak.member.entity.enums.AuthProviderType;
 import com.ddokddak.member.entity.Member;
 import com.ddokddak.member.service.MemberReadService;
 import com.ddokddak.member.service.MemberWriteService;
@@ -49,7 +49,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Member member;
         if (memberReadService.existsUserByEmail(userInfo.getEmail())) {	// 이미 가입된 경우
             member = memberReadService.findUserByEmail(userInfo.getEmail());
-            if (!authProviderType.equals(member.getAuthProviderType())) {
+            if (!authProviderType.equals(member.getAuthProvider())) {
                 throw new CustomApiException("Wrong Match Auth Provider");
             }
         } else { // 가입되지 않은 경우

@@ -2,6 +2,7 @@ package com.ddokddak.auth.api;
 
 import com.ddokddak.common.dto.CommonResponse;
 import com.ddokddak.common.exception.CustomApiException;
+import com.ddokddak.common.props.AppProperties;
 import com.ddokddak.common.utils.CookieUtil;
 import com.ddokddak.common.utils.JwtUtil;
 import com.ddokddak.member.dto.MemberResponse;
@@ -20,12 +21,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
@@ -37,6 +40,7 @@ import java.net.URI;
 public class AuthController {
 
     private final JwtUtil jwtUtil;
+    private final AppProperties appProperties;
     private final MemberWriteService memberWriteService;
     private final CheckAuthUsecase checkAuthUsecase;
 
@@ -62,7 +66,7 @@ public class AuthController {
         String accessToken = jwtUtil.createAccessToken(authentication);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("http://localhost:3000/signin/redirect"));
+        httpHeaders.setLocation(URI.create(appProperties.getBaseUrl() + "/signin/redirect"));
         httpHeaders.add(JwtUtil.AUTHORIZATION_HEADER, "Bearer " + accessToken);
         CookieUtil.addCookie(response, CookieUtil.ACCESS_TOKEN_COOKIE_NAME, accessToken, CookieUtil.COOKIE_EXPIRE_SECONDS);
 
@@ -76,5 +80,17 @@ public class AuthController {
                 HttpStatus.MOVED_PERMANENTLY);
 //                .headers(httpHeaders)
 //                .body(new CommonResponse<>(, signinResponse));
+    }
+
+    @PostMapping(value = "/signout")
+    public ResponseEntity<CommonResponse<SigninResponse>> signOut(HttpServletRequest request, HttpServletResponse response) {
+
+        CookieUtil.deleteCookie(request, response, CookieUtil.ACCESS_TOKEN_COOKIE_NAME);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(URI.create(appProperties.getBaseUrl()));
+
+        return new ResponseEntity<>(new CommonResponse<>("Signed out Successfully", null),
+                httpHeaders,
+                HttpStatus.MOVED_PERMANENTLY);
     }
 }

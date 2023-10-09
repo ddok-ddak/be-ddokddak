@@ -2,11 +2,14 @@ package com.ddokddak.auth.handler;
 
 import com.ddokddak.auth.repository.OAuth2CookieAuthorizationRequestRepository;
 import com.ddokddak.common.exception.CustomApiException;
+import com.ddokddak.common.props.AppProperties;
 import com.ddokddak.common.props.AuthProperties;
 import com.ddokddak.common.utils.CookieUtil;
 import com.ddokddak.common.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.JdbcOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.OAuth2AuthorizationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -17,13 +20,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final AuthProperties authProperties;
+    private final AppProperties appProperties;
     private final JwtUtil jwtUtil;
     private final OAuth2CookieAuthorizationRequestRepository OAuth2AuthorizationRequestWithCookieRepository;
 
@@ -46,11 +49,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) {
-
         String redirectUri = CookieUtil.getCookie(
                 request, OAuth2AuthorizationRequestWithCookieRepository.REDIRECT_URI_COOKIE_NAME)
                 .map(Cookie::getValue)
-                .orElse("http://localhost:3000/signin/redirect"); //getDefaultTargetUrl());
+                .orElse(appProperties.getBaseUrl() + "/signin/redirect"); //getDefaultTargetUrl());
         if(!isAuthorizedRedirectUri(redirectUri)) {
             throw new CustomApiException("Unauthorized Redirect URI");
         }
