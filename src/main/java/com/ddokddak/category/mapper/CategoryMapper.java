@@ -1,25 +1,28 @@
 package com.ddokddak.category.mapper;
 
 import com.ddokddak.category.dto.CategoryAddRequest;
-import com.ddokddak.category.dto.ReadCategoryResponse;
+import com.ddokddak.category.dto.CategoryReadResponse;
 import com.ddokddak.category.entity.Category;
 import com.ddokddak.member.entity.Member;
 
 import java.util.Collections;
+import java.util.Optional;
 
 public class CategoryMapper {
 
-    public static final ReadCategoryResponse toReadCategoryResponse(Category category, int level) {
+    public static final CategoryReadResponse toReadCategoryResponse(Category category, int level) {
 
-        return ReadCategoryResponse.builder()
+        return CategoryReadResponse.builder()
                 .categoryId(category.getId())
                 .name(category.getName())
                 .color(category.getColor())
+                .highlightColor(category.getHighlightColor())
                 .iconName(category.getIconName())
                 .mainCategoryId(category.getMainCategory() == null ? null : category.getMainCategory().getId())
                 .level(category.getLevel())
                 .subCategories(category.getLevel() < level
-                        ? category.getSubCategories()
+                        ? Optional.ofNullable(category.getSubCategories())
+                        .orElseGet(Collections::emptyList)
                         .stream()
                         .filter(sub -> sub.getIsDeleted() == Boolean.FALSE)
                         .map(CategoryMapper::toReadCategoryResponse)
@@ -28,7 +31,7 @@ public class CategoryMapper {
                 .build();
     }
 
-    public static final ReadCategoryResponse toReadCategoryResponse(Category category) {
+    public static final CategoryReadResponse toReadCategoryResponse(Category category) {
 
         return CategoryMapper.toReadCategoryResponse(category, 2);
     }
@@ -36,12 +39,13 @@ public class CategoryMapper {
     public static final Category fromCategoryAddRequest(CategoryAddRequest req, Member member, Category mainCategory) {
 
         return Category.builder()
-                .name( req.name() )
-                .iconName( req.iconName() )
-                .color( req.color() )
-                .level( req.level() )
-                .member( member )
-                .mainCategory( mainCategory )
+                .name(req.name())
+                .iconName(req.iconName())
+                .color(req.color())
+                .highlightColor(req.highlightColor())
+                .level(req.level())
+                .member(member)
+                .mainCategory(mainCategory)
                 .build();
     }
 }

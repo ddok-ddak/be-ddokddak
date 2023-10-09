@@ -1,6 +1,6 @@
 package com.ddokddak.category.dto;
 
-import com.ddokddak.member.entity.TemplateType;
+import com.ddokddak.member.entity.enums.TemplateType;
 import lombok.Builder;
 import javax.validation.constraints.NotNull;
 

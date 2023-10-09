@@ -1,6 +1,6 @@
 package com.ddokddak.category.service;
 
-import com.ddokddak.DatabaseCleanUp;
+import com.ddokddak.utils.DatabaseCleanUp;
 import com.ddokddak.category.dto.CategoryAddRequest;
 import com.ddokddak.category.dto.ModifyCategoryRequest;
 import com.ddokddak.category.dto.ModifyCategoryRelationRequest;
@@ -40,8 +40,7 @@ class CategoryWriteServiceTest {
 
     @BeforeEach
     void setUp() {
-        this.member = Member.builder()
-                                .build();
+        this.member = Member.builder().build();
         memberRepository.save(member);
 
         this.mainCategories = CategoryFixture.createMainCategories(0, 4, member);
@@ -156,26 +155,15 @@ class CategoryWriteServiceTest {
         );
     }
 
-    @DisplayName("상위 카테고리 삭제시 자식 카테고리까지 잘 삭제되는지")
+    @DisplayName("카테고리 삭제 확인")
     @Test
-    void removeAllRelatedCategoryById() {
+    void removeCategoryById() {
         // given
-        var mainCategoryId = mainCategories.get(2).getId();
-
         // when
-        categoryWriteService.removeCategoryByIdAndMemberId(mainCategoryId, member.getId());
-
+        categoryWriteService.removeCategoryByIdAndMemberId(mainCategories.get(2), member.getId());
         // then
-        var idList = this.subCategories.stream()
-                .map(category -> category.getId())
-                .toList();
-        var undeletedList = categoryRepository.findAllById(idList)
-                .stream()
-                .filter(category -> !category.getIsDeleted())
-                .toList();
-
-        Assertions.assertEquals(0, undeletedList.size());
-
+        var undeleted = categoryRepository.findByIdAndIsDeletedFalse(mainCategories.get(2).getId());
+        Assertions.assertEquals(false, undeleted.isPresent());
     }
 
     @DisplayName("메인 카테고리의 이름을 변경할 때 현재 회원의 다른 메인 카테고리에 동일한 이름이 있으면 예외 발생")

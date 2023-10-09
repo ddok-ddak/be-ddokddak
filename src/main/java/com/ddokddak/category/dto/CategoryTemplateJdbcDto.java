@@ -9,6 +9,7 @@ public record CategoryTemplateJdbcDto(
         @NotNull Long memberId,
         @NotNull String name,
         @NotNull String color,
+        @NotNull String highlightColor,
         @NotNull String iconName,
         @NotNull Integer level,
         @Nullable String mainCategoryName

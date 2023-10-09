@@ -21,9 +21,9 @@ public class CategoryJdbcRepository {
 
     @Transactional
     public void batchInsert(List<CategoryTemplate> list, Long memberId) {
-        var sql = "INSERT INTO category (MEMBER_ID, NAME, COLOR, ICON_NAME, LEVEL, PARENT_ID, IS_DELETED, CREATED_AT) " +
+        var sql = "INSERT INTO category (MEMBER_ID, NAME, COLOR, HIGHLIGHT_COLOR, ICON_NAME, LEVEL, PARENT_ID, IS_DELETED, CREATED_AT) " +
                 "VALUES " +
-                "( ?, ?, ?, ?, (SELECT ID FROM (SELECT ID FROM CATEGORY WHERE MEMBER_ID=? AND NAME=?) AS SUB), 0, NOW())";
+                "( ?, ?, ?, ?, ?, (SELECT ID FROM (SELECT ID FROM CATEGORY WHERE MEMBER_ID=? AND NAME=?) AS SUB), 0, NOW())";
         try {
             jdbcTemplate.batchUpdate(
                     sql,
@@ -33,6 +33,7 @@ public class CategoryJdbcRepository {
                         ps.setLong(1, memberId);
                         ps.setString(2, arg.getName());
                         ps.setString(3, arg.getColor());
+                        ps.setString(3, arg.getHighlightColor());
                         ps.setString(4, arg.getIconName());
                         ps.setInt(5, arg.getParentName()==null?0:1);
                         ps.setLong(6, memberId);

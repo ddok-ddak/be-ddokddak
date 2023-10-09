@@ -11,6 +11,7 @@ public record ModifyCategoryRequest(
         @NotNull //@Pattern(regexp="[a-zA-Z가-힣0-9]{1,10}", message = "카테고리 명칭 규칙 위반")
         String name,
         @NotNull String color,
+        @NotNull String highlightColor,
         @NotNull String iconName,
         @NotNull Integer level,
         @Nullable Long mainCategoryId

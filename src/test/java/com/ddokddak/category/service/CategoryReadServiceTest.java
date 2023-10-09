@@ -1,6 +1,6 @@
 package com.ddokddak.category.service;
 
-import com.ddokddak.category.dto.ReadCategoryResponse;
+import com.ddokddak.category.dto.CategoryReadResponse;
 import com.ddokddak.category.entity.Category;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.NotValidRequestException;
@@ -60,7 +60,7 @@ public class CategoryReadServiceTest {
         );
         Mockito.when(memberRepository.findMemberById(memberId)).thenReturn(Optional.of(member));
         Mockito.when(categoryRepository.findCategoryJoinFetch(Mockito.any())).thenReturn(categories);
-        List<ReadCategoryResponse> response = categoryReadService.readCategoriesByMemberId(memberId);
+        List<CategoryReadResponse> response = categoryReadService.readCategoriesByMemberId(memberId);
         assertEquals(categories.size(), response.size());
     }
 
@@ -100,7 +100,8 @@ public class CategoryReadServiceTest {
                 .isDeleted(Boolean.FALSE)
                 .build();
 
-        Mockito.when(categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(categoryId, memberId)).thenReturn(Optional.of(mockCategory));
+        Mockito.when(categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(categoryId, memberId))
+                .thenReturn(Optional.of(mockCategory));
         Category category = categoryReadService.findByIdAndMemberId(categoryId, memberId);
         assertEquals(category.getId(), mockCategory.getId());
         assertEquals(category.getMember().getId(), mockCategory.getMember().getId());

@@ -10,7 +10,7 @@ import com.ddokddak.common.exception.type.BaseException;
 import com.ddokddak.common.exception.type.CategoryException;
 import com.ddokddak.common.exception.type.MemberException;
 import com.ddokddak.member.entity.Member;
-import com.ddokddak.member.entity.TemplateType;
+import com.ddokddak.member.entity.enums.TemplateType;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -84,18 +84,13 @@ public class CategoryWriteService {
     /**
      * 카테고리 삭제
      * 소프트 딜리트 수행하여, is_deleted 컬럼의 값 '1'(Boolean.True)로 변경
-     * @param categoryId 카테고리 아이디
+     * @param category 카테고리 아이디
      * @param memberId 멤버 아이디
      */
     @Transactional
-    public void removeCategoryByIdAndMemberId(Long categoryId, Long memberId) {
-        var category = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(categoryId, memberId)
-                .orElseThrow(() -> new NotValidRequestException(CategoryException.CATEGORY_ID));
+    public void removeCategoryByIdAndMemberId(Category category, Long memberId) {
 
-        // 메인 카테고리이면, 서브 카테고리도 삭제 확인
-        // 즉, 자식이 있을 경우 함께 삭제
-        if (category.getLevel().equals(0)) categoryRepository.deleteAllByMainCategory(category);
-        categoryRepository.delete(category);
+        categoryRepository.softDelete(category);
     }
 
     /**
@@ -198,6 +193,7 @@ public class CategoryWriteService {
                 .findFirst()
                 .orElseThrow(() -> new NotValidRequestException(BaseException.NULL_DATA));
 
+        // 기존에 대분류가 존재했었다면(삭제 상태라면)
         var alreadyExistsCategory = categories.stream()
                 .filter(category -> category.getName() == newMainCategory.getName())
                 .findFirst();
@@ -329,5 +325,9 @@ public class CategoryWriteService {
         return categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(reqMainCategoryId, memberId)
                 .orElseThrow(() ->
                         new CustomApiException(CategoryException.MAIN_CATEGORY_ID));
+    }
+
+    public void deleteAllByMainCategory(Category category) {
+        categoryRepository.deleteAllByMainCategory(category);
     }
 }

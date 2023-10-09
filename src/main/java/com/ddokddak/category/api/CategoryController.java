@@ -5,12 +5,15 @@ import com.ddokddak.category.dto.*;
 import com.ddokddak.category.service.CategoryReadService;
 import com.ddokddak.category.service.CategoryWriteService;
 import com.ddokddak.common.dto.CommonResponse;
+import com.ddokddak.usecase.DeleteCategoryUsecase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @Slf4j
@@ -21,6 +24,7 @@ public class CategoryController {
 
     private final CategoryReadService categoryReadService;
     private final CategoryWriteService categoryWriteService;
+    private final DeleteCategoryUsecase deleteCategoryUsecase;
 
     @PostMapping
     public ResponseEntity<CommonResponse<CategoryAddResponse>> addCategory(
@@ -28,24 +32,29 @@ public class CategoryController {
             @RequestBody CategoryAddRequest req){
 
         var res = categoryWriteService.addCategory(userPrincipal.getId(), req);
-        return ResponseEntity.ok(new CommonResponse<>("Successfully Created", res));
+        URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                .build()
+                .toUri();
+
+        return ResponseEntity.created(location)
+                .body(new CommonResponse<>("Successfully Created", res));
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponse<List<ReadCategoryResponse>>> getCategories(
+    public ResponseEntity<CommonResponse<List<CategoryReadResponse>>> getCategories(
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        List<ReadCategoryResponse> res = categoryReadService.readCategoriesByMemberId(userPrincipal.getId());
+        List<CategoryReadResponse> res = categoryReadService.readCategoriesByMemberId(userPrincipal.getId());
         return  ResponseEntity.ok(new CommonResponse<>("Successfully loaded", res));
     }
 
-    // 현재 매개변수 Long memberId 를 추후 @AuthenticationalPrincipal 활용하는 것으로 수정
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<CommonResponse<Boolean>> removeCategoryById(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable Long categoryId) {
 
-        categoryWriteService.removeCategoryByIdAndMemberId(categoryId, userPrincipal.getId());
+        deleteCategoryUsecase.execute(categoryId, userPrincipal.getId());
+
         return ResponseEntity.ok(new CommonResponse<>("Successfully Deleted", Boolean.TRUE));
     }
 

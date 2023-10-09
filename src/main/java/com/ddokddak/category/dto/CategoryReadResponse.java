@@ -2,15 +2,16 @@ package com.ddokddak.category.dto;
 import lombok.Builder;
 import java.util.List;
 
-public record ReadCategoryResponse(
+public record CategoryReadResponse(
         Long categoryId,
         String name,
         String color,
+        String highlightColor,
         String iconName,
         Integer level,
         Long mainCategoryId,
-        List<ReadCategoryResponse> subCategories
+        List<CategoryReadResponse> subCategories
 ) {
     @Builder
-    public ReadCategoryResponse {}
+    public CategoryReadResponse {}
 }
