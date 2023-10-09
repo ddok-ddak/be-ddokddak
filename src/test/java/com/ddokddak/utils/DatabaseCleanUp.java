@@ -1,4 +1,4 @@
-package com.ddokddak;
+package com.ddokddak.utils;
 
 import com.google.common.base.CaseFormat;
 import lombok.RequiredArgsConstructor;

@@ -6,6 +6,7 @@ import com.ddokddak.auth.handler.OAuth2AuthenticationSuccessHandler;
 import com.ddokddak.auth.repository.OAuth2CookieAuthorizationRequestRepository;
 import com.ddokddak.auth.handler.JwtAuthenticationEntryPoint;
 import com.ddokddak.auth.filter.JwtAuthenticationFilter;
+import com.ddokddak.member.entity.enums.RoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,17 +52,19 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authz -> authz
                         .antMatchers("/", "/css/**").permitAll()
-
-                        // TODO 아래 두 접근에 대해서 관리자만 접근 가능하도록 제한 설정을 해둘 필요성!
-                        // actuator 라이브러리 추가할지 의논해볼 필요
-                        .antMatchers("/actuator/health", "/h2-console/**").permitAll()
                         .antMatchers("/docs/**", "/v3/api-docs", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
-
-                        .anyRequest().permitAll() //.authenticated()
+                        .antMatchers("/actuator/health").permitAll()
+                        // TODO actuator 라이브러리 추가할지 의논해볼 필요
+                        .antMatchers("/actuator/**", "/h2-console/**").hasRole(RoleType.ADMIN.name())
+                        .anyRequest().authenticated()
                 )
                 .oauth2Login()
                 .authorizationEndpoint()
+                .baseUri("/api/oauth2/authorization")
                 .authorizationRequestRepository(oAuth2CookieAuthorizationRequestRepository)
+                .and()
+                .redirectionEndpoint()
+                .baseUri("/api/login/oauth2/code/*")
                 .and()
                 .userInfoEndpoint()
 //                .userService(customOAuth2UserService) 명시하지 않아도 빈에 등록되어 우선적으로 활용된다.

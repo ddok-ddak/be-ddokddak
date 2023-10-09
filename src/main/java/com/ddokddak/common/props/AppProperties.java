@@ -8,8 +8,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Setter
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
-    private static String baseUrl;
-    public static String getBaseUrl() {
-        return baseUrl;
-    }
+    private String baseUrl;
 }

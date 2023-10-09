@@ -1,12 +1,14 @@
 # default
 spring:
   profiles:
-    active: local
+    active: local #dev-local
     group:
       local: local, common, auth
       test: test, common, test-auth
       dev:  common, dev, auth, prod-db
       prod: common, prod, auth, prod-db
+      dev-local: local, common, auth, prod-db
+
 ---
 # common 환경
 spring:
@@ -23,7 +25,7 @@ spring:
 # 벌크 인서트 제한
 jdbc:
   batch:
-    size: 1000
+    size: 10000
 
 # cors 설정
 cors:
@@ -33,11 +35,13 @@ cors:
   maxAgeSec: 3600
 server:
   port: 8080
+  forward-headers-strategy: framework
 
 # 앱 속성
 app:
   baseUrl: 'http://localhost:3000'
   version: v1.0.0
+
 ---
 # test 환경
 spring:
@@ -75,7 +79,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # jdbc 로그 확인 위해 옵션 수정
-    url: jdbc:mysql://localhost:3306/dodone?characterEncoding=UTF-8&profileSQL=true&c=Slf4JLogger&maxQuerySizeToLog=200
+    url: jdbc:mysql://localhost:3306/dodone?characterEncoding=UTF-8&profileSQL=true&c=Slf4JLogger&maxQuerySizeToLog=999999
     username: root
     password: 1234
   jpa:
@@ -87,7 +91,7 @@ spring:
       hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: create-drop # 데이터를 쌓아두려면, 해당 속성을 update로 지정
+      ddl-auto: create # 데이터를 쌓아두려면, 해당 속성을 update로 지정
   sql:
     init:
       mode: always
@@ -159,3 +163,13 @@ cors:
   maxAgeSec: 3600
 app:
   baseUrl: 'https://dodonenow.com'
+
+---
+# dev-local 환경
+spring:
+  config:
+    activate:
+      on-profile: dev-local
+  jpa:
+    hibernate:
+      ddl-auto: update

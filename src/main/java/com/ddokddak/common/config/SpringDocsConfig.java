@@ -27,7 +27,7 @@ public class SpringDocsConfig {
                 .contact(new Contact()
                         .name("DoDone")
                         .email("dodone.cs@gmail.com")
-                        .url("https://dodone.com/"));
+                        .url("https://dodonenow.com/"));
 
         // Security 스키마 설정
         SecurityScheme securityScheme = new SecurityScheme()

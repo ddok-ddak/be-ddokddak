@@ -2,6 +2,9 @@
 
 <included>
     <appender name="JSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
 <!--        <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">-->
 <!--            <jsonFormatter-->
 <!--                    class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">-->

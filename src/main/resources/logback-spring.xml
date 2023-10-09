@@ -13,7 +13,7 @@
         </root>
     </springProfile>
 
-    <springProfile name="prod">
+    <springProfile name="(prod|dev)">
         <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
         <property name="JSON_FILE" value="${LOG_TEMP}/spring.log.json}"/>
 
@@ -26,7 +26,7 @@
         </root>
     </springProfile>
 
-    <springProfile name="!(prod|test)">
+    <springProfile name="!(prod|dev|test)">
         <!-- 선언 순서가 중요함, 인클루드를 불러오기 전에 프로퍼티를 설정해줘야 인클루드 된 xml 파일에서 제대로 프로퍼티를 읽을 수 있다. -->
         <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
         <property name="JSON_FILE" value="${LOG_TEMP}/spring.log.json}"/>
