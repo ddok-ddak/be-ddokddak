@@ -1,4 +1,4 @@
-package com.ddokddak.member.entity;
+package com.ddokddak.member.entity.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

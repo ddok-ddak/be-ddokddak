@@ -14,7 +14,22 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class ActivityRecordMapper {
 
-    public static final ActivityRecord toEntity(Integer cnt, CreateActivityRecordRequest req, Category category) {
+    public static final ActivityRecord toEntity(CreateActivityRecordRequest req, Category category) {
+
+        return ActivityRecord.builder()
+                .category(category)
+                .member(category.getMember())
+                .categoryColor(category.getColor())
+                .categoryName(category.getName())
+                .startedAt(req.startedAt().toLocalDateTime())
+                .finishedAt(req.finishedAt().toLocalDateTime())
+                .timeZone(req.startedAt().getZone().toString())
+                .content(req.content())
+                .timeUnit(req.timeUnit())
+                .build();
+    }
+
+    public static final ActivityRecord toEntitySplitedByTimeUnit(Integer cnt, CreateActivityRecordRequest req, Category category) {
 
         return ActivityRecord.builder()
                 .category(category)

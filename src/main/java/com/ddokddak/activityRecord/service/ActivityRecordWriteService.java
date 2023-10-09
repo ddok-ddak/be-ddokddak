@@ -4,6 +4,7 @@ import com.ddokddak.activityRecord.dto.ModifyActivityRecordRequest;
 import com.ddokddak.activityRecord.entity.ActivityRecord;
 import com.ddokddak.activityRecord.repository.ActivityRecordJdbcRepository;
 import com.ddokddak.activityRecord.repository.ActivityRecordRepository;
+import com.ddokddak.category.entity.Category;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.type.ActivityException;
@@ -33,10 +34,12 @@ public class ActivityRecordWriteService {
         activityRecordRepository.saveAll(activityRecords);
     }
 
+    @Transactional
     public void removeActivityRecordByMemberIdAndId(Long memberId, Long activityRecordId) {
         activityRecordRepository.softDeleteByMemberIdAndId(memberId, activityRecordId);
     }
 
+    @Transactional
     public void modifyActivityRecord(Long memberId, ModifyActivityRecordRequest req) {
         /* TODO 유효성 검증
             1. 사용자 아이디 o
@@ -48,8 +51,8 @@ public class ActivityRecordWriteService {
         var category = categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(req.categoryId(), memberId)
                 .orElseThrow(() -> new CustomApiException((CategoryException.CATEGORY_ID)));
 
-        /* 리뷰 아이디 검증 */
-        var existingActivityRecord = activityRecordRepository.findByIdAndMemberId(req.id(), memberId)
+        /* 기록 아이디 검증 */
+        var existingActivityRecord = activityRecordRepository.findByIdAndMemberIdAndIsDeletedFalse(req.id(), memberId)
                 .orElseThrow(() -> new CustomApiException(ActivityException.ACTIVITYRECORD_ID));
 
         /* 시간 검증 */
@@ -79,5 +82,16 @@ public class ActivityRecordWriteService {
         existingActivityRecord.modifyCategory(category);
         existingActivityRecord.modifyContent(req.content());
         existingActivityRecord.modifyDate(req.startedAt().toLocalDateTime(), req.finishedAt().toLocalDateTime());
+    }
+
+    @Transactional
+    public void removeByMemberIdAndCategory(Long memberId, Category category) {
+        activityRecordRepository.softDeleteByMemberIdAndCategoryId(memberId, category);
+    }
+
+    @Transactional
+    public ActivityRecord createActivityRecord(ActivityRecord entity) {
+        ActivityRecord saved = activityRecordRepository.save(entity);
+        return saved;
     }
 }

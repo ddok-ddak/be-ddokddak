@@ -4,6 +4,7 @@ import com.ddokddak.category.entity.Category;
 import com.ddokddak.common.entity.BaseTimeEntity;
 import com.ddokddak.member.entity.Member;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -15,7 +16,6 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Where(clause = "delete_yn = 'N'")
 @Entity
 public class ActivityRecord extends BaseTimeEntity {
 
@@ -26,6 +26,7 @@ public class ActivityRecord extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="CATEGORY_ID")
     private Category category;
+
 //    @Column(nullable = false)
 //    private String categoryId;
 
@@ -50,6 +51,10 @@ public class ActivityRecord extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="MEMBER_ID")
     private Member member;
+
+    @Builder.Default
+    @ColumnDefault("0")
+    private Boolean isDeleted = Boolean.FALSE;
 
     @Builder.Default
     @Column(length = 1)
