@@ -1,14 +1,11 @@
-package com.ddokddak.auth.api;
+package com.ddokddak.auth;
 
+import com.ddokddak.auth.service.EmailAuthenticationService;
 import com.ddokddak.common.dto.CommonResponse;
-import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.props.AppProperties;
 import com.ddokddak.common.utils.CookieUtil;
 import com.ddokddak.common.utils.JwtUtil;
-import com.ddokddak.member.dto.MemberResponse;
-import com.ddokddak.member.dto.RegisterMemberRequest;
-import com.ddokddak.member.dto.SigninResponse;
-import com.ddokddak.member.dto.SigningRequest;
+import com.ddokddak.member.dto.*;
 import com.ddokddak.member.service.MemberWriteService;
 import com.ddokddak.usecase.CheckAuthUsecase;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +34,7 @@ public class AuthController {
     private final AppProperties appProperties;
     private final MemberWriteService memberWriteService;
     private final CheckAuthUsecase checkAuthUsecase;
+    private final EmailAuthenticationService emailAuthenticationService;
 
     @PostMapping("/signup")
     public ResponseEntity<CommonResponse<?>> signUpNewUser(@Valid @RequestBody RegisterMemberRequest registerMemberRequest) {
@@ -81,6 +73,27 @@ public class AuthController {
 //                .headers(httpHeaders)
 //                .body(new CommonResponse<>(, signinResponse));
     }
+
+    @PostMapping("/requestAuthenticationNumber")
+    public ResponseEntity<CommonResponse<Boolean>> requestAuthenticationNumber(
+            @Valid @RequestBody RequestAuthenticationNumberRequest request
+    ){
+        emailAuthenticationService.mailSendingProcess(request);
+        return ResponseEntity.ok(new CommonResponse<>("SUCCESS", Boolean.TRUE));
+    }
+
+    @PostMapping("/checkAuthenticationNumber")
+    public ResponseEntity<CommonResponse<Boolean>> checkAuthenticationNumber(
+            @Valid @RequestBody CheckAuthenticationNumberRequest request
+    ){
+        return ResponseEntity.ok(
+                new CommonResponse<>(
+                        "SUCCESS", emailAuthenticationService.checkAuthenticationNumber(request)
+                )
+        );
+    }
+
+
 
     @PostMapping(value = "/signout")
     public ResponseEntity<CommonResponse<SigninResponse>> signOut(HttpServletRequest request, HttpServletResponse response) {
