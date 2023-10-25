@@ -68,7 +68,7 @@ public class AuthController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(URI.create(appProperties.getBaseUrl() + "/signin/redirect"));
         httpHeaders.add(JwtUtil.AUTHORIZATION_HEADER, "Bearer " + accessToken);
-        CookieUtil.addCookie(response, CookieUtil.ACCESS_TOKEN_COOKIE_NAME, accessToken, CookieUtil.COOKIE_EXPIRE_SECONDS);
+        CookieUtil.addSecureCookie(response, CookieUtil.ACCESS_TOKEN_COOKIE_NAME, accessToken, CookieUtil.COOKIE_EXPIRE_SECONDS);
 
 //        SigninResponse signinResponse = SigninResponse.builder()
 //                .email(signingRequest.email())
