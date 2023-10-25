@@ -79,11 +79,10 @@ class ActivityRecordControllerTest {
     void createActivityRecord() throws Exception {
         // given
         var localStartedTime = LocalDateTime.of(2023,1,1,13,0);
-        var startedTime = ZonedDateTime.of(localStartedTime, ZoneId.of("Asia/Seoul"));
         var request = CreateActivityRecordRequest.builder()
                 .categoryId(1L)
-                .startedAt(startedTime)
-                .finishedAt(startedTime.plusMinutes(150))
+                .startedAt(localStartedTime)
+                .finishedAt(localStartedTime.plusMinutes(150))
                 .timeUnit(30)
                 .content("test-activity")
                 .build();
@@ -122,11 +121,10 @@ class ActivityRecordControllerTest {
     void createActivityRecordWithException() throws Exception {
         // given
         var localStartedTime = LocalDateTime.of(2023,1,1,13,11);
-        var startedTime = ZonedDateTime.of(localStartedTime, ZoneId.of("Asia/Seoul"));
         var request = CreateActivityRecordRequest.builder()
                 .categoryId(1L)
-                .startedAt(startedTime)
-                .finishedAt(startedTime.plusMinutes(150))
+                .startedAt(localStartedTime)
+                .finishedAt(localStartedTime.plusMinutes(150))
                 .timeUnit(30)
                 .content("test-activity")
                 .build();

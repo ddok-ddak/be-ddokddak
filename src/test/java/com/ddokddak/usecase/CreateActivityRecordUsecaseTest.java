@@ -14,8 +14,6 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -61,12 +59,11 @@ class CreateActivityRecordUsecaseTest {
     void execute() {
         // given
         var localStartedTime = LocalDateTime.of(2023, 1, 1, 13, 0);
-        var startedTime = ZonedDateTime.of(localStartedTime, ZoneId.of("Asia/Seoul"));
 
         var activityRecordRequest = CreateActivityRecordRequest.builder()
                 .categoryId(1L)
-                .startedAt(startedTime)
-                .finishedAt(startedTime.plusMinutes(150))
+                .startedAt(localStartedTime)
+                .finishedAt(localStartedTime.plusMinutes(150))
                 .timeUnit(30)
                 .content("test content")
                 .build();
@@ -85,12 +82,11 @@ class CreateActivityRecordUsecaseTest {
     void occurExceptionWhileExecuting() {
         // given
         var localStartedTime = LocalDateTime.of(2023, 1, 1, 13, 11);
-        var startedTime = ZonedDateTime.of(localStartedTime, ZoneId.of("Asia/Seoul"));
 
         var activityRecordRequest = CreateActivityRecordRequest.builder()
                 .categoryId(1L)
-                .startedAt(startedTime)
-                .finishedAt(startedTime.plusMinutes(23))
+                .startedAt(localStartedTime)
+                .finishedAt(localStartedTime.plusMinutes(23))
                 .timeUnit(30)
                 .content("test content")
                 .build();

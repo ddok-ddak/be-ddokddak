@@ -43,7 +43,12 @@ public class StatsActivityRecordUsecase {
                         .map(main -> {
                             long sum = statsTempResult.get(main.getId()) == null ? 0L : statsTempResult.get(main.getId()).timeSum();
                             List<StatsActivityRecordResponse> tempChildren = new ArrayList<>();
-                            for (Category child : categoriesMap.get(main.getId())) {
+
+                            var subGroupByMainCate = categoriesMap.getOrDefault(main.getId(), null);
+                            if (Objects.isNull(subGroupByMainCate)) {
+                                return ActivityRecordMapper.toStatResponse(main, 0, null);
+                            }
+                            for (Category child : subGroupByMainCate) {
                                 var time = statsTempResult.get(child.getId()) == null ? 0L : statsTempResult.get(child.getId()).timeSum();
                                 sum += time;
                                 tempChildren.add(

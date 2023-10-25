@@ -7,8 +7,6 @@ import com.ddokddak.activityRecord.entity.ActivityRecord;
 import com.ddokddak.category.entity.Category;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
@@ -19,11 +17,8 @@ public class ActivityRecordMapper {
         return ActivityRecord.builder()
                 .category(category)
                 .member(category.getMember())
-                .categoryColor(category.getColor())
-                .categoryName(category.getName())
-                .startedAt(req.startedAt().toLocalDateTime())
-                .finishedAt(req.finishedAt().toLocalDateTime())
-                .timeZone(req.startedAt().getZone().toString())
+                .startedAt(req.startedAt())
+                .finishedAt(req.finishedAt())
                 .content(req.content())
                 .timeUnit(req.timeUnit())
                 .build();
@@ -34,11 +29,8 @@ public class ActivityRecordMapper {
         return ActivityRecord.builder()
                 .category(category)
                 .member(category.getMember())
-                .categoryColor(category.getColor())
-                .categoryName(category.getName())
-                .startedAt(req.startedAt().toLocalDateTime().plusMinutes(30*cnt))
-                .finishedAt(req.startedAt().toLocalDateTime().plusMinutes(30*(cnt+1)))
-                .timeZone(req.startedAt().getZone().toString())
+                .startedAt(req.startedAt().plusMinutes(30*cnt))
+                .finishedAt(req.startedAt().plusMinutes(30*(cnt+1)))
                 .content(req.content())
                 .timeUnit(req.timeUnit())
                 .build();
@@ -49,11 +41,10 @@ public class ActivityRecordMapper {
         return ActivityRecordResponse.builder()
                 .activityRecordId(activityRecord.getId())
                 .categoryId(activityRecord.getCategory().getId())
-                .categoryName(activityRecord.getCategoryName())
-                .categoryColor(activityRecord.getCategoryColor())
-                .startedAt(ZonedDateTime.of(activityRecord.getStartedAt(), ZoneId.of(activityRecord.getTimeZone())))
-                .finishedAt(ZonedDateTime.of(activityRecord.getFinishedAt(), ZoneId.of(activityRecord.getTimeZone())))
-                .timeZone(activityRecord.getTimeZone())
+                .categoryName(activityRecord.getCategory().getName())
+                .categoryColor(activityRecord.getCategory().getColor())
+                .startedAt(activityRecord.getStartedAt())
+                .finishedAt(activityRecord.getFinishedAt())
                 .content(activityRecord.getContent())
                 .timeUnit(activityRecord.getTimeUnit())
                 .build();
@@ -77,11 +68,8 @@ public class ActivityRecordMapper {
                 .id(Long.valueOf(cnt))
                 .category(category)
                 .member(category.getMember())
-                .categoryColor(category.getColor())
-                .categoryName(category.getName())
-                .startedAt(req.startedAt().toLocalDateTime().plusMinutes(30*cnt))
-                .finishedAt(req.startedAt().toLocalDateTime().plusMinutes(30*(cnt+1)))
-                .timeZone(req.startedAt().getZone().toString())
+                .startedAt(req.startedAt().plusMinutes(30*cnt))
+                .finishedAt(req.startedAt().plusMinutes(30*(cnt+1)))
                 .content(req.content())
                 .timeUnit(req.timeUnit())
                 .build();
