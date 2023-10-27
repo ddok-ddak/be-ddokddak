@@ -5,11 +5,10 @@ import com.ddokddak.common.entity.BaseTimeEntity;
 import com.ddokddak.member.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 
 @Getter
@@ -30,17 +29,16 @@ public class ActivityRecord extends BaseTimeEntity {
 //    @Column(nullable = false)
 //    private String categoryId;
 
-    @Column(length = 10, nullable = false)
-    private String categoryName;
-
-    @Column(length = 10, nullable = false)
-    private String categoryColor;
+//    @Column(length = 10, nullable = false)
+//    private String categoryName;
+//
+//    @Column(length = 10, nullable = false)
+//    private String categoryColor;
 
     private LocalDateTime startedAt;
 
     private LocalDateTime finishedAt;
 
-    private String timeZone;
 
     private String content;
 
@@ -56,16 +54,12 @@ public class ActivityRecord extends BaseTimeEntity {
     @ColumnDefault("0")
     private Boolean isDeleted = Boolean.FALSE;
 
-    @Builder.Default
-    @Column(length = 1)
-    private String deleteYn = "N";
-
     public void assignId(Long id) {
         this.id = id;
     }
 
     public void modifyCategory(Category newCategory) {
-        this.category = newCategory.getMainCategory();
+        this.category = newCategory;
     }
 
     public void modifyContent(String newContent) {
@@ -75,5 +69,8 @@ public class ActivityRecord extends BaseTimeEntity {
     public void modifyDate(LocalDateTime newStartAt, LocalDateTime newFinishedAt) {
         this.startedAt = newStartAt;
         this.finishedAt = newFinishedAt;
+    }
+    public void softDelete() {
+        this.isDeleted = Boolean.TRUE;
     }
 }

@@ -3,16 +3,9 @@ package com.ddokddak.activityRecord.api;
 import com.ddokddak.activityRecord.dto.*;
 import com.ddokddak.activityRecord.dto.ActivityRecordResponse;
 import com.ddokddak.activityRecord.dto.CreateActivityRecordRequest;
-import com.ddokddak.activityRecord.dto.ReadActivityRecordRequest;
 import com.ddokddak.activityRecord.service.ActivityRecordReadService;
 import com.ddokddak.auth.domain.UserPrincipal;
 import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
-import com.ddokddak.auth.domain.UserPrincipal;
-import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
-import com.ddokddak.auth.domain.UserPrincipal;
-import com.ddokddak.auth.domain.UserPrincipal;
-import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
-import com.ddokddak.auth.domain.UserPrincipal;
 import com.ddokddak.common.dto.CommonResponse;
 import com.ddokddak.usecase.CreateActivityRecordUsecase;
 import com.ddokddak.usecase.StatsActivityRecordUsecase;
@@ -38,12 +31,14 @@ public class ActivityRecordController {
     private final ActivityRecordWriteService activityRecordWriteService;
 
     @PutMapping
-    public ResponseEntity<CommonResponse<Boolean>> modifyActivityRecord(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ModifyActivityRecordRequest req){
+    public ResponseEntity<CommonResponse<Boolean>> modifyActivityRecord(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestBody ModifyActivityRecordRequest req) {
         activityRecordWriteService.modifyActivityRecord( userPrincipal.getId(), req );
         return ResponseEntity.ok( new CommonResponse<>("Successfully Modified", Boolean.TRUE) );
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{activityRecordId}")
     public ResponseEntity<CommonResponse<Boolean>> removeActivityRecordById(
             @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long activityRecordId) {
         activityRecordWriteService.removeActivityRecordByMemberIdAndId( userPrincipal.getId(), activityRecordId );
@@ -53,7 +48,7 @@ public class ActivityRecordController {
     @GetMapping
     public ResponseEntity<CommonResponse<List<ActivityRecordResponse>>> getActivityRecord(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            ReadActivityRecordRequest req){
+            ReadActivityRecordRequest req) {
         var response =
                 activityRecordReadService.findByMemberIdAndStartedAtBetween(userPrincipal.getId(), req.fromStartedAt(), req.toStartedAt());
         return ResponseEntity.ok(new CommonResponse<>("Success", response));

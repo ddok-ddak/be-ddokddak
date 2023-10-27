@@ -52,6 +52,7 @@ public class Category extends BaseTimeEntity {
     @ColumnDefault("0")
     private Boolean isDeleted = Boolean.FALSE;
 
+    @Builder.Default
     @OneToMany(mappedBy="mainCategory")
     private List<Category> subCategories = new ArrayList<>();
 
