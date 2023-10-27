@@ -53,7 +53,9 @@ public class EmailAuthentication extends BaseTimeEntity {
     public boolean isExceedingCountOfPossible(){
         return this.getTransmissionCount()==5;
     }
-    public boolean isExceedingTimeOfPossible(){
+
+    public boolean isExceedingTimeOfPossible() {
+
         return this.getModifiedAt().plusMinutes(5).isAfter( LocalDateTime.now() );
     }
 }
