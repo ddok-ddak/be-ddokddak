@@ -22,6 +22,15 @@ spring:
     hikari:
       data-source-properties:
         rewriteBatchedStatements: true # 배치 인서트 쿼리 활용 설정
+  thymeleaf: ## thymeleaf default settings
+    prefix: classpath:/mail-templates/ # 이메일 템플릿이 위치할 경로. classpath:를 통해 src/main/resources/ 밑으로 설정되었다.
+    suffix: .html # 템플릿 파일의 확장자
+    mode: HTML
+    encoding: UTF-8
+    check-template-location: true
+  ## thymeleaf custom settings
+    cache: false
+
 # 벌크 인서트 제한
 jdbc:
   batch:
