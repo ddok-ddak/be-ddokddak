@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
-    private final Set<String> profiles = Set.of("dev", "test", "local");
+    private final Set<String> profiles = Set.of("dev", "test", "local", "dev-local");
     private final JwtUtil jwtUtil;
 
     @Override
