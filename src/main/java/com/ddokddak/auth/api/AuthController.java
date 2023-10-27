@@ -84,7 +84,7 @@ public class AuthController {
 
     @PostMapping("/email/checkAuthenticationNumber")
     public ResponseEntity<CommonResponse<Boolean>> checkAuthenticationNumber(
-            @Valid @RequestBody CheckAuthenticationNumberRequest request
+            @Valid @RequestBody CheckEmailAuthenticationRequest request
     ){
         return ResponseEntity.ok(
                 new CommonResponse<>(
