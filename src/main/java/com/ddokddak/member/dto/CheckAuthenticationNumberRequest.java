@@ -4,12 +4,12 @@ import lombok.Builder;
 
 import javax.validation.constraints.NotNull;
 
-public record checkAuthenticationNumberRequest(
+public record CheckAuthenticationNumberRequest(
         @NotNull String addressee,
         @NotNull String authenticationNumber,
         @NotNull String authenticationType
 ) {
     @Builder
-    public checkAuthenticationNumberRequest{}
+    public CheckAuthenticationNumberRequest {}
 
 }
