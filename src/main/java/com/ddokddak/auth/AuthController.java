@@ -2,7 +2,6 @@ package com.ddokddak.auth.api;
 
 import com.ddokddak.auth.service.EmailAuthenticationService;
 import com.ddokddak.common.dto.CommonResponse;
-import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.props.AppProperties;
 import com.ddokddak.common.utils.CookieUtil;
 import com.ddokddak.common.utils.JwtUtil;
@@ -61,7 +60,7 @@ public class AuthController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(URI.create(appProperties.getBaseUrl() + "/signin/redirect"));
         httpHeaders.add(JwtUtil.AUTHORIZATION_HEADER, "Bearer " + accessToken);
-        CookieUtil.addSecureCookie(response, CookieUtil.ACCESS_TOKEN_COOKIE_NAME, accessToken, CookieUtil.COOKIE_EXPIRE_SECONDS);
+        CookieUtil.addCookie(response, CookieUtil.ACCESS_TOKEN_COOKIE_NAME, accessToken, CookieUtil.COOKIE_EXPIRE_SECONDS);
 
 //        SigninResponse signinResponse = SigninResponse.builder()
 //                .email(signingRequest.email())
