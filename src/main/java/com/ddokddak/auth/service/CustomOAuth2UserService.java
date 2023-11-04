@@ -18,6 +18,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @RequiredArgsConstructor
 @Slf4j
 @Service
@@ -42,7 +44,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         AuthProviderType authProviderType = AuthProviderType.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(authProviderType, oAuth2User.getAttributes());
 
-        if (userInfo.getEmail().isEmpty()) {
+        if (Objects.isNull(userInfo.getEmail()) || userInfo.getEmail().isEmpty()) {
             throw new CustomApiException("Email not found from OAuth2 provider");
         }
         // 유저 정보 조회

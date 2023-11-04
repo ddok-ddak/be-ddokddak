@@ -1,7 +1,8 @@
-package com.ddokddak.auth;
+package com.ddokddak.auth.api;
 
 import com.ddokddak.auth.service.EmailAuthenticationService;
 import com.ddokddak.common.dto.CommonResponse;
+import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.props.AppProperties;
 import com.ddokddak.common.utils.CookieUtil;
 import com.ddokddak.common.utils.JwtUtil;
@@ -60,7 +61,7 @@ public class AuthController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(URI.create(appProperties.getBaseUrl() + "/signin/redirect"));
         httpHeaders.add(JwtUtil.AUTHORIZATION_HEADER, "Bearer " + accessToken);
-        CookieUtil.addCookie(response, CookieUtil.ACCESS_TOKEN_COOKIE_NAME, accessToken, CookieUtil.COOKIE_EXPIRE_SECONDS);
+        CookieUtil.addSecureCookie(response, CookieUtil.ACCESS_TOKEN_COOKIE_NAME, accessToken, CookieUtil.COOKIE_EXPIRE_SECONDS);
 
 //        SigninResponse signinResponse = SigninResponse.builder()
 //                .email(signingRequest.email())
@@ -74,17 +75,17 @@ public class AuthController {
 //                .body(new CommonResponse<>(, signinResponse));
     }
 
-    @PostMapping("/requestAuthenticationNumber")
+    @PostMapping("/email/requestAuthenticationNumber")
     public ResponseEntity<CommonResponse<Boolean>> requestAuthenticationNumber(
-            @Valid @RequestBody RequestAuthenticationNumberRequest request
+            @Valid @RequestBody AuthenticationNumberRequest request
     ){
         emailAuthenticationService.mailSendingProcess(request);
         return ResponseEntity.ok(new CommonResponse<>("SUCCESS", Boolean.TRUE));
     }
 
-    @PostMapping("/checkAuthenticationNumber")
+    @PostMapping("/email/checkAuthenticationNumber")
     public ResponseEntity<CommonResponse<Boolean>> checkAuthenticationNumber(
-            @Valid @RequestBody CheckAuthenticationNumberRequest request
+            @Valid @RequestBody CheckEmailAuthenticationRequest request
     ){
         return ResponseEntity.ok(
                 new CommonResponse<>(
@@ -92,8 +93,6 @@ public class AuthController {
                 )
         );
     }
-
-
 
     @PostMapping(value = "/signout")
     public ResponseEntity<CommonResponse<SigninResponse>> signOut(HttpServletRequest request, HttpServletResponse response) {

@@ -1,12 +1,8 @@
 package com.ddokddak.auth.service;
 
 import com.ddokddak.auth.batch.EmailAuthenticationScheduler;
-import com.ddokddak.auth.entity.EmailAuthentication;
 import com.ddokddak.auth.repository.EmailAuthenticationRepository;
-import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.member.dto.CheckAuthenticationNumberRequest;
-import com.ddokddak.member.dto.RequestAuthenticationNumberRequest;
-import com.ddokddak.utils.DatabaseCleanUp;
+import com.ddokddak.member.dto.AuthenticationNumberRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +42,7 @@ class AuthServiceTest {
     @Autowired
     EmailAuthenticationScheduler emailAuthenticationScheduler;
 
-    final RequestAuthenticationNumberRequest request = RequestAuthenticationNumberRequest.builder()
+    final AuthenticationNumberRequest request = AuthenticationNumberRequest.builder()
                                                                                         .addressee("yon914@naver.com")
                                                                                         .authenticationType("JOIN")
                                                                                         .build();

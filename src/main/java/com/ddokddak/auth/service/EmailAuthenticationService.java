@@ -5,8 +5,8 @@ import com.ddokddak.auth.repository.EmailAuthenticationRepository;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.EmailException;
-import com.ddokddak.member.dto.CheckAuthenticationNumberRequest;
-import com.ddokddak.member.dto.RequestAuthenticationNumberRequest;
+import com.ddokddak.member.dto.AuthenticationNumberRequest;
+import com.ddokddak.member.dto.CheckEmailAuthenticationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -28,7 +28,7 @@ public class EmailAuthenticationService {
     private final EmailAuthenticationRepository emailAuthenticationRepository;
     private final TemplateEngine templateEngine;
 
-    public void mailSendingProcess(RequestAuthenticationNumberRequest request) {
+    public void mailSendingProcess(AuthenticationNumberRequest request) {
         String authenticationNumber = getRandomCode();
         EmailAuthentication target  = verifyTarget(
                                         request.addressee(),
@@ -93,7 +93,7 @@ public class EmailAuthenticationService {
         return storedNumber.equals(targetNumber);
     }
 
-    public boolean checkAuthenticationNumber(CheckAuthenticationNumberRequest request) {
+    public boolean checkAuthenticationNumber(CheckEmailAuthenticationRequest request) {
         var searchEmail = emailAuthenticationRepository
 //                .findByAddresseeAndAuthenticationType( request.addressee(), request.authenticationNumber() )
                 .findByAddresseeAndAuthenticationNumber( request.addressee(), request.authenticationNumber() )

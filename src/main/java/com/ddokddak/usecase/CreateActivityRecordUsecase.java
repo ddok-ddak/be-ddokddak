@@ -37,7 +37,7 @@ public class CreateActivityRecordUsecase {
 
         // 시간 범위 내 이미 기록 데이터가 존재하는 경우, 예외 처리
         var result = activityRecordReadService.existsByMemberIdAndStartedAtBetween(
-                memberId, req.startedAt().toLocalDateTime(), req.finishedAt().minusSeconds(1).toLocalDateTime());
+                memberId, req.startedAt(), req.finishedAt().minusSeconds(1));
         if (result) throw new NotValidRequestException(ActivityException.USED_TIME_PERIOD);
 
         var category = categoryReadService.findByIdAndMemberId(req.categoryId(), memberId);
