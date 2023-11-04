@@ -13,11 +13,12 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ddokddak.dev
-    password: lzvsedqxmwkgrxoq
+    username: emptyValueForTest
+    password: emptyValueForTest
     properties:
       mail:
         smtp:
+          mock: true
           ssl:
             protocols: TLSv1.2
           auth: true

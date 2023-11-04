@@ -10,4 +10,6 @@ public interface EmailAuthenticationRepository extends JpaRepository<EmailAuthen
     Optional<EmailAuthentication> findByAddressee(String addressee);
 
     Optional<EmailAuthentication> findByAddresseeAndAuthenticationType(String addressee, String authenticationType);
+
+    Optional<EmailAuthentication> findByAddresseeAndAuthenticationNumber(String addressee, String authenticationNumber);
 }

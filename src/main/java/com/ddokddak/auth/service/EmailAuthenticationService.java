@@ -4,9 +4,9 @@ import com.ddokddak.auth.entity.EmailAuthentication;
 import com.ddokddak.auth.repository.EmailAuthenticationRepository;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.common.exception.type.NotValidRequest;
-import com.ddokddak.member.dto.checkAuthenticationNumberRequest;
-import com.ddokddak.member.dto.requestAuthenticationNumberRequest;
+import com.ddokddak.common.exception.type.EmailException;
+import com.ddokddak.member.dto.AuthenticationNumberRequest;
+import com.ddokddak.member.dto.CheckEmailAuthenticationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,7 +14,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -29,7 +28,7 @@ public class EmailAuthenticationService {
     private final EmailAuthenticationRepository emailAuthenticationRepository;
     private final TemplateEngine templateEngine;
 
-    public void mailSendingProcess(requestAuthenticationNumberRequest request) {
+    public void mailSendingProcess(AuthenticationNumberRequest request) {
         String authenticationNumber = getRandomCode();
         EmailAuthentication target  = verifyTarget(
                                         request.addressee(),
@@ -52,7 +51,7 @@ public class EmailAuthenticationService {
                                     );
 
         if( target.isExceedingCountOfPossible() ){
-            throw new NotValidRequestException("시도 가능 횟수를 초과했습니다.");
+            throw new NotValidRequestException(EmailException.EXCEEDED_RETRY_LIMIT_COUNT);
         }
 
         target.plusTransmissionCount();
@@ -65,12 +64,12 @@ public class EmailAuthenticationService {
         try {
             sender.send( createForm(addressee, authenticationType, authenticationNumber) );
         } catch (Exception e) {
-            log.error(EmailAuthenticationService.class.getEnclosingMethod() + "ERROR ::: addressee : {}, authenticationType : {}, content : {}", addressee, authenticationType, authenticationNumber);
-            throw new CustomApiException("UNABLE TO SEND EMAIL");
+            log.error( EmailAuthenticationService.class.getEnclosingMethod() + "ERROR ::: {}", e.getMessage() );
+            throw new CustomApiException(EmailException.FAIL_TO_MAIL);
         }
     }
 
-    private MimeMessage createForm(String addressee, String authenticationType, String authenticationNumber) throws MessagingException {
+    private MimeMessage createForm(String addressee, String authenticationType, String authenticationNumber) {
         MimeMessage mailMessage = sender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mailMessage, "UTF-8");
@@ -83,23 +82,25 @@ public class EmailAuthenticationService {
 
             String html = templateEngine.process(authenticationType, context);
             helper.setText(html, true);
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch(MessagingException e){
+            log.error( "EmailAuthenticationService.createForm() exception occur ::: {}", e.getMessage() );
+            throw new CustomApiException(EmailException.FAIL_TO_CREATING_MAIL_FORM);
         }
         return mailMessage;
     }
 
-    public boolean checkAuthenticationNumber(checkAuthenticationNumberRequest request) {
+    private boolean equalsAuthCode(String storedNumber, String targetNumber) {
+        return storedNumber.equals(targetNumber);
+    }
+
+    public boolean checkAuthenticationNumber(CheckEmailAuthenticationRequest request) {
         var searchEmail = emailAuthenticationRepository
-                                            .findByAddresseeAndAuthenticationType( request.addressee(), request.authenticationNumber() )
-                                            .orElseThrow(() -> new NotValidRequestException(NotValidRequest.TEMP_EMAIL_ID));
+//                .findByAddresseeAndAuthenticationType( request.addressee(), request.authenticationNumber() )
+                .findByAddresseeAndAuthenticationNumber( request.addressee(), request.authenticationNumber() )
+                .orElseThrow( () -> new NotValidRequestException(EmailException.NOT_VALID_AUTHENTICATION_NUMBER) );
 
         return isWithinValidTime( searchEmail )
                 && equalsAuthCode( searchEmail.getAuthenticationNumber(), request.authenticationNumber() );
-    }
-
-    private boolean equalsAuthCode(String storedNumber, String targetNumber) {
-        return storedNumber.equals(targetNumber);
     }
 
     private boolean isWithinValidTime(EmailAuthentication target) {
@@ -120,8 +121,8 @@ public class EmailAuthenticationService {
             }
 
         } catch (NoSuchAlgorithmException e) {
-            log.error("EmailAuthenticationSerivce.getRandomNumber() exception occur");
-            throw new CustomApiException("Wrong Match Auth Provider");
+            log.error("EmailAuthenticationService.getRandomNumber() exception occur");
+            throw new CustomApiException(EmailException.WRONG_MATCH_AUTHENTICATION_PROVIDER);
         }
         return result.toString();
     }

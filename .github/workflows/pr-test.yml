@@ -22,7 +22,7 @@ jobs:
 
       # test
       - name: Build with Gradle
-        run: ./gradlew test
+        run: ./gradlew clean test
 
       - name: if fail
         uses: actions/github-script@v5

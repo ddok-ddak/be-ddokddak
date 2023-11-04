@@ -9,9 +9,9 @@ import java.util.Base64;
 import java.util.Optional;
 
 public class CookieUtil {
-    public static final String ACCESS_TOKEN_COOKIE_NAME = "access-token";
+    public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
     public static final String COOKIE_REFRESH_TOKEN_KEY = "refresh";
-    public static final int COOKIE_EXPIRE_SECONDS = 180;
+    public static final int COOKIE_EXPIRE_SECONDS = 21600;
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
@@ -27,7 +27,6 @@ public class CookieUtil {
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
-        cookie.setHttpOnly(true);
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
     }

@@ -18,7 +18,7 @@ public class EmailAuthenticationScheduler {
 
     @Transactional
     //@Scheduled(cron = "0 * * * * *") // 1분
-    @Scheduled(cron = "0 0 0 * * *")
+    //@Scheduled(cron = "0 0 0 * * *")
     public void run(){
         //System.out.println("1분 주기 실행!!");
         emailAuthenticationRepository.findAll().forEach(target -> {

@@ -1,8 +1,8 @@
 package com.ddokddak.activityRecord.service;
 
+import com.ddokddak.activityRecord.dto.ReadActivityRecordRequest;
 import com.ddokddak.utils.DatabaseCleanUp;
 import com.ddokddak.activityRecord.dto.ModifyActivityRecordRequest;
-import com.ddokddak.activityRecord.dto.ReadActivityRecordRequest;
 import com.ddokddak.activityRecord.entity.ActivityRecord;
 import com.ddokddak.activityRecord.fixture.ActivityRecordFixture;
 import com.ddokddak.activityRecord.repository.ActivityRecordRepository;
@@ -20,6 +20,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,10 +35,8 @@ class ActivityRecordServiceTest {
     ActivityRecordWriteService activityRecordWriteService;
     @Autowired
     ActivityRecordRepository activityRecordRepository;
-
     @Autowired
     MemberRepository memberRepository;
-
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
@@ -76,21 +75,23 @@ class ActivityRecordServiceTest {
     @Test
     void updateActivityRecord() throws Exception {
         // given
+        var changedContent = "AFTER CHANGE !";
         var targetId = activityRecords.get(0).getId();
         var targetCategory = activityRecords.get(0).getCategory();
         ModifyActivityRecordRequest req = ModifyActivityRecordRequest.builder()
                                                                     .id( targetId )
                                                                     .categoryId(targetCategory.getId())
-                                                                    .content("AFTER CHANGE ! ")
-                                                                    .startedAt(ZonedDateTime.now())
-                                                                    .finishedAt(ZonedDateTime.now())
+                                                                    .content(changedContent)
+                                                                    .startedAt(LocalDateTime.now().minusDays(1))
+                                                                    .finishedAt(LocalDateTime.now().minusDays(1).plusHours(2))
                                                                     .build();
 
         // when
         activityRecordWriteService.modifyActivityRecord( member.getId(), req );
+        var byId = activityRecordRepository.findById(targetId).orElse(null);
 
         // then
-        Assertions.assertNotEquals( activityRecords.get(0).getContent(), "AFTER CHANGE ! ");
+        Assertions.assertEquals(changedContent, Objects.nonNull(byId) ? byId.getContent() : "NULL");
     }
 
     @Test
@@ -121,7 +122,4 @@ class ActivityRecordServiceTest {
 
         assertThat(result);
     }
-
-
-
 }

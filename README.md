@@ -27,16 +27,95 @@ http://localhost:8080/docs/index.html
   - 위 디렉토리 이하에서 html 파일을 확인해보실 수도 있습니다.
 
 ### 프로젝트 구조
-각 도메인별로 구분되어 있습니다.
-
-**category**
-
-서비스에서 유저의 활동을 분류할 수 있는 기능을 개발하는 코드
+레이어드 아키텍쳐 기반 프로젝트이며, 디렉토리 구조는 도메인형으로 구성되어 있습니다.
 
 **common**
-
-프로젝트에서 공통으로 사용하는 코드
-
+- 프로젝트에서 공통으로 사용하는 코드
+ 
 **member**
+- 서비스를 가입한 유저 기능을 개발하는 코드
 
-서비스를 가입한 유저 기능을 개발하는 코드
+**category**
+- 서비스에서 유저의 활동을 분류할 수 있는 기능을 개발하는 코드
+
+```
+└─src
+    ├─docs
+    │  └─asciidoc
+    ├─main
+    │  ├─java
+    │  │  └─com
+    │  │      └─ddokddak
+    │  │          ├─activityRecord
+    │  │          │  ├─api
+    │  │          │  ├─dto
+    │  │          │  ├─entity
+    │  │          │  ├─mapper
+    │  │          │  ├─repository
+    │  │          │  └─service
+    │  │          ├─auth
+    │  │          │  ├─api
+    │  │          │  ├─batch
+    │  │          │  ├─domain
+    │  │          │  │  └─oauth
+    │  │          │  ├─entity
+    │  │          │  ├─enums
+    │  │          │  ├─filter
+    │  │          │  ├─handler
+    │  │          │  ├─repository
+    │  │          │  └─service
+    │  │          ├─category
+    │  │          │  ├─api
+    │  │          │  ├─dto
+    │  │          │  ├─entity
+    │  │          │  ├─enums
+    │  │          │  ├─mapper
+    │  │          │  ├─repository
+    │  │          │  └─service
+    │  │          ├─common
+    │  │          │  ├─config
+    │  │          │  ├─dto
+    │  │          │  ├─entity
+    │  │          │  ├─exception
+    │  │          │  │  └─type
+    │  │          │  ├─filter
+    │  │          │  ├─props
+    │  │          │  ├─repository
+    │  │          │  └─utils
+    │  │          ├─member
+    │  │          │  ├─api
+    │  │          │  ├─dto
+    │  │          │  ├─entity
+    │  │          │  │  └─enums
+    │  │          │  ├─mapper
+    │  │          │  ├─repository
+    │  │          │  └─service
+    │  │          └─usecase
+    │  └─resources
+    │      ├─mail-templates
+    │      └─static
+    │          └─docs
+    └─test
+        └─java
+            └─com
+                └─ddokddak
+                    ├─activityRecord
+                    │  ├─api
+                    │  ├─fixture
+                    │  └─service
+                    ├─auth
+                    │  └─service
+                    ├─category
+                    │  ├─api
+                    │  ├─fixture
+                    │  └─service
+                    ├─member
+                    │  └─api
+                    ├─usecase
+                    └─utils
+                        └─security
+├─build
+├─config
+├─gradle
+└─logs
+```

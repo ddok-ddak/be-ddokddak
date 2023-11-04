@@ -57,9 +57,9 @@ public class ActivityRecordJdbcRepository {
     @Transactional
     public void batchInsert(int batchSize, List<ActivityRecord> list) {
 
-        var sql = "INSERT INTO activity_record (MEMBER_ID, CATEGORY_ID, CATEGORY_NAME, CATEGORY_COLOR, " +
-                "STARTED_AT, FINISHED_AT, TIME_ZONE, CONTENT, TIME_UNIT, DELETE_YN, CREATED_AT) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+        var sql = "INSERT INTO activity_record (MEMBER_ID, CATEGORY_ID, " +
+                "STARTED_AT, FINISHED_AT, CONTENT, TIME_UNIT, IS_DELETED, CREATED_AT) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
         try {
             jdbcTemplate.batchUpdate(
                     sql,
@@ -68,14 +68,11 @@ public class ActivityRecordJdbcRepository {
                     (ps, arg) -> {
                         ps.setLong(1, arg.getMember().getId());
                         ps.setLong(2, arg.getCategory().getId());
-                        ps.setString(3, arg.getCategoryName());
-                        ps.setString(4, arg.getCategoryColor());
-                        ps.setTimestamp(5, Timestamp.valueOf(arg.getStartedAt())); // datetime 타입으로 저장!
-                        ps.setTimestamp(6, Timestamp.valueOf(arg.getFinishedAt()));
-                        ps.setString(7, arg.getTimeZone());
-                        ps.setString(8, arg.getContent());
-                        ps.setInt(9, arg.getTimeUnit());
-                        ps.setString(10, arg.getDeleteYn());
+                        ps.setTimestamp(3, Timestamp.valueOf(arg.getStartedAt())); // datetime 타입으로 저장!
+                        ps.setTimestamp(4, Timestamp.valueOf(arg.getFinishedAt()));
+                        ps.setString(5, arg.getContent());
+                        ps.setInt(6, arg.getTimeUnit());
+                        ps.setBoolean(7, arg.getIsDeleted().booleanValue());
                     });
             
         } catch (Exception e) {
