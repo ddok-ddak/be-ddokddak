@@ -6,10 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface EmailAuthenticationRepository extends JpaRepository<EmailAuthentication, Long> {
-
-    Optional<EmailAuthentication> findByAddressee(String addressee);
-
-    Optional<EmailAuthentication> findByAddresseeAndAuthenticationType(String addressee, String authenticationType);
-
-    Optional<EmailAuthentication> findByAddresseeAndAuthenticationNumber(String addressee, String authenticationNumber);
+    Optional<EmailAuthentication> findByEmailAndAuthenticationType(String email, String authenticationType);
+    Optional<EmailAuthentication> findByIdAndAuthenticationNumber(Long authenticationRequestId, String authenticationNumber);
 }

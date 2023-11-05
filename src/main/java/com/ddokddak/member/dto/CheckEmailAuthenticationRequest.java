@@ -5,9 +5,8 @@ import lombok.Builder;
 import javax.validation.constraints.NotNull;
 
 public record CheckEmailAuthenticationRequest(
-        @NotNull String addressee,
-        @NotNull String authenticationNumber,
-        @NotNull String authenticationType
+        @NotNull Long authenticationRequestId,
+        @NotNull String authenticationNumber
 
 ) {
     @Builder

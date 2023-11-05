@@ -28,30 +28,38 @@ public class EmailAuthenticationService {
     private final EmailAuthenticationRepository emailAuthenticationRepository;
     private final TemplateEngine templateEngine;
 
-    public void mailSendingProcess(AuthenticationNumberRequest request) {
+    public Long mailSendingProcess(AuthenticationNumberRequest request) {
         String authenticationNumber = getRandomCode();
         EmailAuthentication target  = verifyTarget(
-                                        request.addressee(),
+                                        request.email(),
                                         request.authenticationType(),
                                         authenticationNumber
                                     );
-        send( request.addressee(), request.authenticationType(), authenticationNumber );
-        emailAuthenticationRepository.save( target );
+        send( request.email(), request.authenticationType(), authenticationNumber );
+        return emailAuthenticationRepository.save( target ).getId();
     }
 
-    private EmailAuthentication verifyTarget(String addressee, String authenticationType, String authenticationNumber) {
+    private EmailAuthentication verifyTarget(String email, String authenticationType, String authenticationNumber) {
         var target = emailAuthenticationRepository
-                                    .findByAddresseeAndAuthenticationType(addressee, authenticationType )
+                                    .findByEmailAndAuthenticationType(email, authenticationType )
                                     .orElse(EmailAuthentication
                                             .builder()
-                                            .addressee(addressee)
+                                            .email(email)
                                             .authenticationNumber(authenticationNumber)
                                             .authenticationType(authenticationType)
                                             .build()
                                     );
 
-        if( target.isExceedingCountOfPossible() ){
+        if( target.isExceedingTransmissionCountOfPossible() ){
+            throw new NotValidRequestException(EmailException.EXCEEDED_TRANSMISSION_LIMIT_COUNT);
+        }
+
+        if( target.isExceedingFailCountOfPossible() ){
             throw new NotValidRequestException(EmailException.EXCEEDED_RETRY_LIMIT_COUNT);
+        }
+
+        if( target.getId()!=null && target.isNextDay() ){
+            target.initializeTransmissionCount();
         }
 
         target.plusTransmissionCount();
@@ -60,21 +68,21 @@ public class EmailAuthenticationService {
         return target;
     }
 
-    private void send(String addressee, String authenticationType, String authenticationNumber) {
+    private void send(String email, String authenticationType, String authenticationNumber) {
         try {
-            sender.send( createForm(addressee, authenticationType, authenticationNumber) );
+            sender.send( createForm(email, authenticationType, authenticationNumber) );
         } catch (Exception e) {
             log.error( EmailAuthenticationService.class.getEnclosingMethod() + "ERROR ::: {}", e.getMessage() );
             throw new CustomApiException(EmailException.FAIL_TO_MAIL);
         }
     }
 
-    private MimeMessage createForm(String addressee, String authenticationType, String authenticationNumber) {
+    private MimeMessage createForm(String email, String authenticationType, String authenticationNumber) {
         MimeMessage mailMessage = sender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mailMessage, "UTF-8");
-            helper.setTo(addressee);
-            helper.setSubject("[똑딱] 이메일 인증 번호");
+            helper.setTo(email);
+            helper.setSubject("[DoDone] 이메일 인증 번호");
 
             //메일 내용 설정 : 템플릿 프로세스
             Context context = new Context();
@@ -95,8 +103,7 @@ public class EmailAuthenticationService {
 
     public boolean checkAuthenticationNumber(CheckEmailAuthenticationRequest request) {
         var searchEmail = emailAuthenticationRepository
-//                .findByAddresseeAndAuthenticationType( request.addressee(), request.authenticationNumber() )
-                .findByAddresseeAndAuthenticationNumber( request.addressee(), request.authenticationNumber() )
+                .findByIdAndAuthenticationNumber( request.authenticationRequestId(), request.authenticationNumber() )
                 .orElseThrow( () -> new NotValidRequestException(EmailException.NOT_VALID_AUTHENTICATION_NUMBER) );
 
         return isWithinValidTime( searchEmail )

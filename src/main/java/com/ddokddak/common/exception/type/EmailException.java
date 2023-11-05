@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum EmailException implements ExceptionType {
 
+    EXCEEDED_TRANSMISSION_LIMIT_COUNT(HttpStatus.TOO_MANY_REQUESTS, "Exceeded Transmission Limit Count For Email Of Authentication", "E_EXCEED_TRANSMISSION_LIMIT_COUNT"),
     EXCEEDED_RETRY_LIMIT_COUNT(HttpStatus.TOO_MANY_REQUESTS, "Exceeded Retry Limit Count For Email Of Authentication", "E_EXCEED_RETRY_LIMIT_COUNT"),
     NOT_VALID_AUTHENTICATION_NUMBER(HttpStatus.BAD_REQUEST, "Not Valid Authentication Number", "E_NOT_VALID_AUTHENTICATION_NUMBER"),
     WRONG_MATCH_AUTHENTICATION_PROVIDER(HttpStatus.INTERNAL_SERVER_ERROR, "Wrong Match Auth Provider", "E_WRONG_MATCH_AUTHENTICATION_PROVIDER"),

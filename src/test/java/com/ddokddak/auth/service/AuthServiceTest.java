@@ -1,6 +1,5 @@
 package com.ddokddak.auth.service;
 
-import com.ddokddak.auth.batch.EmailAuthenticationScheduler;
 import com.ddokddak.auth.repository.EmailAuthenticationRepository;
 import com.ddokddak.member.dto.AuthenticationNumberRequest;
 import org.junit.jupiter.api.AfterEach;
@@ -18,32 +17,32 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.thymeleaf.TemplateEngine;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @AutoConfigureMockMvc
-@ExtendWith(MockitoExtension.class)
+//@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 //@Transactional // 롤백 수행 <- 레이지 로딩이 동작하지 않음
 class AuthServiceTest {
-    @Spy
-    @InjectMocks
+    /*@Spy
+    @InjectMocks*/
+    @Autowired
     EmailAuthenticationService emailAuthenticationService;
-    @Mock
+    //@Mock
+    @Autowired
     EmailAuthenticationRepository emailAuthenticationRepository;
-    @Mock
+    //@Mock
+    @Autowired
     JavaMailSender sender;
-    @Mock
+    //@Mock
+    @Autowired
     TemplateEngine templateEngine;
 
     /*@Autowired
     DatabaseCleanUp databaseCleanUp;*/
-    @Autowired
-    EmailAuthenticationScheduler emailAuthenticationScheduler;
 
     final AuthenticationNumberRequest request = AuthenticationNumberRequest.builder()
-                                                                                        .addressee("yon914@naver.com")
+                                                                                        .email("yon914@naver.com")
                                                                                         .authenticationType("JOIN")
                                                                                         .build();
 
@@ -64,32 +63,32 @@ class AuthServiceTest {
         // given
 
         // when
-//        doNothing().when( emailAuthenticationService ).mailSendingProcess( request );
-        // lenient().doNothing().when(emailAuthenticationService).mailSendingProcess(request);
-        // then
-        // verify( emailAuthenticationService, times(1) ).mailSendingProcess( request );
+        /*doNothing().when( emailAuthenticationService ).mailSendingProcess( request );
+        lenient().doNothing().when(emailAuthenticationService).mailSendingProcess(request);
 
+        // then
+        verify( emailAuthenticationService, times(1) ).mailSendingProcess( request );*/
 /*
         // when
-        emailAuthenticationService.mailSendingProcess( request );
+        var createdId = emailAuthenticationService.mailSendingProcess( request );
 
         // then
-        Assertions.assertNotNull(emailAuthenticationRepository.findByAddressee("yon914@naver.com"));*/
+        Assertions.assertNotNull(emailAuthenticationRepository.findById(createdId));*/
     }
 
     @Test
     void testCheckAuthenticationNumber() throws Exception {
         // given
         /*RequestAuthenticationNumberRequest request1 = RequestAuthenticationNumberRequest.builder()
-                                                                                        .addressee("yon914@naver.com")
+                                                                                        .email("yon914@naver.com")
                                                                                         .authenticationType("JOIN")
                                                                                         .build();
         emailAuthenticationService.mailSendingProcess( request1 );
 
-        EmailAuthentication target = emailAuthenticationRepository.findByAddressee("yon914@naver.com").get();
+        EmailAuthentication target = emailAuthenticationRepository.findByemail("yon914@naver.com").get();
 
         CheckAuthenticationNumberRequest request2 = CheckAuthenticationNumberRequest.builder()
-                                                                    .addressee("yon914@naver.com")
+                                                                    .email("yon914@naver.com")
                                                                     .authenticationNumber(target.getAuthenticationNumber())
                                                                     .build();
 
@@ -105,7 +104,7 @@ class AuthServiceTest {
         /*
         // given
         RequestAuthenticationNumberRequest request1 = RequestAuthenticationNumberRequest.builder()
-                                                                                        .addressee("yon914@naver.com")
+                                                                                        .email("yon914@naver.com")
                                                                                         .authenticationType("JOIN")
                                                                                         .build();
 
@@ -115,8 +114,7 @@ class AuthServiceTest {
 
         assertThrows( NotValidRequestException.class, () ->{
             emailAuthenticationService.mailSendingProcess( request1 );
-        }).getStatus().equals("HttpStatus.TOO_MANY_REQUESTS");
-        */
+        }).getStatus().equals("HttpStatus.TOO_MANY_REQUESTS");*/
     }
 
     @Test
@@ -124,7 +122,7 @@ class AuthServiceTest {
         /*
         // given
         RequestAuthenticationNumberRequest request1 = RequestAuthenticationNumberRequest.builder()
-                                                                                        .addressee("yon914@naver.com")
+                                                                                        .email("yon914@naver.com")
                                                                                         .authenticationType("JOIN")
                                                                                         .build();
 
@@ -135,7 +133,7 @@ class AuthServiceTest {
         Thread.sleep(60000L);
 
         EmailAuthentication target = emailAuthenticationRepository
-                                            .findByAddresseeAndAuthenticationType("yon914@naver.com", "JOIN").get();
+                                            .findByemailAndAuthenticationType("yon914@naver.com", "JOIN").get();
 
         assertThat( target.getTransmissionCount() ).isEqualTo(0);
         */

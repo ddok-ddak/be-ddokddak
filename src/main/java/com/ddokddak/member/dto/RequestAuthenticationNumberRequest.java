@@ -5,9 +5,10 @@ import lombok.Builder;
 import javax.validation.constraints.NotNull;
 
 public record RequestAuthenticationNumberRequest(
-        @NotNull String addressee,
+        @NotNull String email,
         @NotNull String authenticationType
-){
+) {
     @Builder
-    public RequestAuthenticationNumberRequest {}
+    public RequestAuthenticationNumberRequest {
+    }
 }
