@@ -1,10 +1,10 @@
 package com.ddokddak.usecase;
 
-import com.ddokddak.activityRecord.dto.StatsActivityRecordRequest;
-import com.ddokddak.activityRecord.dto.StatsActivityRecordResponse;
+import com.ddokddak.activityRecord.domain.dto.StatsActivityRecordRequest;
+import com.ddokddak.activityRecord.domain.dto.StatsActivityRecordResponse;
 import com.ddokddak.activityRecord.mapper.ActivityRecordMapper;
 import com.ddokddak.activityRecord.service.ActivityRecordReadService;
-import com.ddokddak.category.entity.Category;
+import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.service.CategoryReadService;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

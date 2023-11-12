@@ -1,10 +1,8 @@
 package com.ddokddak.activityRecord.api;
 
-import com.ddokddak.activityRecord.dto.*;
-import com.ddokddak.activityRecord.dto.ActivityRecordResponse;
-import com.ddokddak.activityRecord.dto.CreateActivityRecordRequest;
+import com.ddokddak.activityRecord.domain.dto.*;
 import com.ddokddak.activityRecord.service.ActivityRecordReadService;
-import com.ddokddak.auth.domain.UserPrincipal;
+import com.ddokddak.auth.domain.oauth.UserPrincipal;
 import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
 import com.ddokddak.common.dto.CommonResponse;
 import com.ddokddak.usecase.CreateActivityRecordUsecase;

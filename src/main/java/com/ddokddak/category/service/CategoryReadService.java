@@ -1,15 +1,15 @@
 package com.ddokddak.category.service;
 
 
-import com.ddokddak.category.dto.CategoryReadResponse;
-import com.ddokddak.category.entity.Category;
+import com.ddokddak.category.domain.dto.CategoryReadResponse;
+import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.mapper.CategoryMapper;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.BaseException;
 import com.ddokddak.common.exception.type.CategoryException;
 import com.ddokddak.common.exception.type.MemberException;
-import com.ddokddak.member.entity.Member;
+import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

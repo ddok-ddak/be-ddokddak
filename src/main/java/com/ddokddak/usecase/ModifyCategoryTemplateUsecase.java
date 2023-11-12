@@ -1,6 +1,6 @@
 package com.ddokddak.usecase;
 
-import com.ddokddak.category.dto.CategoryTemplateRequest;
+import com.ddokddak.category.domain.dto.CategoryTemplateRequest;
 import com.ddokddak.category.service.CategoryWriteService;
 import com.ddokddak.member.service.MemberWriteService;
 import lombok.RequiredArgsConstructor;

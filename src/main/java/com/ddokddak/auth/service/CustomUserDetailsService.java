@@ -1,8 +1,8 @@
 package com.ddokddak.auth.service;
 
-import com.ddokddak.auth.domain.UserPrincipal;
+import com.ddokddak.auth.domain.oauth.UserPrincipal;
 import com.ddokddak.common.exception.CustomApiException;
-import com.ddokddak.member.entity.enums.Status;
+import com.ddokddak.member.domain.enums.Status;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

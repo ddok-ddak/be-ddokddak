@@ -1,9 +1,9 @@
 package com.ddokddak.category.mapper;
 
-import com.ddokddak.category.dto.CategoryAddRequest;
-import com.ddokddak.category.dto.CategoryReadResponse;
-import com.ddokddak.category.entity.Category;
-import com.ddokddak.member.entity.Member;
+import com.ddokddak.category.domain.dto.CategoryAddRequest;
+import com.ddokddak.category.domain.dto.CategoryReadResponse;
+import com.ddokddak.category.domain.entity.Category;
+import com.ddokddak.member.domain.entity.Member;
 
 import java.util.Collections;
 import java.util.Optional;

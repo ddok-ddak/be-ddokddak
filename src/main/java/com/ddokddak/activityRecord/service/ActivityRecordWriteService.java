@@ -1,10 +1,10 @@
 package com.ddokddak.activityRecord.service;
 
-import com.ddokddak.activityRecord.dto.ModifyActivityRecordRequest;
-import com.ddokddak.activityRecord.entity.ActivityRecord;
+import com.ddokddak.activityRecord.domain.dto.ModifyActivityRecordRequest;
+import com.ddokddak.activityRecord.domain.entity.ActivityRecord;
 import com.ddokddak.activityRecord.repository.ActivityRecordJdbcRepository;
 import com.ddokddak.activityRecord.repository.ActivityRecordRepository;
-import com.ddokddak.category.entity.Category;
+import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.type.ActivityException;
@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.*;
 import java.util.List;
 
 @RequiredArgsConstructor

@@ -1,8 +1,8 @@
 package com.ddokddak.member.service;
 
 import com.ddokddak.common.exception.CustomApiException;
-import com.ddokddak.member.dto.MemberResponse;
-import com.ddokddak.member.entity.Member;
+import com.ddokddak.member.domain.dto.MemberResponse;
+import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.member.mapper.MemberMapper;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,18 +1,15 @@
 package com.ddokddak.activityRecord.repository;
 
-import com.ddokddak.activityRecord.dto.StatsActivityRecordRequest;
-import com.ddokddak.activityRecord.dto.StatsActivityRecordResult;
-import com.ddokddak.activityRecord.entity.ActivityRecord;
-import com.ddokddak.category.entity.Category;
-import org.hibernate.annotations.SQLDelete;
+import com.ddokddak.activityRecord.domain.dto.StatsActivityRecordRequest;
+import com.ddokddak.activityRecord.domain.dto.StatsActivityRecordResult;
+import com.ddokddak.activityRecord.domain.entity.ActivityRecord;
+import com.ddokddak.category.domain.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +39,7 @@ public interface ActivityRecordRepository extends JpaRepository<ActivityRecord, 
     List<ActivityRecord> findByMemberIdAndStartedAtBetweenAndIsDeletedFalse(
             Long memberId, LocalDateTime fromStartedAt, LocalDateTime toStartedAt);
 
-    @Query("SELECT new com.ddokddak.activityRecord.dto.StatsActivityRecordResult(" +
+    @Query("SELECT new com.ddokddak.activityRecord.domain.dto.StatsActivityRecordResult(" +
             "ar.category.id, sum(TIME_TO_SEC(TIMEDIFF(ar.finishedAt, ar.startedAt)) / 60)) " + //, function('date_format', ar.startedAt, '%Y-%m')) " +
             "FROM ActivityRecord ar JOIN ar.category " +
             "WHERE ar.member.id = :memberId " +

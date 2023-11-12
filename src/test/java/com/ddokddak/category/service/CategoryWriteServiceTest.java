@@ -1,15 +1,15 @@
 package com.ddokddak.category.service;
 
 import com.ddokddak.utils.DatabaseCleanUp;
-import com.ddokddak.category.dto.CategoryAddRequest;
-import com.ddokddak.category.dto.ModifyCategoryRequest;
-import com.ddokddak.category.dto.ModifyCategoryRelationRequest;
-import com.ddokddak.category.dto.ModifyCategoryValueRequest;
-import com.ddokddak.category.entity.Category;
+import com.ddokddak.category.domain.dto.CategoryAddRequest;
+import com.ddokddak.category.domain.dto.ModifyCategoryRequest;
+import com.ddokddak.category.domain.dto.ModifyCategoryRelationRequest;
+import com.ddokddak.category.domain.dto.ModifyCategoryValueRequest;
+import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.fixture.CategoryFixture;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.CustomApiException;
-import com.ddokddak.member.entity.Member;
+import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

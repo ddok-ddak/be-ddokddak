@@ -1,10 +1,10 @@
 package com.ddokddak.activityRecord.api;
 
-import com.ddokddak.activityRecord.dto.CreateActivityRecordRequest;
-import com.ddokddak.category.entity.Category;
+import com.ddokddak.activityRecord.domain.dto.CreateActivityRecordRequest;
+import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.ActivityException;
-import com.ddokddak.member.entity.Member;
+import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.usecase.CreateActivityRecordUsecase;
 import com.ddokddak.utils.security.WithMockCustomUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,12 +19,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -34,8 +31,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

@@ -1,6 +1,6 @@
 package com.ddokddak.category.repository;
 
-import com.ddokddak.category.enums.CategoryTemplate;
+import com.ddokddak.category.domain.enums.CategoryTemplate;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.type.DbException;
 import lombok.RequiredArgsConstructor;

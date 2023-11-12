@@ -1,8 +1,8 @@
 package com.ddokddak.activityRecord.service;
 
-import com.ddokddak.activityRecord.dto.StatsActivityRecordRequest;
-import com.ddokddak.activityRecord.dto.StatsActivityRecordResult;
-import com.ddokddak.activityRecord.dto.ActivityRecordResponse;
+import com.ddokddak.activityRecord.domain.dto.StatsActivityRecordRequest;
+import com.ddokddak.activityRecord.domain.dto.StatsActivityRecordResult;
+import com.ddokddak.activityRecord.domain.dto.ActivityRecordResponse;
 import com.ddokddak.activityRecord.mapper.ActivityRecordMapper;
 import com.ddokddak.activityRecord.repository.ActivityRecordRepository;
 import lombok.RequiredArgsConstructor;

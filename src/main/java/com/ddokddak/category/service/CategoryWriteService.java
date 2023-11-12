@@ -1,7 +1,7 @@
 package com.ddokddak.category.service;
 
-import com.ddokddak.category.dto.*;
-import com.ddokddak.category.entity.Category;
+import com.ddokddak.category.domain.dto.*;
+import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.repository.CategoryJdbcRepository;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.CustomApiException;
@@ -9,8 +9,8 @@ import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.BaseException;
 import com.ddokddak.common.exception.type.CategoryException;
 import com.ddokddak.common.exception.type.MemberException;
-import com.ddokddak.member.entity.Member;
-import com.ddokddak.member.entity.enums.TemplateType;
+import com.ddokddak.member.domain.entity.Member;
+import com.ddokddak.member.domain.enums.TemplateType;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -126,6 +126,7 @@ public class CategoryWriteService {
      * 카테고리 이름 변경 작업 시,
      * 같은 레벨 및 부모를 가진 카테고리 내에 동일한 이름이 있는지 확인한다. (자기 자신은 제외)
      * 그룹의 높이가 1인 경우만 고려한다. (즉, 메인과 서브 레벨만 존재한다.)
+     *
      * @param reqName 변경할 카테고리의 새 이름
      * @param categoryId 대상 카테고리 아이디
      * @param categories 비교할 카테고리 리스트
@@ -145,6 +146,7 @@ public class CategoryWriteService {
     /**
      * 카테고리 이름 변경 작업 시,
      * 비교할 대상 카테고리 그룹을 조회한다.
+     *
      * @param category 현재 대상 카테고리
      * @param mainCategory 카테고리의 메인 카테고리
      * @return List<Category> 비교 대상 카테고리 목록
@@ -213,6 +215,7 @@ public class CategoryWriteService {
     // 아래는 사용 없는 코드 - 제거 예정
     /**
      * 카테고리의 관계, 레벨만을 변경하고자 하는 경우
+     *
      * @param req CategoryRelationModifyRequest 카테고리 관계 수정 요청 정보
      * @param memberId 멤버 아이디
      */

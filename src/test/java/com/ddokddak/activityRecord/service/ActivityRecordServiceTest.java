@@ -1,15 +1,15 @@
 package com.ddokddak.activityRecord.service;
 
-import com.ddokddak.activityRecord.dto.ReadActivityRecordRequest;
+import com.ddokddak.activityRecord.domain.dto.ReadActivityRecordRequest;
 import com.ddokddak.utils.DatabaseCleanUp;
-import com.ddokddak.activityRecord.dto.ModifyActivityRecordRequest;
-import com.ddokddak.activityRecord.entity.ActivityRecord;
+import com.ddokddak.activityRecord.domain.dto.ModifyActivityRecordRequest;
+import com.ddokddak.activityRecord.domain.entity.ActivityRecord;
 import com.ddokddak.activityRecord.fixture.ActivityRecordFixture;
 import com.ddokddak.activityRecord.repository.ActivityRecordRepository;
-import com.ddokddak.category.entity.Category;
+import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.fixture.CategoryFixture;
 import com.ddokddak.category.repository.CategoryRepository;
-import com.ddokddak.member.entity.Member;
+import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 

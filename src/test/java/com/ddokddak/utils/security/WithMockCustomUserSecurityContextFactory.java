@@ -1,8 +1,8 @@
 package com.ddokddak.utils.security;
 
 
-import com.ddokddak.auth.domain.UserPrincipal;
-import com.ddokddak.member.entity.enums.RoleType;
+import com.ddokddak.auth.domain.oauth.UserPrincipal;
+import com.ddokddak.member.domain.enums.RoleType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

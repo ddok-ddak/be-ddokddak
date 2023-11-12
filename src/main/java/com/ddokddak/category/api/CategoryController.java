@@ -1,7 +1,7 @@
 package com.ddokddak.category.api;
 
-import com.ddokddak.auth.domain.UserPrincipal;
-import com.ddokddak.category.dto.*;
+import com.ddokddak.auth.domain.oauth.UserPrincipal;
+import com.ddokddak.category.domain.dto.*;
 import com.ddokddak.category.service.CategoryReadService;
 import com.ddokddak.category.service.CategoryWriteService;
 import com.ddokddak.common.dto.CommonResponse;
