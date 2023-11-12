@@ -75,11 +75,11 @@ public class AuthController {
     }
 
     @PostMapping("/email/requestAuthenticationNumber")
-    public ResponseEntity<CommonResponse<Boolean>> requestAuthenticationNumber(
+    public ResponseEntity<CommonResponse<Long>> requestAuthenticationNumber(
             @Valid @RequestBody AuthenticationNumberRequest request
     ){
-        emailAuthenticationService.mailSendingProcess(request);
-        return ResponseEntity.ok(new CommonResponse<>("SUCCESS", Boolean.TRUE));
+        var createdId = emailAuthenticationService.mailSendingProcess(request);
+        return ResponseEntity.ok(new CommonResponse<>("SUCCESS", createdId));
     }
 
     @PostMapping("/email/checkAuthenticationNumber")

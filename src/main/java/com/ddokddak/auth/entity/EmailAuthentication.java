@@ -20,7 +20,7 @@ public class EmailAuthentication extends BaseTimeEntity {
     private Long id;
 
     @Column(unique = true, length = 100)
-    private String addressee;
+    private String email;
 
     @Column(unique = true)
     private String authenticationNumber;
@@ -29,6 +29,7 @@ public class EmailAuthentication extends BaseTimeEntity {
     private String authenticationType;
 
     private int transmissionCount;
+    private int failCount;
 
     public void initializeTransmissionCount() {
         this.transmissionCount = 0;
@@ -50,12 +51,14 @@ public class EmailAuthentication extends BaseTimeEntity {
     public boolean isNextSeconds(){
         return this.getModifiedAt().plusSeconds(60000L).isAfter( LocalDateTime.now() );
     }*/
-    public boolean isExceedingCountOfPossible(){
+    public boolean isExceedingTransmissionCountOfPossible(){
         return this.getTransmissionCount()==5;
     }
-
+    public boolean isExceedingFailCountOfPossible(){
+        return this.getFailCount()==5;
+    }
     public boolean isExceedingTimeOfPossible() {
 
-        return this.getModifiedAt().plusMinutes(5).isAfter( LocalDateTime.now() );
+        return this.getModifiedAt().plusMinutes(3).isAfter( LocalDateTime.now() );
     }
 }
