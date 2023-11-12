@@ -1,12 +1,12 @@
 package com.ddokddak.usecase;
 
-import com.ddokddak.activityRecord.dto.CreateActivityRecordRequest;
+import com.ddokddak.activityRecord.domain.dto.CreateActivityRecordRequest;
 import com.ddokddak.activityRecord.service.ActivityRecordReadService;
 import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
-import com.ddokddak.category.entity.Category;
+import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.service.CategoryReadService;
 import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.member.entity.Member;
+import com.ddokddak.member.domain.entity.Member;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,6 +1,6 @@
 package com.ddokddak.usecase;
 
-import com.ddokddak.member.dto.SigningRequest;
+import com.ddokddak.auth.domain.dto.SigningRequest;
 import com.ddokddak.member.service.MemberWriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;

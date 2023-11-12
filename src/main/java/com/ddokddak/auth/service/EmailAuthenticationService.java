@@ -1,17 +1,19 @@
 package com.ddokddak.auth.service;
 
-import com.ddokddak.auth.entity.EmailAuthentication;
+import com.ddokddak.auth.domain.entity.EmailAuthentication;
+import com.ddokddak.auth.domain.enums.EmailAuthenticationType;
 import com.ddokddak.auth.repository.EmailAuthenticationRepository;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.EmailException;
-import com.ddokddak.member.dto.AuthenticationNumberRequest;
-import com.ddokddak.member.dto.CheckEmailAuthenticationRequest;
+import com.ddokddak.auth.domain.dto.AuthenticationNumberRequest;
+import com.ddokddak.auth.domain.dto.CheckEmailAuthenticationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -28,6 +30,7 @@ public class EmailAuthenticationService {
     private final EmailAuthenticationRepository emailAuthenticationRepository;
     private final TemplateEngine templateEngine;
 
+    @Transactional
     public Long mailSendingProcess(AuthenticationNumberRequest request) {
         String authenticationNumber = getRandomCode();
         EmailAuthentication target  = verifyTarget(
@@ -39,9 +42,10 @@ public class EmailAuthenticationService {
         return emailAuthenticationRepository.save( target ).getId();
     }
 
-    private EmailAuthentication verifyTarget(String email, String authenticationType, String authenticationNumber) {
+    @Transactional
+    public EmailAuthentication verifyTarget(String email, EmailAuthenticationType authenticationType, String authenticationNumber) {
         var target = emailAuthenticationRepository
-                                    .findByEmailAndAuthenticationType(email, authenticationType )
+                                    .findByEmailAndAuthenticationType(email, authenticationType)
                                     .orElse(EmailAuthentication
                                             .builder()
                                             .email(email)
@@ -68,9 +72,9 @@ public class EmailAuthenticationService {
         return target;
     }
 
-    private void send(String email, String authenticationType, String authenticationNumber) {
+    private void send(String email, EmailAuthenticationType authenticationType, String authenticationNumber) {
         try {
-            sender.send( createForm(email, authenticationType, authenticationNumber) );
+            sender.send( createForm(email, authenticationType.toString(), authenticationNumber) );
         } catch (Exception e) {
             log.error( EmailAuthenticationService.class.getEnclosingMethod() + "ERROR ::: {}", e.getMessage() );
             throw new CustomApiException(EmailException.FAIL_TO_MAIL);
@@ -90,7 +94,7 @@ public class EmailAuthenticationService {
 
             String html = templateEngine.process(authenticationType, context);
             helper.setText(html, true);
-        }catch(MessagingException e){
+        } catch (MessagingException e) {
             log.error( "EmailAuthenticationService.createForm() exception occur ::: {}", e.getMessage() );
             throw new CustomApiException(EmailException.FAIL_TO_CREATING_MAIL_FORM);
         }
@@ -101,6 +105,7 @@ public class EmailAuthenticationService {
         return storedNumber.equals(targetNumber);
     }
 
+    @Transactional
     public boolean checkAuthenticationNumber(CheckEmailAuthenticationRequest request) {
         var searchEmail = emailAuthenticationRepository
                 .findByIdAndAuthenticationNumber( request.authenticationRequestId(), request.authenticationNumber() )
@@ -118,7 +123,7 @@ public class EmailAuthenticationService {
         StringBuilder result = new StringBuilder();
         try {
             SecureRandom randomForCombination = SecureRandom.getInstance("SHA1PRNG");
-            for( int i=0;i<8;i++ ){
+            for (int i = 0; i < 6; i++) {
                 switch( randomForCombination.nextInt(3) ){
                     case 0 -> result.append((char) ((randomForCombination.nextInt(26)) + 97)); // a~z  (ex. 1+97=98 => (char)98 = 'b')
                     case 1 -> result.append((char) ((randomForCombination.nextInt(26)) + 65)); // A~Z

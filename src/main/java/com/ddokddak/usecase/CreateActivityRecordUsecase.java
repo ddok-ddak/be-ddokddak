@@ -1,7 +1,7 @@
 package com.ddokddak.usecase;
 
-import com.ddokddak.activityRecord.dto.CreateActivityRecordRequest;
-import com.ddokddak.activityRecord.entity.ActivityRecord;
+import com.ddokddak.activityRecord.domain.dto.CreateActivityRecordRequest;
+import com.ddokddak.activityRecord.domain.entity.ActivityRecord;
 import com.ddokddak.activityRecord.mapper.ActivityRecordMapper;
 import com.ddokddak.activityRecord.service.ActivityRecordReadService;
 import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
@@ -12,9 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @Service

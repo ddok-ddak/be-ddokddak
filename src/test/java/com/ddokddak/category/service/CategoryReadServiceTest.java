@@ -1,10 +1,10 @@
 package com.ddokddak.category.service;
 
-import com.ddokddak.category.dto.CategoryReadResponse;
-import com.ddokddak.category.entity.Category;
+import com.ddokddak.category.domain.dto.CategoryReadResponse;
+import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.NotValidRequestException;
-import com.ddokddak.member.entity.Member;
+import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,13 +1,12 @@
 package com.ddokddak.category.api;
 
-import com.ddokddak.activityRecord.dto.CreateActivityRecordRequest;
-import com.ddokddak.category.dto.*;
-import com.ddokddak.category.entity.Category;
+import com.ddokddak.category.domain.dto.*;
+import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.fixture.CategoryFixture;
 import com.ddokddak.category.mapper.CategoryMapper;
 import com.ddokddak.category.service.CategoryReadService;
 import com.ddokddak.category.service.CategoryWriteService;
-import com.ddokddak.member.entity.Member;
+import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.usecase.DeleteCategoryUsecase;
 import com.ddokddak.utils.security.WithMockCustomUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,18 +20,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;

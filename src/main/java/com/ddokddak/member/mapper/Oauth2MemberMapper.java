@@ -1,7 +1,8 @@
 package com.ddokddak.member.mapper;
 
-import com.ddokddak.member.entity.Oauth2Member;
-import com.ddokddak.member.entity.enums.AuthProviderType;
+import com.ddokddak.auth.domain.oauth.UserPrincipal;
+import com.ddokddak.member.domain.entity.Oauth2Member;
+import com.ddokddak.member.domain.enums.AuthProviderType;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -52,10 +53,12 @@ public class Oauth2MemberMapper {
         ClientRegistration clientRegistration = authorizedClient.getClientRegistration();
         OAuth2AccessToken accessToken = authorizedClient.getAccessToken();
         OAuth2RefreshToken refreshToken = authorizedClient.getRefreshToken();
-
+        UserPrincipal userPrincipal = (UserPrincipal) principal.getPrincipal();
         return Oauth2Member.builder()
+                .memberId(userPrincipal.getId())
+                .email(principal.getName())
+                .oauth2Id(userPrincipal.getAttributes().get("sub").toString())
                 .authProvider(AuthProviderType.getByCode(clientRegistration.getRegistrationId()))
-                .oauth2Id(principal.getName())
                 .accessTokenType(accessToken.getTokenType().getValue())
                 .accessTokenValue(accessToken.getTokenValue())
                 .accessTokenScope(accessToken.getScopes())

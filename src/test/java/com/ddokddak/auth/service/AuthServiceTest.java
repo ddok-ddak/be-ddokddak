@@ -1,7 +1,8 @@
 package com.ddokddak.auth.service;
 
+import com.ddokddak.auth.domain.enums.EmailAuthenticationType;
 import com.ddokddak.auth.repository.EmailAuthenticationRepository;
-import com.ddokddak.member.dto.AuthenticationNumberRequest;
+import com.ddokddak.auth.domain.dto.AuthenticationNumberRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,13 +43,12 @@ class AuthServiceTest {
     DatabaseCleanUp databaseCleanUp;*/
 
     final AuthenticationNumberRequest request = AuthenticationNumberRequest.builder()
-                                                                                        .email("yon914@naver.com")
-                                                                                        .authenticationType("JOIN")
-                                                                                        .build();
+            .email("yon914@naver.com")
+            .authenticationType(EmailAuthenticationType.JOIN)
+            .build();
 
     @BeforeEach
     void setUp() {
-
     }
 
     @AfterEach

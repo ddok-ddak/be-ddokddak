@@ -1,7 +1,7 @@
 package com.ddokddak.usecase;
 
 import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
-import com.ddokddak.category.entity.Category;
+import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.service.CategoryReadService;
 import com.ddokddak.category.service.CategoryWriteService;
 import lombok.RequiredArgsConstructor;

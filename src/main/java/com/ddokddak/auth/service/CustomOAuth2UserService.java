@@ -1,11 +1,11 @@
 package com.ddokddak.auth.service;
 
-import com.ddokddak.auth.domain.UserPrincipal;
+import com.ddokddak.auth.domain.oauth.UserPrincipal;
 import com.ddokddak.auth.domain.oauth.OAuth2UserInfo;
 import com.ddokddak.auth.domain.oauth.OAuth2UserInfoFactory;
 import com.ddokddak.common.exception.CustomApiException;
-import com.ddokddak.member.entity.enums.AuthProviderType;
-import com.ddokddak.member.entity.Member;
+import com.ddokddak.member.domain.enums.AuthProviderType;
+import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.member.service.MemberReadService;
 import com.ddokddak.member.service.MemberWriteService;
 import lombok.RequiredArgsConstructor;

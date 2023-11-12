@@ -1,12 +1,11 @@
 package com.ddokddak.activityRecord.fixture;
 
-import com.ddokddak.activityRecord.entity.ActivityRecord;
-import com.ddokddak.category.entity.Category;
-import com.ddokddak.member.entity.Member;
+import com.ddokddak.activityRecord.domain.entity.ActivityRecord;
+import com.ddokddak.category.domain.entity.Category;
+import com.ddokddak.member.domain.entity.Member;
 
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
 

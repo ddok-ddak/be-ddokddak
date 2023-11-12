@@ -1,10 +1,10 @@
 package com.ddokddak.activityRecord.mapper;
 
-import com.ddokddak.activityRecord.dto.ActivityRecordResponse;
-import com.ddokddak.activityRecord.dto.CreateActivityRecordRequest;
-import com.ddokddak.activityRecord.dto.StatsActivityRecordResponse;
-import com.ddokddak.activityRecord.entity.ActivityRecord;
-import com.ddokddak.category.entity.Category;
+import com.ddokddak.activityRecord.domain.dto.ActivityRecordResponse;
+import com.ddokddak.activityRecord.domain.dto.CreateActivityRecordRequest;
+import com.ddokddak.activityRecord.domain.dto.StatsActivityRecordResponse;
+import com.ddokddak.activityRecord.domain.entity.ActivityRecord;
+import com.ddokddak.category.domain.entity.Category;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import java.util.List;

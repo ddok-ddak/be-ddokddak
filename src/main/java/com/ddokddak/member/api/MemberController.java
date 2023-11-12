@@ -1,9 +1,11 @@
 package com.ddokddak.member.api;
 
-import com.ddokddak.auth.domain.UserPrincipal;
-import com.ddokddak.category.dto.CategoryTemplateRequest;
+import com.ddokddak.auth.domain.oauth.UserPrincipal;
+import com.ddokddak.category.domain.dto.CategoryTemplateRequest;
 import com.ddokddak.common.dto.CommonResponse;
-import com.ddokddak.member.dto.*;
+import com.ddokddak.member.domain.dto.MemberResponse;
+import com.ddokddak.member.domain.dto.ModifyStartDayRequest;
+import com.ddokddak.member.domain.dto.ModifyStartTimeRequest;
 import com.ddokddak.member.service.MemberReadService;
 import com.ddokddak.member.service.MemberWriteService;
 import com.ddokddak.usecase.CreateCategoryTemplateUsecase;

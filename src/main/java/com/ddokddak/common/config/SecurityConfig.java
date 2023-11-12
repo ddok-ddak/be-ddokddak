@@ -6,7 +6,7 @@ import com.ddokddak.auth.handler.OAuth2AuthenticationSuccessHandler;
 import com.ddokddak.auth.repository.OAuth2CookieAuthorizationRequestRepository;
 import com.ddokddak.auth.handler.JwtAuthenticationEntryPoint;
 import com.ddokddak.auth.filter.JwtAuthenticationFilter;
-import com.ddokddak.member.entity.enums.RoleType;
+import com.ddokddak.member.domain.enums.RoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

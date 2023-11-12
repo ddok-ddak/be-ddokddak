@@ -1,6 +1,6 @@
 package com.ddokddak.activityRecord.repository;
 
-import com.ddokddak.activityRecord.entity.ActivityRecord;
+import com.ddokddak.activityRecord.domain.entity.ActivityRecord;
 import com.ddokddak.common.exception.JdbcExecException;
 
 import com.ddokddak.common.exception.type.DbException;

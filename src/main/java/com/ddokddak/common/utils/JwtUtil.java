@@ -1,7 +1,7 @@
 package com.ddokddak.common.utils;
 
 import com.ddokddak.common.props.AuthProperties;
-import com.ddokddak.auth.domain.UserPrincipal;
+import com.ddokddak.auth.domain.oauth.UserPrincipal;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -90,13 +90,12 @@ public class JwtUtil {
     public Authentication getAuthentication(String accessToken) {
 
         Claims claims = parseClaims(accessToken);
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(
-                        claims.get(AUTHORITIES_KEY)
-                                .toString()
-                                .split(",")
-                        ).map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+        Collection<? extends GrantedAuthority> authorities = Arrays.stream(
+                claims.get(AUTHORITIES_KEY)
+                        .toString()
+                        .split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
 
         UserPrincipal userPrincipal = UserPrincipal.builder()
                 .id(((Number) claims.get("userId")).longValue())
@@ -112,10 +111,13 @@ public class JwtUtil {
         try {
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
             return true;
-        } catch (MalformedJwtException ex) {
-            log.error("Invalid JWT token");
         } catch (ExpiredJwtException ex) {
             log.error("Expired JWT token");
+            // todo check if refresh token available
+            Claims claims = parseClaims(token);
+            long userId = ((Number) claims.get("userId")).longValue();
+        } catch (MalformedJwtException ex) {
+            log.error("Invalid JWT token");
         } catch (UnsupportedJwtException ex) {
             log.error("Unsupported JWT token");
         } catch (IllegalArgumentException ex) {

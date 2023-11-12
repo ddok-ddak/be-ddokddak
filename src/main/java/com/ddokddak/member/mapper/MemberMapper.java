@@ -1,12 +1,12 @@
 package com.ddokddak.member.mapper;
 
-import com.ddokddak.member.dto.MemberResponse;
-import com.ddokddak.member.dto.RegisterMemberRequest;
-import com.ddokddak.member.entity.*;
-import com.ddokddak.member.entity.enums.AuthProviderType;
-import com.ddokddak.member.entity.enums.RoleType;
-import com.ddokddak.member.entity.enums.Status;
-import com.ddokddak.member.entity.enums.TemplateType;
+import com.ddokddak.member.domain.dto.MemberResponse;
+import com.ddokddak.auth.domain.dto.RegisterMemberRequest;
+import com.ddokddak.member.domain.entity.Member;
+import com.ddokddak.member.domain.enums.AuthProviderType;
+import com.ddokddak.member.domain.enums.RoleType;
+import com.ddokddak.member.domain.enums.Status;
+import com.ddokddak.member.domain.enums.TemplateType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

@@ -1,17 +1,17 @@
 package com.ddokddak.member.service;
 
 import com.ddokddak.auth.domain.oauth.OAuth2UserInfo;
-import com.ddokddak.category.dto.CategoryTemplateRequest;
+import com.ddokddak.category.domain.dto.CategoryTemplateRequest;
 import com.ddokddak.category.service.CategoryWriteService;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.MemberException;
-import com.ddokddak.member.dto.MemberResponse;
-import com.ddokddak.member.dto.ModifyStartDayRequest;
-import com.ddokddak.member.dto.ModifyStartTimeRequest;
-import com.ddokddak.member.dto.RegisterMemberRequest;
-import com.ddokddak.member.entity.*;
-import com.ddokddak.member.entity.enums.TemplateType;
+import com.ddokddak.member.domain.dto.MemberResponse;
+import com.ddokddak.member.domain.dto.ModifyStartDayRequest;
+import com.ddokddak.member.domain.dto.ModifyStartTimeRequest;
+import com.ddokddak.auth.domain.dto.RegisterMemberRequest;
+import com.ddokddak.member.domain.entity.Member;
+import com.ddokddak.member.domain.enums.TemplateType;
 import com.ddokddak.member.mapper.MemberMapper;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;

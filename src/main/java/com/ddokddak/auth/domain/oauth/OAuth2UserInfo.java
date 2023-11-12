@@ -1,10 +1,10 @@
 package com.ddokddak.auth.domain.oauth;
 
-import com.ddokddak.member.entity.*;
-import com.ddokddak.member.entity.enums.AuthProviderType;
-import com.ddokddak.member.entity.enums.RoleType;
-import com.ddokddak.member.entity.enums.Status;
-import com.ddokddak.member.entity.enums.TemplateType;
+import com.ddokddak.member.domain.entity.Member;
+import com.ddokddak.member.domain.enums.AuthProviderType;
+import com.ddokddak.member.domain.enums.RoleType;
+import com.ddokddak.member.domain.enums.Status;
+import com.ddokddak.member.domain.enums.TemplateType;
 
 import java.util.Map;
 

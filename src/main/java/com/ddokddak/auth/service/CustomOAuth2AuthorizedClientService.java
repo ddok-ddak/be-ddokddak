@@ -1,7 +1,7 @@
 package com.ddokddak.auth.service;
 
-import com.ddokddak.member.entity.Oauth2Member;
-import com.ddokddak.member.entity.enums.AuthProviderType;
+import com.ddokddak.member.domain.entity.Oauth2Member;
+import com.ddokddak.member.domain.enums.AuthProviderType;
 import com.ddokddak.member.mapper.Oauth2MemberMapper;
 import com.ddokddak.member.repository.Oauth2MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
+import java.sql.SQLException;
 
 @RequiredArgsConstructor
 @Service
@@ -41,6 +41,7 @@ public class CustomOAuth2AuthorizedClientService implements OAuth2AuthorizedClie
     }
 
     @Override
+    @Transactional
     public void saveAuthorizedClient(OAuth2AuthorizedClient authorizedClient, Authentication principal) {
         Assert.notNull(authorizedClient, "authorizedClient cannot be null");
         Assert.notNull(principal, "principal cannot be null");
@@ -62,8 +63,10 @@ public class CustomOAuth2AuthorizedClientService implements OAuth2AuthorizedClie
             try {
                 oauth2Member = Oauth2MemberMapper.fromAuthorizedClientAndPrincipal(authorizedClient, principal);
                 this.insertOauth2Member(oauth2Member);
-            }
-            catch (DuplicateKeyException ex) {
+
+            } catch (DuplicateKeyException ex) {
+                this.updateOauth2Member(oauth2Member, authorizedClient, principal);
+            } catch (SQLException ex) {
                 this.updateOauth2Member(oauth2Member, authorizedClient, principal);
             }
         }
@@ -81,12 +84,12 @@ public class CustomOAuth2AuthorizedClientService implements OAuth2AuthorizedClie
     private Oauth2Member getOauth2Member(String principalName, String clientRegistrationId) {
 
         return this.oauth2MemberRepository
-                .findByOauth2IdAndAuthProviderAndIsDeletedFalse(principalName, AuthProviderType.getByCode(clientRegistrationId))
+                .findByEmailAndAuthProviderAndIsDeletedFalse(principalName, AuthProviderType.getByCode(clientRegistrationId))
                 .orElse(null);
     }
 
     @Transactional
-    public void insertOauth2Member(Oauth2Member oauth2Member) {
+    public void insertOauth2Member(Oauth2Member oauth2Member) throws SQLException {
         oauth2MemberRepository.save(oauth2Member);
     }
 

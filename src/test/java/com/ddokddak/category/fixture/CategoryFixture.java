@@ -1,7 +1,7 @@
 package com.ddokddak.category.fixture;
 
-import com.ddokddak.category.entity.Category;
-import com.ddokddak.member.entity.Member;
+import com.ddokddak.category.domain.entity.Category;
+import com.ddokddak.member.domain.entity.Member;
 import java.util.List;
 import java.util.stream.IntStream;
 

@@ -1,11 +1,11 @@
 package com.ddokddak.member.api;
 
-import com.ddokddak.category.dto.CategoryTemplateRequest;
-import com.ddokddak.member.dto.ModifyStartDayRequest;
-import com.ddokddak.member.dto.ModifyStartTimeRequest;
-import com.ddokddak.member.entity.enums.CustomOpt;
-import com.ddokddak.member.entity.Member;
-import com.ddokddak.member.entity.enums.TemplateType;
+import com.ddokddak.category.domain.dto.CategoryTemplateRequest;
+import com.ddokddak.member.domain.dto.ModifyStartDayRequest;
+import com.ddokddak.member.domain.dto.ModifyStartTimeRequest;
+import com.ddokddak.member.domain.enums.CustomOpt;
+import com.ddokddak.member.domain.entity.Member;
+import com.ddokddak.member.domain.enums.TemplateType;
 import com.ddokddak.member.mapper.MemberMapper;
 import com.ddokddak.member.service.MemberReadService;
 import com.ddokddak.member.service.MemberWriteService;
