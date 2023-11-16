@@ -2,9 +2,9 @@
 - dodonenow 백엔드 서버 저장소입니다.
 
 ## 서버 구성
-
+![structure.jpg](structure.jpg)
 ## ERD
-
+![erd.png](erd.png)
 ## 프로젝트 구조
 - 레이어드 아키텍쳐 기반 프로젝트이며, 디렉토리 구조는 도메인형으로 구성되어 있습니다.
 
