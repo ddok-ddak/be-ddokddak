@@ -4,8 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum EmailAuthenticationType {
-    JOIN
-//    ,
-//    SEARCH_PWD,
-//    DORMANT_RECOVERY
+    JOIN,
+    SEARCH_PWD,
+    DORMANT_RECOVERY
 }
