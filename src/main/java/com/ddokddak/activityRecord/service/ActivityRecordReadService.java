@@ -20,8 +20,8 @@ public class ActivityRecordReadService {
 
     private final ActivityRecordRepository activityRecordRepository;
 
-    public Boolean existsByMemberIdAndStartedAtBetween(Long memberId, LocalDateTime fromStartedAt, LocalDateTime toStartedAt) {
-        var result = activityRecordRepository.existsByMemberIdAndStartedAtBetweenAndIsDeletedFalse(memberId, fromStartedAt, toStartedAt);
+    public Boolean existsByMemberIdAndIsDeletedFalseAndBetweenPeriodCondition(Long memberId, LocalDateTime fromStartedAt, LocalDateTime toStartedAt) {
+        var result = activityRecordRepository.existByMemberIdAndIsDeletedFalseAndBetweenPeriodCondition(memberId, fromStartedAt, toStartedAt);
         return result;
     }
 

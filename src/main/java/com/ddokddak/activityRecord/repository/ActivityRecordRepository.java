@@ -36,6 +36,14 @@ public interface ActivityRecordRepository extends JpaRepository<ActivityRecord, 
     List<ActivityRecord> findByMemberIdAndIsDeletedFalseAndBetweenPeriodConditionExceptSelf(
             Long id, Long memberId, LocalDateTime startedAt, LocalDateTime finishedAt);
 
+    @Query("SELECT count(ar) > 0 FROM ActivityRecord ar " +
+            "WHERE ar.member.id = :memberId " +
+            "AND ar.isDeleted = false " +
+            "AND ((ar.startedAt < :startedAt AND ar.finishedAt > :startedAt) " +
+            "OR (ar.startedAt < :finishedAt AND ar.finishedAt > :finishedAt))")
+    Boolean existByMemberIdAndIsDeletedFalseAndBetweenPeriodCondition(
+            Long memberId, LocalDateTime startedAt, LocalDateTime finishedAt);
+
     List<ActivityRecord> findByMemberIdAndStartedAtBetweenAndIsDeletedFalse(
             Long memberId, LocalDateTime fromStartedAt, LocalDateTime toStartedAt);
 
