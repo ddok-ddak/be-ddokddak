@@ -24,16 +24,6 @@ public class ActivityRecordWriteService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public void saveBulkActivityRecords(List<ActivityRecord> activityRecords) {
-        activityRecordJdbcRepository.bulkSave(activityRecords);
-    }
-
-    @Transactional
-    public void saveAll(List<ActivityRecord> activityRecords) {
-        activityRecordRepository.saveAll(activityRecords);
-    }
-
-    @Transactional
     public void removeActivityRecordByMemberIdAndId(Long memberId, Long activityRecordId) {
         /* 기록 아이디 검증 */
         var existingActivityRecord = activityRecordRepository.findByIdAndMemberIdAndIsDeletedFalse(activityRecordId, memberId)
@@ -86,5 +76,15 @@ public class ActivityRecordWriteService {
     public ActivityRecord createActivityRecord(ActivityRecord entity) {
         ActivityRecord saved = activityRecordRepository.save(entity);
         return saved;
+    }
+
+    @Transactional
+    public void saveBulkActivityRecords(List<ActivityRecord> activityRecords) {
+        activityRecordJdbcRepository.bulkSave(activityRecords);
+    }
+
+    @Transactional
+    public void saveAll(List<ActivityRecord> activityRecords) {
+        activityRecordRepository.saveAll(activityRecords);
     }
 }

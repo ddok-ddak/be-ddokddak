@@ -167,9 +167,6 @@ class CategoryControllerTest {
                 .andDo(document("delete-category",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("memberId").optional().description("멤버 아이디(temp)")
-                        ),
                         pathParameters(
                                 parameterWithName("categoryId").description("카테고리 아이디")
                         ),
@@ -246,9 +243,6 @@ class CategoryControllerTest {
                 .andDo(document("modify-category-relation",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("memberId").optional().description("멤버 아이디(temp)")
-                        ),
                         requestFields(
                                 fieldWithPath("categoryId").description("카테고리 아이디"),
                                 fieldWithPath("level").description("카테고리 레벨"),
