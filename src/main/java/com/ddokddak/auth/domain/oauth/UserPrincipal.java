@@ -16,24 +16,27 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     private Long id;
     private String email;
     private String password;
+    private String oauth2Id;
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
     @Builder
-    public UserPrincipal(Long id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Long id, String oauth2Id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
+        this.oauth2Id = oauth2Id;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
     }
 
     /* default login */
-    public static UserPrincipal create(Member member) {
+    public static UserPrincipal create(Member member, String oauth2Id) {
         List<GrantedAuthority> authorities = Collections.
                 singletonList(new SimpleGrantedAuthority(member.getRole().getCode()));
 
         return UserPrincipal.builder()
                 .id(member.getId())
+                .oauth2Id(oauth2Id)
                 .email(member.getEmail())
                 .password(member.getPassword())
                 .authorities(authorities)
@@ -41,8 +44,8 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     }
 
     /* oauth login */
-    public static UserPrincipal create(Member member, Map<String, Object> attributes) {
-        UserPrincipal userPrincipal = UserPrincipal.create(member);
+    public static UserPrincipal create(Member member, String oauth2Id, Map<String, Object> attributes) {
+        UserPrincipal userPrincipal = UserPrincipal.create(member, oauth2Id);
         userPrincipal.setAttributes(attributes);
         return userPrincipal;
     }
@@ -99,4 +102,6 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     public Long getId() {
         return id;
     }
+
+    public String getOauth2Id() { return this.oauth2Id; }
 }

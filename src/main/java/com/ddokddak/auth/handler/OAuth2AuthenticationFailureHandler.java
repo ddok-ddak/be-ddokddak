@@ -13,6 +13,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -34,7 +35,8 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
                 .queryParam("error", exception.getLocalizedMessage())
                 .build().toUriString();
 
+        var redirectUri = request.getParameter("redirect_uri");
         OAuth2AuthorizationRequestWithCookieRepository.removeAuthorizationRequestCookies(request, response);
-        getRedirectStrategy().sendRedirect(request, response, request.getParameter("redirect_uri"));
+        getRedirectStrategy().sendRedirect(request, response, (Objects.nonNull(redirectUri) ? "/login/redirect" : redirectUri));
     }
 }

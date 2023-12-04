@@ -18,7 +18,7 @@ public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
         return authProviderType;
     }
     @Override
-    public String getId() {
+    public String getOauth2Id() {
         return (String) super.getAttributes().get("sub");
     }
     @Override

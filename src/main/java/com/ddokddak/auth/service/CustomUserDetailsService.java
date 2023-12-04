@@ -25,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Optional<UserPrincipal> userPrincipal = memberRepository.findByEmail(email)
                 .map(user -> {
                     if (user.getStatus() == Status.NORMAL) {
-                        return UserPrincipal.create(user);
+                        return UserPrincipal.create(user, null);
                     } else {
                         throw new CustomApiException(email + "-> 활성화되어 있지 않습니다.");
                     }

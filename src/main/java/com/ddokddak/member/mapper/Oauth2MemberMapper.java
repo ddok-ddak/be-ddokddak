@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Objects;
 import java.util.Set;
 
 public class Oauth2MemberMapper {
@@ -51,22 +52,39 @@ public class Oauth2MemberMapper {
     public static Oauth2Member fromAuthorizedClientAndPrincipal(OAuth2AuthorizedClient authorizedClient, Authentication principal) {
 
         ClientRegistration clientRegistration = authorizedClient.getClientRegistration();
+        AuthProviderType authProvider = AuthProviderType.getByCode(clientRegistration.getRegistrationId());
         OAuth2AccessToken accessToken = authorizedClient.getAccessToken();
         OAuth2RefreshToken refreshToken = authorizedClient.getRefreshToken();
+
         UserPrincipal userPrincipal = (UserPrincipal) principal.getPrincipal();
+        var refreshTokenExpiredAt = Oauth2MemberMapper.getRefreshTokenExpiresAt(refreshToken.getIssuedAt(), userPrincipal);
+
         return Oauth2Member.builder()
                 .memberId(userPrincipal.getId())
                 .email(principal.getName())
-                .oauth2Id(userPrincipal.getAttributes().get("sub").toString())
-                .authProvider(AuthProviderType.getByCode(clientRegistration.getRegistrationId()))
+                .oauth2Id(userPrincipal.getOauth2Id())
+                .authProvider(authProvider)
                 .accessTokenType(accessToken.getTokenType().getValue())
                 .accessTokenValue(accessToken.getTokenValue())
                 .accessTokenScope(accessToken.getScopes())
-                .accessTokenIssuedAt(accessToken.getIssuedAt() == null ? null : accessToken.getIssuedAt().atZone(ZoneOffset.UTC).toLocalDateTime())
-                .accessTokenExpiresAt(accessToken.getExpiresAt() == null ? null : accessToken.getExpiresAt().atZone(ZoneOffset.UTC).toLocalDateTime())
+                .accessTokenIssuedAt(accessToken.getIssuedAt() == null ? null
+                        : accessToken.getIssuedAt().atZone(ZoneOffset.UTC).toLocalDateTime())
+                .accessTokenExpiresAt(accessToken.getExpiresAt() == null ? null
+                        : accessToken.getExpiresAt().atZone(ZoneOffset.UTC).toLocalDateTime())
                 .refreshTokenValue(refreshToken != null ? refreshToken.getTokenValue() : null)
-                .refreshTokenIssuedAt(refreshToken != null && refreshToken.getIssuedAt() != null
-                        ? LocalDateTime.from(refreshToken.getIssuedAt().atZone(ZoneOffset.UTC).toLocalDateTime()) : null)
+                .refreshTokenIssuedAt(refreshToken != null && refreshToken.getIssuedAt() == null ? null
+                        : refreshToken.getIssuedAt().atZone(ZoneOffset.UTC).toLocalDateTime())
+                .refreshTokenExpiredAt(refreshTokenExpiredAt == null ? null
+                        : refreshTokenExpiredAt.atZone(ZoneOffset.UTC).toLocalDateTime())
                 .build();
     }
+
+    private static Instant getRefreshTokenExpiresAt(Instant refreshTokenIssuedAt, UserPrincipal userPrincipal) {
+
+        var refreshTokenExpiresIn = ((Number) userPrincipal.getAttributes()
+                .getOrDefault("refresh_token_expires_in", null)).longValue();
+        if (Objects.isNull(refreshTokenExpiresIn)) return null;
+        return (refreshTokenExpiresIn > 0) ? refreshTokenIssuedAt.plusSeconds(refreshTokenExpiresIn) : refreshTokenIssuedAt.plusSeconds(1);
+    }
+
 }
