@@ -2,6 +2,7 @@ package com.ddokddak.category.api;
 
 import com.ddokddak.category.domain.dto.*;
 import com.ddokddak.category.domain.entity.Category;
+import com.ddokddak.category.domain.entity.CategoryIcon;
 import com.ddokddak.category.fixture.CategoryFixture;
 import com.ddokddak.category.mapper.CategoryMapper;
 import com.ddokddak.category.service.CategoryReadService;
@@ -56,15 +57,21 @@ class CategoryControllerTest {
     private DeleteCategoryUsecase deleteCategoryUsecase;
 
     private Member member;
+    private CategoryIcon iconFile;
     private List<Category> mainCategories;
     private List<Category> subCategories;
 
     @BeforeEach
     void setUp() {
         this.member = Member.builder().build();
+        this.iconFile = CategoryIcon.builder()
+                .filename("icon.jpg")
+                .path("/")
+                .originalFilename("1234.jpg")
+                .build();
         // 전달하는 숫자 파라미터에 따라 이름이 정해짐
-        this.mainCategories = CategoryFixture.createMainCategories(0, 4, member);
-        this.subCategories = CategoryFixture.createSubCategories(4, 8, member, mainCategories.get(2));
+        this.mainCategories = CategoryFixture.createMainCategories(0, 4, member, iconFile);
+        this.subCategories = CategoryFixture.createSubCategories(4, 8, member, mainCategories.get(2), iconFile);
 
     }
 
@@ -96,7 +103,7 @@ class CategoryControllerTest {
                                 fieldWithPath("result[].categoryId").description("아이디"),
                                 fieldWithPath("result[].name").description("카테고리 이름"),
                                 fieldWithPath("result[].color").description("색상"),
-                                fieldWithPath("result[].iconName").description("아이콘 파일명"),
+                                fieldWithPath("result[].iconFile").description("아이콘 정보"),
                                 fieldWithPath("result[].level").description("레벨"),
                                 fieldWithPath("result[].mainCategoryId").description("상위 카테고리 아이디")
                         )
@@ -112,7 +119,7 @@ class CategoryControllerTest {
                 .name("test")
                 .color("sample")
                 .highlightColor("sample")
-                .iconName("sample")
+                .iconId(1L)
                 .level(1)
                 .mainCategoryId(1L)
                 .build();
@@ -138,7 +145,7 @@ class CategoryControllerTest {
                                 fieldWithPath("name").description("카테고리 이름"),
                                 fieldWithPath("color").description("색상"),
                                 fieldWithPath("highlightColor").description("하이라이트 색상"),
-                                fieldWithPath("iconName").description("아이콘 파일명"),
+                                fieldWithPath("iconId").description("아이콘 아이디"),
                                 fieldWithPath("level").description("레벨"),
                                 fieldWithPath("mainCategoryId").description("상위 카테고리 아이디")
                         ),
@@ -187,7 +194,7 @@ class CategoryControllerTest {
                 .categoryId(1L)
                 .name("sample")
                 //.color("sample")
-                .iconName("sample")
+                .iconId(1L)
                 .build();
 
         String content = objectMapper.writeValueAsString(dto);
@@ -209,7 +216,7 @@ class CategoryControllerTest {
                         requestFields(
                                 fieldWithPath("categoryId").description("카테고리 아이디"),
                                 fieldWithPath("name").description("카테고리명"),
-                                fieldWithPath("iconName").description("아이콘 파일명")
+                                fieldWithPath("iconId").description("아이콘 아이디")
                         ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태"),
@@ -266,7 +273,7 @@ class CategoryControllerTest {
                 .name("sample")
                 .color("sample")
                 .highlightColor("sample")
-                .iconName("sample")
+                .iconId(1L)
                 .level(0)
                 .build();
 
@@ -283,13 +290,10 @@ class CategoryControllerTest {
                 .andDo(document("modify-category",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("memberId").optional().description("멤버 아이디(temp)")
-                        ),
                         requestFields(
                                 fieldWithPath("categoryId").description("카테고리 아이디"),
                                 fieldWithPath("name").description("카테고리명"),
-                                fieldWithPath("iconName").description("카테고리 아이콘 파일명"),
+                                fieldWithPath("iconId").description("카테고리 아이콘 아이디"),
                                 fieldWithPath("color").description("카테고리 색상"),
                                 fieldWithPath("highlightColor").description("카테고리 하이라이트 색상"),
                                 fieldWithPath("level").description("카테고리 레벨"),

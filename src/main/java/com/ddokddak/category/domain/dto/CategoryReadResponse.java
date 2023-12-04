@@ -1,4 +1,5 @@
 package com.ddokddak.category.domain.dto;
+import com.ddokddak.category.domain.entity.CategoryIcon;
 import lombok.Builder;
 import java.util.List;
 
@@ -7,7 +8,7 @@ public record CategoryReadResponse(
         String name,
         String color,
         String highlightColor,
-        String iconName,
+        CategoryIconReadResponse iconFile,
         Integer level,
         Long mainCategoryId,
         List<CategoryReadResponse> subCategories

@@ -488,7 +488,7 @@ X-XSS-Protection: 1; mode=block
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
-Content-Length: 972
+Content-Length: 1524
 
 {
   "status" : "SUCCESS",
@@ -498,7 +498,13 @@ Content-Length: 972
     "name" : "category0",
     "color" : "color0",
     "highlightColor" : null,
-    "iconName" : "iconName0",
+    "iconFile" : {
+      "id" : null,
+      "iconGroup" : "base",
+      "filename" : "icon.jpg",
+      "originalFilename" : "1234.jpg",
+      "path" : "/"
+    },
     "level" : 0,
     "mainCategoryId" : null,
     "subCategories" : [ ]
@@ -507,7 +513,13 @@ Content-Length: 972
     "name" : "category1",
     "color" : "color1",
     "highlightColor" : null,
-    "iconName" : "iconName1",
+    "iconFile" : {
+      "id" : null,
+      "iconGroup" : "base",
+      "filename" : "icon.jpg",
+      "originalFilename" : "1234.jpg",
+      "path" : "/"
+    },
     "level" : 0,
     "mainCategoryId" : null,
     "subCategories" : [ ]
@@ -516,7 +528,13 @@ Content-Length: 972
     "name" : "category2",
     "color" : "color2",
     "highlightColor" : null,
-    "iconName" : "iconName2",
+    "iconFile" : {
+      "id" : null,
+      "iconGroup" : "base",
+      "filename" : "icon.jpg",
+      "originalFilename" : "1234.jpg",
+      "path" : "/"
+    },
     "level" : 0,
     "mainCategoryId" : null,
     "subCategories" : [ ]
@@ -525,7 +543,13 @@ Content-Length: 972
     "name" : "category3",
     "color" : "color3",
     "highlightColor" : null,
-    "iconName" : "iconName3",
+    "iconFile" : {
+      "id" : null,
+      "iconGroup" : "base",
+      "filename" : "icon.jpg",
+      "originalFilename" : "1234.jpg",
+      "path" : "/"
+    },
     "level" : 0,
     "mainCategoryId" : null,
     "subCategories" : [ ]
@@ -563,7 +587,13 @@ Content-Length: 972
     "name" : "category0",
     "color" : "color0",
     "highlightColor" : null,
-    "iconName" : "iconName0",
+    "iconFile" : {
+      "id" : null,
+      "iconGroup" : "base",
+      "filename" : "icon.jpg",
+      "originalFilename" : "1234.jpg",
+      "path" : "/"
+    },
     "level" : 0,
     "mainCategoryId" : null,
     "subCategories" : [ ]
@@ -572,7 +602,13 @@ Content-Length: 972
     "name" : "category1",
     "color" : "color1",
     "highlightColor" : null,
-    "iconName" : "iconName1",
+    "iconFile" : {
+      "id" : null,
+      "iconGroup" : "base",
+      "filename" : "icon.jpg",
+      "originalFilename" : "1234.jpg",
+      "path" : "/"
+    },
     "level" : 0,
     "mainCategoryId" : null,
     "subCategories" : [ ]
@@ -581,7 +617,13 @@ Content-Length: 972
     "name" : "category2",
     "color" : "color2",
     "highlightColor" : null,
-    "iconName" : "iconName2",
+    "iconFile" : {
+      "id" : null,
+      "iconGroup" : "base",
+      "filename" : "icon.jpg",
+      "originalFilename" : "1234.jpg",
+      "path" : "/"
+    },
     "level" : 0,
     "mainCategoryId" : null,
     "subCategories" : [ ]
@@ -590,7 +632,13 @@ Content-Length: 972
     "name" : "category3",
     "color" : "color3",
     "highlightColor" : null,
-    "iconName" : "iconName3",
+    "iconFile" : {
+      "id" : null,
+      "iconGroup" : "base",
+      "filename" : "icon.jpg",
+      "originalFilename" : "1234.jpg",
+      "path" : "/"
+    },
     "level" : 0,
     "mainCategoryId" : null,
     "subCategories" : [ ]
@@ -646,9 +694,9 @@ Content-Length: 972
 <td class="tableblock halign-left valign-top"><p class="tableblock">색상</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].iconName</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">아이콘 파일명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].iconFile</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">아이콘 정보</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>result[].level</code></p></td>
@@ -677,7 +725,7 @@ Content-Length: 972
   "name" : "test",
   "color" : "sample",
   "highlightColor" : "sample",
-  "iconName" : "sample",
+  "iconId" : 1,
   "level" : 1,
   "mainCategoryId" : 1
 }'</code></pre>
@@ -691,14 +739,14 @@ Content-Length: 972
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/categories HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer {ACCESS_TOKEN}
-Content-Length: 145
+Content-Length: 136
 Host: localhost:8080
 
 {
   "name" : "test",
   "color" : "sample",
   "highlightColor" : "sample",
-  "iconName" : "sample",
+  "iconId" : 1,
   "level" : 1,
   "mainCategoryId" : 1
 }</code></pre>
@@ -740,7 +788,7 @@ Content-Length: 103
   "name" : "test",
   "color" : "sample",
   "highlightColor" : "sample",
-  "iconName" : "sample",
+  "iconId" : 1,
   "level" : 1,
   "mainCategoryId" : 1
 }' | http POST 'http://localhost:8080/api/v1/categories' \
@@ -757,7 +805,7 @@ Content-Length: 103
   "name" : "test",
   "color" : "sample",
   "highlightColor" : "sample",
-  "iconName" : "sample",
+  "iconId" : 1,
   "level" : 1,
   "mainCategoryId" : 1
 }</code></pre>
@@ -796,9 +844,9 @@ Content-Length: 103
 <td class="tableblock halign-left valign-top"><p class="tableblock">하이라이트 색상</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iconName</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">아이콘 파일명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iconId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">아이콘 아이디</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>level</code></p></td>
@@ -879,7 +927,7 @@ Content-Length: 103
     -d '{
   "categoryId" : 1,
   "name" : "sample",
-  "iconName" : "sample"
+  "iconId" : 1
 }'</code></pre>
 </div>
 </div>
@@ -891,13 +939,13 @@ Content-Length: 103
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /api/v1/categories/value HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer {ACCESS_TOKEN}
-Content-Length: 72
+Content-Length: 63
 Host: localhost:8080
 
 {
   "categoryId" : 1,
   "name" : "sample",
-  "iconName" : "sample"
+  "iconId" : 1
 }</code></pre>
 </div>
 </div>
@@ -933,7 +981,7 @@ Content-Length: 87
 <pre class="highlight"><code class="language-bash" data-lang="bash">$ echo '{
   "categoryId" : 1,
   "name" : "sample",
-  "iconName" : "sample"
+  "iconId" : 1
 }' | http PUT 'http://localhost:8080/api/v1/categories/value' \
     'Content-Type:application/json;charset=UTF-8' \
     'Authorization:Bearer {ACCESS_TOKEN}'</code></pre>
@@ -947,7 +995,7 @@ Content-Length: 87
 <pre class="highlight nowrap"><code>{
   "categoryId" : 1,
   "name" : "sample",
-  "iconName" : "sample"
+  "iconId" : 1
 }</code></pre>
 </div>
 </div>
@@ -979,9 +1027,9 @@ Content-Length: 87
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iconName</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">아이콘 파일명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iconId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">아이콘 아이디</p></td>
 </tr>
 </tbody>
 </table>
@@ -1241,7 +1289,7 @@ Content-Length: 87
   "name" : "sample",
   "color" : "sample",
   "highlightColor" : "sample",
-  "iconName" : "sample",
+  "iconId" : 1,
   "level" : 0,
   "mainCategoryId" : null
 }'</code></pre>
@@ -1255,7 +1303,7 @@ Content-Length: 87
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /api/v1/categories HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer {ACCESS_TOKEN}
-Content-Length: 171
+Content-Length: 162
 Host: localhost:8080
 
 {
@@ -1263,7 +1311,7 @@ Host: localhost:8080
   "name" : "sample",
   "color" : "sample",
   "highlightColor" : "sample",
-  "iconName" : "sample",
+  "iconId" : 1,
   "level" : 0,
   "mainCategoryId" : null
 }</code></pre>
@@ -1303,7 +1351,7 @@ Content-Length: 87
   "name" : "sample",
   "color" : "sample",
   "highlightColor" : "sample",
-  "iconName" : "sample",
+  "iconId" : 1,
   "level" : 0,
   "mainCategoryId" : null
 }' | http PUT 'http://localhost:8080/api/v1/categories' \
@@ -1321,7 +1369,7 @@ Content-Length: 87
   "name" : "sample",
   "color" : "sample",
   "highlightColor" : "sample",
-  "iconName" : "sample",
+  "iconId" : 1,
   "level" : 0,
   "mainCategoryId" : null
 }</code></pre>
@@ -1355,9 +1403,9 @@ Content-Length: 87
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iconName</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 아이콘 파일명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>iconId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 아이콘 아이디</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>color</code></p></td>
@@ -1378,27 +1426,6 @@ Content-Length: 87
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>mainCategoryId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">상위 카테고리 아이디 (자신이 대분류인 경우 null)</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="Modify-Category_request_parameters">Request parameters</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디(temp)</p></td>
 </tr>
 </tbody>
 </table>

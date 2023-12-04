@@ -15,8 +15,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql="UPDATE category SET modified_at = NOW(), is_deleted = 1 WHERE id = ?")
-//@Where(clause = "delete_yn = 'N'")
 @Entity
 public class Category extends BaseTimeEntity {
 
@@ -35,8 +33,6 @@ public class Category extends BaseTimeEntity {
     @Column(length = 10)
     private String highlightColor;
 
-    private String iconName;
-
     @Column(length = 1)
     private Integer level;
 
@@ -47,6 +43,12 @@ public class Category extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="MEMBER_ID")
     private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ColumnDefault("1")
+    @JoinColumn(name="CATEGORY_ICON_ID")
+    private CategoryIcon iconFile;
+
 
     @Builder.Default
     @ColumnDefault("0")
@@ -64,8 +66,8 @@ public class Category extends BaseTimeEntity {
         this.name = name;
     }
 
-    public void modifyIconName(String iconName) {
-        this.iconName = iconName;
+    public void modifyIconFile(CategoryIcon iconFile) {
+        this.iconFile = iconFile;
     }
 
     public void modifyCategoryRelation(Integer level, @Nullable Category mainCategory) {

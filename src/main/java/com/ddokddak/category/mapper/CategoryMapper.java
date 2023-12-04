@@ -3,6 +3,7 @@ package com.ddokddak.category.mapper;
 import com.ddokddak.category.domain.dto.CategoryAddRequest;
 import com.ddokddak.category.domain.dto.CategoryReadResponse;
 import com.ddokddak.category.domain.entity.Category;
+import com.ddokddak.category.domain.entity.CategoryIcon;
 import com.ddokddak.member.domain.entity.Member;
 
 import java.util.Collections;
@@ -17,7 +18,7 @@ public class CategoryMapper {
                 .name(category.getName())
                 .color(category.getColor())
                 .highlightColor(category.getHighlightColor())
-                .iconName(category.getIconName())
+                .iconFile(CategoryIconMapper.toReadResponse(category.getIconFile()))
                 .mainCategoryId(category.getMainCategory() == null ? null : category.getMainCategory().getId())
                 .level(category.getLevel())
                 .subCategories(category.getLevel() < level
@@ -36,11 +37,14 @@ public class CategoryMapper {
         return CategoryMapper.toReadCategoryResponse(category, 2);
     }
 
-    public static final Category fromCategoryAddRequest(CategoryAddRequest req, Member member, Category mainCategory) {
+    public static final Category fromCategoryAddRequest(CategoryAddRequest req,
+                                                        Member member,
+                                                        Category mainCategory,
+                                                        CategoryIcon iconFile) {
 
         return Category.builder()
                 .name(req.name())
-                .iconName(req.iconName())
+                .iconFile(iconFile)
                 .color(req.color())
                 .highlightColor(req.highlightColor())
                 .level(req.level())

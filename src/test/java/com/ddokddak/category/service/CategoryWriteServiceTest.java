@@ -1,5 +1,7 @@
 package com.ddokddak.category.service;
 
+import com.ddokddak.category.domain.entity.CategoryIcon;
+import com.ddokddak.category.repository.CategoryIconRepository;
 import com.ddokddak.utils.DatabaseCleanUp;
 import com.ddokddak.category.domain.dto.CategoryAddRequest;
 import com.ddokddak.category.domain.dto.ModifyCategoryRequest;
@@ -32,9 +34,12 @@ class CategoryWriteServiceTest {
     @Autowired
     MemberRepository memberRepository;
     @Autowired
+    CategoryIconRepository categoryIconRepository;
+    @Autowired
     DatabaseCleanUp databaseCleanUp;
 
     private Member member;
+    private CategoryIcon iconFile;
     private List<Category> mainCategories;
     private List<Category> subCategories;
 
@@ -42,12 +47,18 @@ class CategoryWriteServiceTest {
     void setUp() {
         this.member = Member.builder().build();
         memberRepository.save(member);
+        this.iconFile = CategoryIcon.builder()
+                .filename("icon.jpg")
+                .path("/")
+                .originalFilename("1234.jpg")
+                .build();
+        categoryIconRepository.save(iconFile);
 
-        this.mainCategories = CategoryFixture.createMainCategories(0, 4, member);
+        this.mainCategories = CategoryFixture.createMainCategories(0, 4, member, iconFile);
         categoryRepository.saveAll(mainCategories);
 
         // 전달하는 숫자 파라미터에 따라 이름이 정해짐
-        this.subCategories = CategoryFixture.createSubCategories(4, 8, member, mainCategories.get(2));
+        this.subCategories = CategoryFixture.createSubCategories(4, 8, member, mainCategories.get(2), iconFile);
         categoryRepository.saveAll(subCategories);
     }
 
@@ -63,11 +74,12 @@ class CategoryWriteServiceTest {
     void occurExceptionForMainCategoryNameConflictsWithOthersWhenCreating(){
         // given, when
         CategoryAddRequest duplicatedRequest = CategoryAddRequest.builder()
-                                                                .name("category0")
-                                                                .color("color0")
-                                                                .level(0)
-                                                                .mainCategoryId(null)
-                                                                .build();
+                .name("category0")
+                .color("color0")
+                .iconId(this.iconFile.getId())
+                .level(0)
+                .mainCategoryId(null)
+                .build();
         // then
         assertThatThrownBy( ()-> categoryWriteService.addCategory( member.getId(), duplicatedRequest ) )
                 .isInstanceOf( CustomApiException.class )
@@ -92,6 +104,7 @@ class CategoryWriteServiceTest {
                 .name("category00")
                 .color("color0")
                 .level(1)
+                .iconId(1L)
                 .mainCategoryId( notValidatedMainCategory.getId() ) // DB에 없는 아이디
                 .build();
 
@@ -109,6 +122,7 @@ class CategoryWriteServiceTest {
                 .name("category4") // category2에 이미 있는 서브카테고리명
                 .color("color4")
                 .level(1)
+                .iconId(1L)
                 .mainCategoryId( mainCategories.get(2).getId() )
                 .build();
 
@@ -125,6 +139,7 @@ class CategoryWriteServiceTest {
         CategoryAddRequest request = CategoryAddRequest.builder()
                 .name("category11")
                 .color("color11")
+                .iconId(this.iconFile.getId())
                 .level(0)
                 .build();
 
@@ -142,6 +157,7 @@ class CategoryWriteServiceTest {
         CategoryAddRequest request = CategoryAddRequest.builder()
                 .name("category10")
                 .color("color10")
+                .iconId(this.iconFile.getId())
                 .level(1)
                 .mainCategoryId(mainCategories.get(2).getId())
                 .build();
@@ -174,7 +190,7 @@ class CategoryWriteServiceTest {
         var request = ModifyCategoryValueRequest.builder()
                 .categoryId(mainCategory.getId())
                 .name(mainCategories.get(1).getName())
-                .iconName(mainCategory.getIconName())
+                .iconId(1L)
                 //.color(mainCategory.getColor())
                 .build();
 
@@ -191,7 +207,7 @@ class CategoryWriteServiceTest {
         var request = ModifyCategoryValueRequest.builder()
                 .categoryId(subCategory.getId())
                 .name(subCategories.get(2).getName())
-                .iconName(subCategory.getIconName())
+                .iconId(1L)
                 //.color(subCategory.getColor())
                 .build();
 
@@ -277,7 +293,7 @@ class CategoryWriteServiceTest {
                 .categoryId(mainCategory.getId())
                 .name(subCategories.get(0).getName())
                 .color(mainCategory.getColor())
-                .iconName(mainCategory.getIconName())
+                .iconId(1L)
                 .level(1)
                 .mainCategoryId(mainCategories.get(2).getId())
                 .build();
@@ -298,7 +314,7 @@ class CategoryWriteServiceTest {
                 .categoryId(mainCategory.getId())
                 .name(name)
                 .color(mainCategory.getColor())
-                .iconName(mainCategory.getIconName())
+                .iconId(1L)
                 .level(1)
                 .mainCategoryId(mainCategories.get(2).getId()) // 다른 메인 카테고리에 등록
                 .build();

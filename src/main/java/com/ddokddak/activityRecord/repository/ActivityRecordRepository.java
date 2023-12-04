@@ -48,14 +48,15 @@ public interface ActivityRecordRepository extends JpaRepository<ActivityRecord, 
             Long memberId, LocalDateTime fromStartedAt, LocalDateTime toStartedAt);
 
     @Query("SELECT new com.ddokddak.activityRecord.domain.dto.StatsActivityRecordResult(" +
-            "ar.category.id, sum(TIME_TO_SEC(TIMEDIFF(ar.finishedAt, ar.startedAt)) / 60)) " + //, function('date_format', ar.startedAt, '%Y-%m')) " +
+            "ar.category.id, " +
+            "sum(TIME_TO_SEC(TIMEDIFF(ar.finishedAt, ar.startedAt)) / 60)) " + // todo case when 로직 추가하기 - 활동기록이 시작 시간, 종료 시간 조건에 겹치는 경우
             "FROM ActivityRecord ar JOIN ar.category " +
             "WHERE ar.member.id = :memberId " +
             "AND ar.isDeleted = false " +
             "AND ar.category.isDeleted = false " +
             "AND ar.startedAt >= :#{#request.fromStartedAt} " +
             "AND ar.finishedAt <= :#{#request.toFinishedAt} " +
-            "GROUP BY ar.category") //, function('date_format', ar.startedAt, '%Y-%m')" )
+            "GROUP BY ar.category")
     List<StatsActivityRecordResult> statsByMemberIdAndPeriodGroupByCategory(StatsActivityRecordRequest request, Long memberId); //LocalDateTime fromStartedAt, LocalDateTime toFinishedAt
 
     @Modifying

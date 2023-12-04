@@ -2,12 +2,15 @@ package com.ddokddak.category.service;
 
 import com.ddokddak.category.domain.dto.*;
 import com.ddokddak.category.domain.entity.Category;
+import com.ddokddak.category.domain.entity.CategoryIcon;
+import com.ddokddak.category.repository.CategoryIconRepository;
 import com.ddokddak.category.repository.CategoryJdbcRepository;
 import com.ddokddak.category.repository.CategoryRepository;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.BaseException;
 import com.ddokddak.common.exception.type.CategoryException;
+import com.ddokddak.common.exception.type.CategoryIconException;
 import com.ddokddak.common.exception.type.MemberException;
 import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.member.domain.enums.TemplateType;
@@ -28,13 +31,16 @@ public class CategoryWriteService {
     private final CategoryRepository categoryRepository;
     private final CategoryJdbcRepository categoryJdbcRepository;
     private final MemberRepository memberRepository;
+    private final CategoryIconRepository categoryIconRepository;
 
 
     @Transactional
     public CategoryAddResponse addCategory(Long memberId, CategoryAddRequest req) {
-        Member member = memberRepository.findById( memberId ).orElseThrow(
-                () -> new CustomApiException( MemberException.MEMBER_ID )
-        );
+
+        Member member = memberRepository.findById( memberId )
+                .orElseThrow(() -> new CustomApiException( MemberException.MEMBER_ID ));
+
+        CategoryIcon categoryIcon = this.categoryIconRepository.getReferenceById(req.iconId());
 
         Category category = null;
         Long createdCategoryId  = null;
@@ -49,7 +55,7 @@ public class CategoryWriteService {
                 throw new CustomApiException(CategoryException.USED_NAME_CONFLICTS);
             }
 
-            category = fromCategoryAddRequest(req, member, null);
+            category = fromCategoryAddRequest(req, member, null, categoryIcon);
             createdCategoryId = categoryRepository.save( category ).getId();
         }
 
@@ -74,7 +80,7 @@ public class CategoryWriteService {
                 throw new CustomApiException(CategoryException.USED_NAME_CONFLICTS);
             }
 
-            category = fromCategoryAddRequest(req, member, mainCategory);
+            category = fromCategoryAddRequest(req, member, mainCategory, categoryIcon);
             createdCategoryId = categoryRepository.save(category).getId();
         }
 
@@ -107,7 +113,7 @@ public class CategoryWriteService {
 
         var isEqualName = Objects.equals(req.name(), category.getName());
 //        var isEqualColor = Objects.equals(req.color(), category.getColor());
-        var isEqualIconName = Objects.equals(req.iconName(), category.getIconName());
+        var isEqualIconName = Objects.equals(req.iconId(), category.getIconFile().getId());
 
         if (isEqualName && isEqualIconName) { // isEqualColor &&
             throw new CustomApiException(BaseException.UNABLE_REQUEST);
@@ -119,7 +125,11 @@ public class CategoryWriteService {
             category.modifyName(req.name());
         }
 //        if (!isEqualColor) category.modifyColor(req.color());
-        if (!isEqualIconName) category.modifyIconName(req.iconName());
+        var iconFile = this.categoryIconRepository.getReferenceById(req.iconId());
+        //findByIdAndIsDeletedFalse(req.iconId())
+        //        .orElseThrow(() -> new CustomApiException(CategoryIconException.ICON_ID));
+
+        if (!isEqualIconName) category.modifyIconFile(iconFile);
     }
 
     /**

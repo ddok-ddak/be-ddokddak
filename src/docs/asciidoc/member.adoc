@@ -5,3 +5,27 @@
 
 [[Read-MemberInfo]]
 === 회원 정보 조회
+
+operation::get-member-info[]
+
+[[Check-DuplicatedEmail]]
+=== 회원 중복 이메일 확인
+
+operation::check-if-duplicated-email
+
+[[Set-Member-CategoryTemplate]]
+=== 회원 카테고리 템플릿 설정
+- 회원가입 후 최초 한번 카테고리 템플릿 설정시 사용됩니다.
+
+operation::set-category-template[]
+
+[[Update-StratDay]]
+=== 회원별 활동기록 시작 일자 수정
+
+operation::update-start-day[]
+
+[[Update-StratTime]]
+=== 회원별 활동기록 시작 시간 수정
+
+operation::update-start-time[]
+

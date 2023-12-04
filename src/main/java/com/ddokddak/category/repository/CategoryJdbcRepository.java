@@ -21,9 +21,9 @@ public class CategoryJdbcRepository {
 
     @Transactional
     public void batchInsert(List<CategoryTemplate> list, Long memberId) {
-        var sql = "INSERT INTO category (MEMBER_ID, NAME, COLOR, HIGHLIGHT_COLOR, ICON_NAME, LEVEL, PARENT_ID, IS_DELETED, CREATED_AT) " +
+        var sql = "INSERT INTO category (MEMBER_ID, NAME, COLOR, HIGHLIGHT_COLOR, ICON_ID, LEVEL, PARENT_ID, IS_DELETED, CREATED_AT) " +
                 "VALUES " +
-                "( ?, ?, ?, ?, ?, (SELECT ID FROM (SELECT ID FROM CATEGORY WHERE MEMBER_ID=? AND NAME=?) AS SUB), 0, NOW())";
+                "( ?, ?, ?, (SELECT ID FROM CATEGORY_ICON WHERE ICON_GROUP=? AND FILENAME=?), ?, (SELECT ID FROM (SELECT ID FROM CATEGORY WHERE MEMBER_ID=? AND NAME=?) AS SUB), 0, NOW())";
         try {
             jdbcTemplate.batchUpdate(
                     sql,
@@ -34,10 +34,11 @@ public class CategoryJdbcRepository {
                         ps.setString(2, arg.getName());
                         ps.setString(3, arg.getColor());
                         ps.setString(3, arg.getHighlightColor());
-                        ps.setString(4, arg.getIconName());
-                        ps.setInt(5, arg.getParentName()==null?0:1);
-                        ps.setLong(6, memberId);
-                        ps.setString(7, arg.getParentName());
+                        ps.setString(4, arg.getIconGroup());
+                        ps.setString(5, arg.getIconFilename());
+                        ps.setInt(6, arg.getParentName()==null?0:1);
+                        ps.setLong(7, memberId);
+                        ps.setString(8, arg.getParentName());
                         //ps.setString(7, "N");
                     });
         } catch (Exception e) {
