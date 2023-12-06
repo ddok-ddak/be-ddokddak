@@ -14,9 +14,10 @@ public class ActivityRecordFixture {
     public static List<ActivityRecord> createActivityRecords(int start, int end, Member member, List<Category> categories) {
 
         var startedTime = LocalDateTime.now();
+        var categoreisLength = categories.size();
         var activityRecordList = IntStream.range(start, end)
                 .mapToObj(i -> ActivityRecord.builder()
-                        .category(categories.get(i))
+                        .category(categories.get(i % categoreisLength))
                         .startedAt(startedTime.minusMinutes(30*(i+1)))
                         .finishedAt(startedTime.minusMinutes(30*i))
                         .content("content")

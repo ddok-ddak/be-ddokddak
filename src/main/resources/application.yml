@@ -1,7 +1,7 @@
 # default
 spring:
   profiles:
-    active: local #dev-local
+    active: local # dev-local
     group:
       local: local, common, auth
       test: test, common, test-auth
@@ -185,3 +185,4 @@ spring:
   sql:
     init:
       mode: never
+      data-locations: classpath:data.sql

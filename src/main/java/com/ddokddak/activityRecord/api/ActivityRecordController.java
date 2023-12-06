@@ -28,6 +28,20 @@ public class ActivityRecordController {
     private final ActivityRecordReadService activityRecordReadService;
     private final ActivityRecordWriteService activityRecordWriteService;
 
+    @PostMapping
+    public ResponseEntity<CommonResponse<Boolean>> createActivityRecord(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestBody CreateActivityRecordRequest req)
+    {
+        createActivityRecordUsecase.execute(req, userPrincipal.getId());
+        URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                .build()
+                .toUri();
+
+        return ResponseEntity.created(location)
+                .body(new CommonResponse<>("Successfully Created", Boolean.TRUE));
+    }
+
     @PutMapping
     public ResponseEntity<CommonResponse<Boolean>> modifyActivityRecord(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
@@ -61,17 +75,4 @@ public class ActivityRecordController {
         return ResponseEntity.ok(new CommonResponse<>("Success", response));
     }
 
-    @PostMapping
-    public ResponseEntity<CommonResponse<Boolean>> createActivityRecord(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @RequestBody CreateActivityRecordRequest req)
-    {
-        createActivityRecordUsecase.execute(req, userPrincipal.getId());
-        URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
-                .build()
-                .toUri();
-
-        return ResponseEntity.created(location)
-                .body(new CommonResponse<>("Successfully Created", Boolean.TRUE));
-    }
 }

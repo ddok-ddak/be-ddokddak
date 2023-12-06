@@ -15,3 +15,5 @@
 
 include::src/docs/asciidoc/category.adoc[]
 include::src/docs/asciidoc/activityRecord.adoc[]
+include::src/docs/asciidoc/member.adoc[]
+include::src/docs/asciidoc/auth.adoc[]

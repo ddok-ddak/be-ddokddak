@@ -1,35 +1,36 @@
 [[Category-API]]
 == Category-API
 - 로그인시 jwt를 이용합니다.
+- 회원의 활동 카테고리를 조회 및 관리하기 위한 기능을 제공합니다.
 
 [[Read-Categories]]
 === Category 정보 조회
 
-operation::read-category[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']
+operation::read-category[]
 
 [[Create-Category]]
 === Category 추가
 
-operation::create-category[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']
+operation::create-category[]
 
 [[Modify-Category-Value]]
 === Category 속성 정보 수정
 
-operation::modify-category-value[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']
+operation::modify-category-value[]
 
 [[Modify-Category-Relation]]
 === Category 관계 정보 수정
 
-operation::modify-category-relation[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']
+operation::modify-category-relation[]
 
 [[Modify-Category]]
 === Category 수정
 - 요구사항에 없으나 생성해둔 API입니다.
 
-operation::modify-category[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']
+operation::modify-category[]
 
 
 [[Delete-Category]]
 === Category 삭제
 
-operation::delete-category[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']
+operation::delete-category[]

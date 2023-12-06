@@ -3,12 +3,33 @@
 - 필요한 경우, memberId를 url 파라미터로 전달합니다.
 - 추후 로그인이 적용되면, 이 파라미터는 제거하고 jwt를 이용할 예정입니다.
 
+[[Read-ActivityRecord]]
+=== ActivityRecord 조회
+
+operation::read-activity-record[snippets='curl-request,http-request,http-response,response-fields']
+
+
+[[Read-Stats-ActivityRecord]]
+=== ActivityRecord 통계 조회
+
+operation::read-activity-record-stats[]
+
 [[Create-ActivityRecord]]
 === ActivityRecord 등록
 
-operation::create-activity-record[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']
+operation::create-activity-record[]
 
 [[Create-ActivityRecord-404]]
 === ActivityRecord 등록 - 404 예외 발생
 
-operation::create-activity-record-404[sn ippets='request-fields,curl-request, http-request, request-headers, http-response, response-headers, response-fields, links']
+operation::create-activity-record-404[]
+
+[[Modify-ActivityRecord]]
+=== ActivityRecord 수정
+
+operation::modify-activity-record[]
+
+[[Remove-ActivityRecord]]
+=== ActivityRecord 삭제
+
+operation::remove-activity-record[]

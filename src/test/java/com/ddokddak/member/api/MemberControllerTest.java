@@ -212,6 +212,7 @@ class MemberControllerTest {
     void getCurrentUserInfo() throws Exception {
 
         var response = MemberMapper.toMemberResponse(this.member);
+
         // when, then
         given(memberReadService.getUserDtoByEmail(any())).willReturn(response);
 
