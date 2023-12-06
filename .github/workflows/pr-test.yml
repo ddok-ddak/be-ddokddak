@@ -3,8 +3,9 @@ on:
   pull_request:
     branches: dev
 permissions:
-  contents: read
-
+  contents: write
+  pull-requests: write
+  
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -25,12 +26,24 @@ jobs:
         run: ./gradlew clean test
 
       - name: if fail
-        uses: actions/github-script@v5
         if: failure()
+        uses: actions/github-script@v6
         with:
-          script: |
-           github.rest.issues.createComment({
-              ...context.repo,
-              issue_number: context.issue.number,
-              body:"test failed : 코드를 다시 확인해주세요."
-            })
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: | 
+            const pull_number = ${{ github.event.pull_request.number }}
+            const updated_title = `[BUILD FAIL] ${{ github.event.pull_request.title }}`
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pull_number,
+              body: "Test failed: 코드를 다시 확인해주세요.",
+              event: "COMMENT"
+            });
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pull_number,
+              title: updated_title,
+              state: 'closed'
+            });
