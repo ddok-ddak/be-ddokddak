@@ -20,8 +20,11 @@ public class NaverOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @Override
-    public String getId() {
-        return super.getAttributes().get("id").toString();
+    public String getOauth2Id() {
+        if (attributesResponse == null) {
+            return null;
+        }
+        return this.attributesResponse.get("id").toString();
     }
 
     @Override

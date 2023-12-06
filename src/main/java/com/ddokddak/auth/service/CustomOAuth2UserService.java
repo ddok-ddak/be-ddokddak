@@ -8,6 +8,7 @@ import com.ddokddak.member.domain.enums.AuthProviderType;
 import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.member.service.MemberReadService;
 import com.ddokddak.member.service.MemberWriteService;
+import com.google.common.collect.ImmutableMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -18,6 +19,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -57,7 +60,19 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         } else { // 가입되지 않은 경우
             member = memberWriteService.registerForOauth2(userInfo);
         }
-        return UserPrincipal.create(member, oAuth2User.getAttributes());
+
+        var attributes = this.buildNewAttributesMap(oAuth2User.getAttributes(), oAuth2UserRequest.getAdditionalParameters());
+        return UserPrincipal.create(member, userInfo.getOauth2Id(), attributes);
+    }
+
+    private Map<String, Object> buildNewAttributesMap(Map<String, Object> attributes, Map<String, Object> additionalParameters) {
+
+        var newAttributes = ImmutableMap.<String, Object> builder()
+                .putAll(attributes)
+                .putAll(additionalParameters)
+                .build();
+
+        return newAttributes;
     }
 
 }

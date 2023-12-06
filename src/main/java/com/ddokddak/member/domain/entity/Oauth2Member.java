@@ -69,6 +69,9 @@ public class Oauth2Member {
     @Column
     private LocalDateTime refreshTokenIssuedAt;
 
+    @Column
+    private LocalDateTime refreshTokenExpiredAt;
+
     @Builder.Default
     @ColumnDefault("0")
     private Boolean isDeleted = Boolean.FALSE;
@@ -89,7 +92,7 @@ public class Oauth2Member {
         this.accessTokenExpiresAt = accessToken.getExpiresAt() == null ? null : accessToken.getExpiresAt().atZone(ZoneOffset.UTC).toLocalDateTime();
         this.refreshTokenValue = refreshToken != null ? refreshToken.getTokenValue() : null;
         this.refreshTokenIssuedAt = refreshToken != null && refreshToken.getIssuedAt() != null
-                ? LocalDateTime.from(refreshToken.getIssuedAt()) : null;
+                ? refreshToken.getIssuedAt().atZone(ZoneOffset.UTC).toLocalDateTime() : null;
     }
 
     public void modifyForDeletingAuthentication() {

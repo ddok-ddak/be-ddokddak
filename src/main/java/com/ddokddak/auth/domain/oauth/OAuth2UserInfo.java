@@ -35,7 +35,7 @@ public abstract class OAuth2UserInfo {
 
   public abstract AuthProviderType getProviderType();
 
-  public abstract String getId();
+  public abstract String getOauth2Id();
 
   public abstract String getName();
 
