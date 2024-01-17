@@ -20,11 +20,11 @@ import java.util.stream.Collectors;
 public class StatsActivityRecordUsecase {
     private final ActivityRecordReadService activityRecordReadService;
     private final CategoryReadService categoryReadService;
-    private final MemberRepository memberRepository;
 
+    // todo 디비에서 최대한 해결하는 로직 구현 후 성능 비교해보기
     @Transactional(readOnly = true)
     public List<StatsActivityRecordResponse> execute(StatsActivityRecordRequest req, Long memberId) {
-        var categories = categoryReadService.findByMemberId(memberId); //categoryReadService.findByRefMember(memberRepository.getReferenceById(memberId));
+        var categories = categoryReadService.findByMemberId(memberId);
         var statsActivityRecordResponses = activityRecordReadService.statsByMemberIdAndPeriod(req, memberId);
 
         // 부모 카테고리 기준 그루핑

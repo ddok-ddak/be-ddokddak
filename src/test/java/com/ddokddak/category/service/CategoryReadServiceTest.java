@@ -23,12 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryReadServiceTest {
+
     @Mock
     private CategoryRepository categoryRepository;
-
     @Mock
     private MemberRepository memberRepository;
-
     @InjectMocks
     private CategoryReadService categoryReadService;
 

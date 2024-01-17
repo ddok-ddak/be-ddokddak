@@ -10,6 +10,7 @@ import com.ddokddak.activityRecord.service.ActivityRecordReadService;
 import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
 import com.ddokddak.auth.filter.JwtAuthenticationFilter;
 import com.ddokddak.category.domain.entity.Category;
+import com.ddokddak.category.domain.entity.CategoryIcon;
 import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.ActivityException;
 import com.ddokddak.member.domain.entity.Member;
@@ -80,11 +81,15 @@ class ActivityRecordControllerTest {
     @BeforeEach
     void setUp() {
         var member = Member.builder().id(1L).build();
+        var categoryIcon = CategoryIcon.builder()
+                .id(1L)
+                .iconGroup("base")
+                .build();
         this.category = Category.builder()
                 .id(1L)
                 .name("test")
                 .color("blue")
-                .iconName("icon.jpg")
+                .iconFile(categoryIcon)
                 .level(0)
                 .mainCategory(null)
                 .member(member)

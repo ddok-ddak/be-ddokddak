@@ -9,7 +9,7 @@ public record CategoryAddRequest(
         @NotNull String name,
         @NotNull String color,
         @NotNull String highlightColor,
-        @NotNull String iconName,
+        @NotNull Long iconId,
         @NotNull Integer level,
         @Nullable Long mainCategoryId
 ){

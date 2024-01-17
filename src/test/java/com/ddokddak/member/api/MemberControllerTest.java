@@ -75,69 +75,6 @@ class MemberControllerTest {
     void tearDown() {
     }
 
-    @DisplayName("회원가입 중 중복된 이메일이 있는지 검증_200")
-    @Test
-    void checkIfDuplicatedEmail() throws Exception {
-
-        // when, then
-        doNothing().when(memberReadService).checkIfDuplicatedUserByEmail(any());
-
-        mockMvc.perform(get("/api/v1/members/duplicatedEmail")
-                        .param("email", "test@example.com"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andDo(document("check-if-duplicated-email",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("email").description("검증할 이메일 주소")
-                        ),
-                        responseFields(
-                                fieldWithPath("status").description("응답 상태"),
-                                fieldWithPath("message").description("응답 메세지"),
-                                subsectionWithPath("result").description("결과값")
-                        )
-                ));
-    }
-
-    @DisplayName("중복된 이메일이 있는 경우_409")
-    @Test
-    void return409ExceptionWhenDuplicatedEmail() {
-    }
-
-    @DisplayName("회원가입 중 중복된 닉네임이 있는지 검증_200")
-    @Test
-    void checkIfDuplicatedNickname() throws Exception {
-
-        // when, then
-        doNothing().when(memberReadService).checkIfDuplicatedUserByNickname(any());
-
-        mockMvc.perform(get("/api/v1/members/duplicateNickname")
-                        .param("nickname", "test"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andDo(document("check-if-duplicated-nickname",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestParameters(
-                                parameterWithName("nickname").description("검증할 닉네임명")
-                        ),
-                        responseFields(
-                                fieldWithPath("status").description("응답 상태"),
-                                fieldWithPath("message").description("응답 메세지"),
-                                subsectionWithPath("result").description("결과값")
-                        )
-                ));
-    }
-
-
-    @DisplayName("중복된 닉네임이 있는 경우_409")
-    @Test
-    void return409ExceptionWhenDuplicatedNickname() throws Exception {
-    }
-
     @WithMockUser
     @DisplayName("시작시간 커스텀 수정_200")
     @Test
@@ -272,4 +209,67 @@ class MemberControllerTest {
                         )
                 ));
     }
+
+    @DisplayName("회원가입 중 중복된 이메일이 있는지 검증_200")
+    @Test
+    void checkIfDuplicatedEmail() throws Exception {
+
+        // when, then
+        doNothing().when(memberReadService).checkIfDuplicatedUserByEmail(any());
+
+        mockMvc.perform(get("/api/v1/members/duplicatedEmail")
+                        .param("email", "test@example.com"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("check-if-duplicated-email",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("email").description("검증할 이메일 주소")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("응답 메세지"),
+                                subsectionWithPath("result").description("결과값")
+                        )
+                ));
+    }
+
+    @DisplayName("중복된 이메일이 있는 경우_409")
+    @Test
+    void return409ExceptionWhenDuplicatedEmail() {
+    }
+
+    @DisplayName("회원가입 중 중복된 닉네임이 있는지 검증_200")
+    @Test
+    void checkIfDuplicatedNickname() throws Exception {
+
+        // when, then
+        doNothing().when(memberReadService).checkIfDuplicatedUserByNickname(any());
+
+        mockMvc.perform(get("/api/v1/members/duplicateNickname")
+                        .param("nickname", "test"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("check-if-duplicated-nickname",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("nickname").description("검증할 닉네임명")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태"),
+                                fieldWithPath("message").description("응답 메세지"),
+                                subsectionWithPath("result").description("결과값")
+                        )
+                ));
+    }
+
+    @DisplayName("중복된 닉네임이 있는 경우_409")
+    @Test
+    void return409ExceptionWhenDuplicatedNickname() throws Exception {
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.ddokddak.activityRecord.service;
 
 import com.ddokddak.activityRecord.domain.dto.ReadActivityRecordRequest;
+import com.ddokddak.category.domain.entity.CategoryIcon;
+import com.ddokddak.category.repository.CategoryIconRepository;
 import com.ddokddak.utils.DatabaseCleanUp;
 import com.ddokddak.activityRecord.domain.dto.ModifyActivityRecordRequest;
 import com.ddokddak.activityRecord.domain.entity.ActivityRecord;
@@ -39,9 +41,12 @@ class ActivityRecordServiceTest {
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
+    CategoryIconRepository categoryIconRepository;
+    @Autowired
     DatabaseCleanUp databaseCleanUp;
 
     private Member member;
+    private CategoryIcon iconFile;
     private List<Category> mainCategories;
     private List<Category> subCategories;
 
@@ -51,12 +56,18 @@ class ActivityRecordServiceTest {
     void setUp() {
         this.member = Member.builder().build();
         memberRepository.save(member);
+        this.iconFile = CategoryIcon.builder()
+                .filename("icon.jpg")
+                .path("/")
+                .originalFilename("1234.jpg")
+                .build();
+        categoryIconRepository.save(iconFile);
 
-        this.mainCategories = CategoryFixture.createMainCategories(0, 4, member);
+        this.mainCategories = CategoryFixture.createMainCategories(0, 4, member, iconFile);
         categoryRepository.saveAll(mainCategories);
 
         // 전달하는 숫자 파라미터에 따라 이름이 정해짐
-        this.subCategories = CategoryFixture.createSubCategories(4, 8, member, mainCategories.get(2));
+        this.subCategories = CategoryFixture.createSubCategories(4, 8, member, mainCategories.get(2), iconFile);
         categoryRepository.saveAll(subCategories);
 
         this.activityRecords = ActivityRecordFixture.createActivityRecords( 0,4, member, mainCategories );

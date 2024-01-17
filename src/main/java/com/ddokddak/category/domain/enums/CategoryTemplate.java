@@ -5,5 +5,6 @@ public interface CategoryTemplate {
     String getName();
     String getColor();
     String getHighlightColor();
-    String getIconName();
+    String getIconGroup();
+    String getIconFilename();
 }
