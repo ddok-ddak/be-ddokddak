@@ -14,12 +14,14 @@ import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.member.domain.enums.TemplateType;
 import com.ddokddak.member.mapper.MemberMapper;
 import com.ddokddak.member.repository.MemberRepository;
+import com.ddokddak.member.repository.Oauth2MemberRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -27,7 +29,7 @@ import java.util.UUID;
 @Service
 public class MemberWriteService {
     private final MemberRepository memberRepository;
-    private final CategoryWriteService categoryWriteService;
+    private final Oauth2MemberRepository oauth2MemberRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -98,5 +100,20 @@ public class MemberWriteService {
                 .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
         var previousTemplateType = member.modifyCategoryTemplateType(req.templateType());
         return previousTemplateType;
+    }
+
+    @Transactional
+    public void withdraw(Long memberId) {
+
+        var member = memberRepository.findById(memberId)
+                .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
+        member.setStatusWithdrawal();
+
+        if (Objects.nonNull(member.getOauth2Id())) {
+            var oauth2Member = oauth2MemberRepository.findByOauth2Id(member.getOauth2Id());
+            if (oauth2Member.isPresent()) {
+                oauth2Member.get().modifyForDeletingAuthentication();
+            }
+        }
     }
 }

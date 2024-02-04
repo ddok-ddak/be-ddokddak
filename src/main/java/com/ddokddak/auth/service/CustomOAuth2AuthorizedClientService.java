@@ -55,7 +55,6 @@ public class CustomOAuth2AuthorizedClientService implements OAuth2AuthorizedClie
         var oauth2Member = this.getOauth2Member(principalName, clientRegistrationId);
         boolean existsOauth2Member = null != oauth2Member;
 
-
         if (existsOauth2Member) {
             this.updateOauth2Member(oauth2Member, authorizedClient, principal);
         }

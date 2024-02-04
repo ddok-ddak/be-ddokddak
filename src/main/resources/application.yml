@@ -171,7 +171,7 @@ cors:
   allowedHeaders: '*'
   maxAgeSec: 3600
 app:
-  baseUrl: 'https://dodonenow.com'
+  baseUrl: 'http://localhost:3000'
 
 ---
 # dev-local 환경

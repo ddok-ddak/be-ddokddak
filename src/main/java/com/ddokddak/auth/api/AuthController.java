@@ -1,6 +1,7 @@
 package com.ddokddak.auth.api;
 
 import com.ddokddak.auth.domain.dto.*;
+import com.ddokddak.auth.domain.oauth.UserPrincipal;
 import com.ddokddak.auth.service.EmailAuthenticationService;
 import com.ddokddak.common.dto.CommonResponse;
 import com.ddokddak.common.props.AppProperties;
@@ -14,11 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -60,21 +63,24 @@ public class AuthController {
         String accessToken = jwtUtil.createAccessToken(authentication);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create(appProperties.getBaseUrl() + "/signin/redirect"));
+        var redirectUri = UriComponentsBuilder.fromUriString(appProperties.getBaseUrl() + "/signin/redirect")
+                .queryParam("accessToken", accessToken)
+                .build();
+        httpHeaders.setLocation(redirectUri.toUri());
         httpHeaders.add(JwtUtil.AUTHORIZATION_HEADER, "Bearer " + accessToken);
         CookieUtil.addCookie(response, CookieUtil.ACCESS_TOKEN_COOKIE_NAME, accessToken, CookieUtil.COOKIE_EXPIRE_SECONDS);
 
-        SigninResponse signinResponse = SigninResponse.builder()
-                .email(signingRequest.email())
-                .authorization("Bearer " + accessToken)
-                .build();
+//        SigninResponse signinResponse = SigninResponse.builder()
+//                .email(signingRequest.email())
+//                .authorization("Bearer " + accessToken)
+//                .build();
 
- //       return new ResponseEntity<>(new CommonResponse<>("Signed in Successfully", null),
-//                httpHeaders,
-//                HttpStatus.MOVED_PERMANENTLY);
-        return ResponseEntity.ok()
-                .headers(httpHeaders)
-                .body(new CommonResponse<>("Signed in Successfully", signinResponse));
+        return new ResponseEntity<>(new CommonResponse<>("Signed in Successfully", null),
+                httpHeaders,
+                HttpStatus.MOVED_PERMANENTLY);
+//        return ResponseEntity.ok()
+//                .headers(httpHeaders)
+//                .body(new CommonResponse<>("Signed in Successfully", signinResponse));
     }
 
     @PostMapping(value = "/signout")
@@ -88,6 +94,20 @@ public class AuthController {
         return new ResponseEntity<>(new CommonResponse<>("Signed out Successfully", null),
                 httpHeaders,
                 HttpStatus.MOVED_PERMANENTLY);
+    }
+
+    @PostMapping(value = "/withdrawal")
+    public ResponseEntity<CommonResponse<SigninResponse>> withdraw(
+            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+
+        memberWriteService.withdraw(userPrincipal.getId());
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(URI.create(appProperties.getBaseUrl()));
+
+        return ResponseEntity.ok()
+                .headers(httpHeaders)
+                .body(new CommonResponse<>("WithDrew Successfully", null));
     }
 
     @PostMapping("/email/code")

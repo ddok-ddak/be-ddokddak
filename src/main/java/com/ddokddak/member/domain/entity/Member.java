@@ -134,4 +134,8 @@ public class Member extends BaseTimeEntity {
         this.templateType = templateType;
         return previousTemplateType;
     }
+
+    public void setStatusWithdrawal() {
+        this.status = Status.WITHDRAWAL;
+    }
 }
