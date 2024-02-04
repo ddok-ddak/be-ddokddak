@@ -60,7 +60,6 @@ public interface ActivityRecordRepository extends JpaRepository<ActivityRecord, 
     List<StatsActivityRecordResult> statsByMemberIdAndPeriodGroupByCategory(StatsActivityRecordRequest request, Long memberId); //LocalDateTime fromStartedAt, LocalDateTime toFinishedAt
 
     @Modifying
-    @Transactional
     @Query("UPDATE ActivityRecord ar SET ar.isDeleted = 1, ar.modifiedAt = NOW() WHERE ar.member.id=:id AND ar.id = :activityRecordId")
     void softDeleteByMemberIdAndId(Long id, Long activityRecordId);
 

@@ -57,8 +57,10 @@ public class Oauth2MemberMapper {
         OAuth2RefreshToken refreshToken = authorizedClient.getRefreshToken();
 
         UserPrincipal userPrincipal = (UserPrincipal) principal.getPrincipal();
-        var refreshTokenExpiredAt = Oauth2MemberMapper.getRefreshTokenExpiresAt(refreshToken.getIssuedAt(), userPrincipal);
-
+        Instant refreshTokenExpiredAt = null;
+        if (Objects.nonNull(refreshToken)) {
+            refreshTokenExpiredAt = Oauth2MemberMapper.getRefreshTokenExpiresAt(refreshToken.getIssuedAt(), userPrincipal);
+        }
         return Oauth2Member.builder()
                 .memberId(userPrincipal.getId())
                 .email(principal.getName())
@@ -72,7 +74,7 @@ public class Oauth2MemberMapper {
                 .accessTokenExpiresAt(accessToken.getExpiresAt() == null ? null
                         : accessToken.getExpiresAt().atZone(ZoneOffset.UTC).toLocalDateTime())
                 .refreshTokenValue(refreshToken != null ? refreshToken.getTokenValue() : null)
-                .refreshTokenIssuedAt(refreshToken != null && refreshToken.getIssuedAt() == null ? null
+                .refreshTokenIssuedAt(refreshToken == null || refreshToken.getIssuedAt() == null ? null
                         : refreshToken.getIssuedAt().atZone(ZoneOffset.UTC).toLocalDateTime())
                 .refreshTokenExpiredAt(refreshTokenExpiredAt == null ? null
                         : refreshTokenExpiredAt.atZone(ZoneOffset.UTC).toLocalDateTime())
@@ -81,10 +83,10 @@ public class Oauth2MemberMapper {
 
     private static Instant getRefreshTokenExpiresAt(Instant refreshTokenIssuedAt, UserPrincipal userPrincipal) {
 
-        var refreshTokenExpiresIn = ((Number) userPrincipal.getAttributes()
-                .getOrDefault("refresh_token_expires_in", null)).longValue();
+        var refreshTokenExpiresIn = ((Long) userPrincipal.getAttributes()
+                .getOrDefault("refresh_token_expires_in", null));
         if (Objects.isNull(refreshTokenExpiresIn)) return null;
-        return (refreshTokenExpiresIn > 0) ? refreshTokenIssuedAt.plusSeconds(refreshTokenExpiresIn) : refreshTokenIssuedAt.plusSeconds(1);
+        return (refreshTokenExpiresIn > 0) ? refreshTokenIssuedAt.plusSeconds(refreshTokenExpiresIn) : null;
     }
 
 }

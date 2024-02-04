@@ -10,4 +10,5 @@ public interface Oauth2MemberRepository extends JpaRepository<Oauth2Member, Long
 
     public Optional<Oauth2Member> findByEmailAndAuthProviderAndIsDeletedFalse(String oauth2Id, AuthProviderType authProvider);
 
+    Optional<Oauth2Member> findByOauth2Id(String oauth2Id);
 }
