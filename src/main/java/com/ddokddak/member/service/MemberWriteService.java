@@ -2,7 +2,6 @@ package com.ddokddak.member.service;
 
 import com.ddokddak.auth.domain.oauth.OAuth2UserInfo;
 import com.ddokddak.category.domain.dto.CategoryTemplateRequest;
-import com.ddokddak.category.service.CategoryWriteService;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.MemberException;
@@ -14,7 +13,7 @@ import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.member.domain.enums.TemplateType;
 import com.ddokddak.member.mapper.MemberMapper;
 import com.ddokddak.member.repository.MemberRepository;
-import com.ddokddak.member.repository.Oauth2MemberRepository;
+import com.ddokddak.member.repository.OAuth2MemberRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +28,7 @@ import java.util.UUID;
 @Service
 public class MemberWriteService {
     private final MemberRepository memberRepository;
-    private final Oauth2MemberRepository oauth2MemberRepository;
+    private final OAuth2MemberRepository oauth2MemberRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -67,10 +66,11 @@ public class MemberWriteService {
     }
 
     @Transactional
-    public void countFailedPasswordTry(String email) {
+    public int countFailedPasswordTry(String email) {
         var member = memberRepository.findByEmail(email)
                 .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
-        member.plusFailedPasswordTryCount();
+        int failedPasswordCount = member.plusFailedPasswordTryCount();
+        return failedPasswordCount;
     }
 
     @Transactional
@@ -115,5 +115,21 @@ public class MemberWriteService {
                 oauth2Member.get().modifyForDeletingAuthentication();
             }
         }
+    }
+
+    @Transactional
+    public void signOut(Long memberId) {
+
+        var member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotValidRequestException(MemberException.MEMBER_ID));
+
+        if (Objects.nonNull(member.getOauth2Id())) {
+            var oauth2Member = oauth2MemberRepository.findByOauth2Id(member.getOauth2Id());
+            if (oauth2Member.isPresent()) {
+                oauth2Member.get().modifyForSignOut();
+            }
+        }
+
+        // todo 토큰 블랙리스트 관리 (레디스 활용)
     }
 }

@@ -1,9 +1,9 @@
 package com.ddokddak.auth.service;
 
-import com.ddokddak.member.domain.entity.Oauth2Member;
+import com.ddokddak.member.domain.entity.OAuth2Member;
 import com.ddokddak.member.domain.enums.AuthProviderType;
-import com.ddokddak.member.mapper.Oauth2MemberMapper;
-import com.ddokddak.member.repository.Oauth2MemberRepository;
+import com.ddokddak.member.mapper.OAuth2MemberMapper;
+import com.ddokddak.member.repository.OAuth2MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.Authentication;
@@ -16,12 +16,15 @@ import org.springframework.util.Assert;
 import javax.transaction.Transactional;
 import java.sql.SQLException;
 
+/**
+ * JdbcOAuth2AuthorizedClientService 와 InMemoryOAuth2AuthorizedClientService 참고
+ */
 @RequiredArgsConstructor
 @Service
 public class CustomOAuth2AuthorizedClientService implements OAuth2AuthorizedClientService {
 
     private final ClientRegistrationRepository clientRegistrationRepository;
-    private final Oauth2MemberRepository oauth2MemberRepository;
+    private final OAuth2MemberRepository oauth2MemberRepository;
 
 //           JdbcOAuth2AuthorizedClientService;
 //        InMemoryOAuth2AuthorizedClientService;
@@ -34,8 +37,8 @@ public class CustomOAuth2AuthorizedClientService implements OAuth2AuthorizedClie
         Assert.hasText(principalName, "principalName cannot be empty");
 
         ClientRegistration registration = this.clientRegistrationRepository.findByRegistrationId(clientRegistrationId);
-        Oauth2Member oauth2Member = registration == null ? null : this.getOauth2Member(principalName, clientRegistrationId);
-        var oauth2AuthorizedClient = Oauth2MemberMapper.toOauth2AuthorizedClient(oauth2Member, registration);
+        OAuth2Member oauth2Member = registration == null ? null : this.getOauth2Member(principalName, clientRegistrationId);
+        var oauth2AuthorizedClient = OAuth2MemberMapper.toOauth2AuthorizedClient(oauth2Member, registration);
 
         return (T) oauth2AuthorizedClient;
     }
@@ -60,7 +63,7 @@ public class CustomOAuth2AuthorizedClientService implements OAuth2AuthorizedClie
         }
         else {
             try {
-                oauth2Member = Oauth2MemberMapper.fromAuthorizedClientAndPrincipal(authorizedClient, principal);
+                oauth2Member = OAuth2MemberMapper.fromAuthorizedClientAndPrincipal(authorizedClient, principal);
                 this.insertOauth2Member(oauth2Member);
 
             } catch (DuplicateKeyException ex) {
@@ -80,7 +83,7 @@ public class CustomOAuth2AuthorizedClientService implements OAuth2AuthorizedClie
         oauth2Member.modifyForDeletingAuthentication();
     }
 
-    private Oauth2Member getOauth2Member(String principalName, String clientRegistrationId) {
+    private OAuth2Member getOauth2Member(String principalName, String clientRegistrationId) {
 
         return this.oauth2MemberRepository
                 .findByEmailAndAuthProviderAndIsDeletedFalse(principalName, AuthProviderType.getByCode(clientRegistrationId))
@@ -88,12 +91,12 @@ public class CustomOAuth2AuthorizedClientService implements OAuth2AuthorizedClie
     }
 
     @Transactional
-    public void insertOauth2Member(Oauth2Member oauth2Member) throws SQLException {
+    public void insertOauth2Member(OAuth2Member oauth2Member) throws SQLException {
         oauth2MemberRepository.save(oauth2Member);
     }
 
     @Transactional
-    public void updateOauth2Member(Oauth2Member oauth2Member, OAuth2AuthorizedClient authorizedClient, Authentication principal) {
+    public void updateOauth2Member(OAuth2Member oauth2Member, OAuth2AuthorizedClient authorizedClient, Authentication principal) {
         oauth2Member.modifyByOAuth2AuthorizedClientAndAuthentication(authorizedClient, principal);
     }
 }

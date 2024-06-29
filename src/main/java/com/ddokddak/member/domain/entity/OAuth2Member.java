@@ -1,8 +1,10 @@
 package com.ddokddak.member.domain.entity;
 
+import com.ddokddak.auth.domain.oauth.CustomOAuth2Token;
 import com.ddokddak.common.utils.SetStringConverter;
 import com.ddokddak.member.domain.enums.AuthProviderType;
 import lombok.*;
+import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -22,12 +24,13 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "oauth2_member")
-public class Oauth2Member {
+public class OAuth2Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Unique
     @Column(name = "member_id")
     private Long memberId;
 
@@ -43,19 +46,15 @@ public class Oauth2Member {
     @Builder.Default
     private AuthProviderType authProvider = AuthProviderType.DEFAULT;
 
-    @NotNull
     @Column(length = 100)
     private String accessTokenType;
 
-    @NotNull
     @Column(length = 256)
     private String accessTokenValue;
 
-    @NotNull
     @Column
     private LocalDateTime accessTokenIssuedAt;
 
-    @NotNull
     @Column
     private LocalDateTime accessTokenExpiresAt;
 
@@ -95,6 +94,16 @@ public class Oauth2Member {
                 ? refreshToken.getIssuedAt().atZone(ZoneOffset.UTC).toLocalDateTime() : null;
     }
 
+    public void modifyForSignOut() {
+        this.accessTokenType = null;
+        this.accessTokenValue = null;
+        this.accessTokenScope = null;
+        this.accessTokenIssuedAt = null;
+        this.accessTokenExpiresAt = null;
+        this.refreshTokenValue = null;
+        this.refreshTokenIssuedAt = null;
+    }
+
     public void modifyForDeletingAuthentication() {
         this.accessTokenType = null;
         this.accessTokenValue = null;
@@ -104,5 +113,17 @@ public class Oauth2Member {
         this.refreshTokenValue = null;
         this.refreshTokenIssuedAt = null;
         this.isDeleted = Boolean.TRUE;
+    }
+
+    public void modifyForRefreshProc(CustomOAuth2Token oAuth2Token) {
+        LocalDateTime issuedAt = LocalDateTime.now();
+        this.accessTokenValue = oAuth2Token.getAccessToken();
+        this.accessTokenIssuedAt = issuedAt;
+        this.accessTokenExpiresAt = issuedAt.plusSeconds(oAuth2Token.getExpiresIn());
+        if (oAuth2Token.getRefreshToken() != null) {
+            this.refreshTokenValue = oAuth2Token.getRefreshToken();
+            this.refreshTokenIssuedAt = issuedAt;
+            this.refreshTokenExpiredAt = issuedAt.plusSeconds(oAuth2Token.getExpiresIn());
+        }
     }
 }

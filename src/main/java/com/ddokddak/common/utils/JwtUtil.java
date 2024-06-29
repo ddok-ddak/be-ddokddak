@@ -1,8 +1,10 @@
 package com.ddokddak.common.utils;
 
+import com.ddokddak.common.dto.TokenInfo;
 import com.ddokddak.common.props.AuthProperties;
 import com.ddokddak.auth.domain.oauth.UserPrincipal;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +14,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.security.Key;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -21,16 +25,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 public class JwtUtil {
-    private String SECRET_KEY;
-    private final String AUTHORITIES_KEY = "role";
+    private Key SECRET_KEY;
     private final AuthProperties authProperties;
+    private final String AUTHORITIES_KEY = "role";
     public static final String AUTHORIZATION_HEADER = "Authorization"; //"X-AUTH-TOKEN"
+    public static final String COOKIE_REFRESH_TOKEN_KEY = "refresh_token";
     public static final Long ACCESS_TOKEN_EXPIRE_MS = 1000L * 60 * 60;		// 1hour
     public static final Long REFRESH_TOKEN_EXPIRE_MS = 1000L * 60 * 60 * 24 * 7;	// 1week
 
     @PostConstruct
     public void init() {
-        this.SECRET_KEY = authProperties.getToken().getTokenSecret();
+        this.SECRET_KEY = Keys.hmacShaKeyFor(authProperties.getToken().getTokenSecret().getBytes());;
     }
 
     public String createAccessTokenForDev() {
@@ -38,7 +43,7 @@ public class JwtUtil {
         Date now = new Date();
         Date validity = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_MS);
         return Jwts.builder()
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS512)
                 .setSubject("test")
                 .claim("userId", 1)
                 .claim(AUTHORITIES_KEY, "ROLE_USER")
@@ -61,7 +66,7 @@ public class JwtUtil {
                 .collect(Collectors.joining(","));
 
         return Jwts.builder()
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS512)
                 .setSubject(userEmail)
                 .claim("userId", userId)
                 .claim(AUTHORITIES_KEY, role)
@@ -71,19 +76,45 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String createRefreshToken(Authentication authentication) {
+    public String createAccessToken(UserPrincipal userPrincipal) {
+
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_MS);
+
+        Long userId = userPrincipal.getId();
+        String userEmail = userPrincipal.getUsername();
+        String role = userPrincipal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        return Jwts.builder()
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS512)
+                .setSubject(userEmail)
+                .claim("userId", userId)
+                .claim(AUTHORITIES_KEY, role)
+                .setIssuer("DoDone")
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .compact();
+    }
+
+    public TokenInfo createRefreshToken() {
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_MS);
 
         String refreshToken = Jwts.builder()
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS512)
                 .setIssuer("DoDone")
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .compact();
-        saveRefreshToken(authentication, refreshToken);
-        return refreshToken;
+        //saveRefreshToken(authentication, refreshToken);
+
+        return TokenInfo.builder()
+                .issuedAt(now.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
+                .expiredAt(validity.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
+                .build();
     }
 
     // Access Token을 검사하고 얻은 정보로 Authentication 객체 생성
@@ -133,11 +164,5 @@ public class JwtUtil {
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
-    }
-
-    private void saveRefreshToken(Authentication authentication, String refreshToken) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String email = userPrincipal.getName();
-        //userRepository.updateRefreshToken(email, refreshToken);
     }
 }

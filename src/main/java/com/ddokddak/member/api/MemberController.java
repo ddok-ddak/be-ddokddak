@@ -81,7 +81,7 @@ public class MemberController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PutMapping("/custom/category-template")
+    @PatchMapping("/custom/category-template")
     public ResponseEntity<CommonResponse<Boolean>> modifyCategoryTemplateType(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody CategoryTemplateRequest req) {

@@ -10,6 +10,37 @@ spring:
             clientId: emptyValueForTest
             clientSecret: emptyValueForTest
             scope: profile,email
+          naver:
+            clientId: emptyValueForTest
+            clientSecret: emptyValueForTest
+            authorizationGrantType: authorization_code
+            #clientName: Naver
+            redirectUri: "{baseUrl}/api/login/oauth2/code/naver"
+            scope:
+              - email
+              - nickname
+          kakao:
+            clientId: emptyValueForTest
+            clientSecret: emptyValueForTest
+            clientAuthenticationMethod: client_secret_post
+            authorizationGrantType: authorization_code
+            redirectUri: "{baseUrl}/api/login/oauth2/code/kakao"
+            scope:
+              - profile_nickname
+              - account_email
+        provider:
+          google:
+            authorizationUri: https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&prompt=consent
+          kakao:
+            authorizationUri: https://kauth.kakao.com/oauth/authorize #?prompt=login
+            tokenUri: https://kauth.kakao.com/oauth/token
+            userInfoUri: https://kapi.kakao.com/v2/user/me
+            userNameAttribute: id
+          naver:
+            authorizationUri: https://nid.naver.com/oauth2.0/authorize
+            tokenUri: https://nid.naver.com/oauth2.0/token
+            userInfoUri: https://openapi.naver.com/v1/nid/me
+            userNameAttribute: response
   mail:
     host: smtp.gmail.com
     port: 587
@@ -33,7 +64,7 @@ spring:
 # 토큰 관련 secret Key 및 RedirectUri 설정
 auth:
   token:
-    tokenSecret: emptyValueForTest
+    tokenSecret: emptyValueForTestemptyValueForTestemptyValueForTestemptyValueForTest
     tokenExpirationMS: 1800000
     refreshTokenExpiry: 604800000
   oauth2:

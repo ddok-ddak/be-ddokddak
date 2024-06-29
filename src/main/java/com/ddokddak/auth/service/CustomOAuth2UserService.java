@@ -4,8 +4,10 @@ import com.ddokddak.auth.domain.oauth.UserPrincipal;
 import com.ddokddak.auth.domain.oauth.OAuth2UserInfo;
 import com.ddokddak.auth.domain.oauth.OAuth2UserInfoFactory;
 import com.ddokddak.common.exception.CustomApiException;
+import com.ddokddak.common.exception.type.MemberException;
 import com.ddokddak.member.domain.enums.AuthProviderType;
 import com.ddokddak.member.domain.entity.Member;
+import com.ddokddak.member.domain.enums.Status;
 import com.ddokddak.member.service.MemberReadService;
 import com.ddokddak.member.service.MemberWriteService;
 import com.google.common.collect.ImmutableMap;
@@ -48,14 +50,17 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(authProviderType, oAuth2User.getAttributes());
 
         if (Objects.isNull(userInfo.getEmail()) || userInfo.getEmail().isEmpty()) {
-            throw new CustomApiException("Email not found from OAuth2 provider");
+            throw new CustomApiException(MemberException.EMPTY_OAUTH2_EMAIL);
         }
         // 유저 정보 조회
         Member member;
         if (memberReadService.existsUserByEmail(userInfo.getEmail())) {	// 이미 가입된 경우
             member = memberReadService.findUserByEmail(userInfo.getEmail());
+            if (member.getStatus() == Status.WITHDRAWAL) {
+                throw new CustomApiException(MemberException.MEMBER_WITHDREW);
+            }
             if (!authProviderType.equals(member.getAuthProvider())) {
-                throw new CustomApiException("Wrong Match Auth Provider");
+                throw new CustomApiException(MemberException.WRONG_AUTH_PROVIDER);
             }
         } else { // 가입되지 않은 경우
             member = memberWriteService.registerForOauth2(userInfo);

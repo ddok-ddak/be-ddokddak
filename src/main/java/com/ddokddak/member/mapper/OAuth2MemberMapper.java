@@ -1,7 +1,7 @@
 package com.ddokddak.member.mapper;
 
 import com.ddokddak.auth.domain.oauth.UserPrincipal;
-import com.ddokddak.member.domain.entity.Oauth2Member;
+import com.ddokddak.member.domain.entity.OAuth2Member;
 import com.ddokddak.member.domain.enums.AuthProviderType;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.core.Authentication;
@@ -16,8 +16,8 @@ import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.Set;
 
-public class Oauth2MemberMapper {
-    public static OAuth2AuthorizedClient toOauth2AuthorizedClient(Oauth2Member oauth2Member, ClientRegistration registration) {
+public class OAuth2MemberMapper {
+    public static OAuth2AuthorizedClient toOauth2AuthorizedClient(OAuth2Member oauth2Member, ClientRegistration registration) {
 
         if (registration == null) {
             throw new DataRetrievalFailureException("The ClientRegistration with id '" + oauth2Member.getAuthProvider() + "' exists in the data source, however, it was not found in the ClientRegistrationRepository.");
@@ -49,7 +49,7 @@ public class Oauth2MemberMapper {
         return new OAuth2AuthorizedClient(registration, principalName, accessToken, refreshToken);
     }
 
-    public static Oauth2Member fromAuthorizedClientAndPrincipal(OAuth2AuthorizedClient authorizedClient, Authentication principal) {
+    public static OAuth2Member fromAuthorizedClientAndPrincipal(OAuth2AuthorizedClient authorizedClient, Authentication principal) {
 
         ClientRegistration clientRegistration = authorizedClient.getClientRegistration();
         AuthProviderType authProvider = AuthProviderType.getByCode(clientRegistration.getRegistrationId());
@@ -59,9 +59,9 @@ public class Oauth2MemberMapper {
         UserPrincipal userPrincipal = (UserPrincipal) principal.getPrincipal();
         Instant refreshTokenExpiredAt = null;
         if (Objects.nonNull(refreshToken)) {
-            refreshTokenExpiredAt = Oauth2MemberMapper.getRefreshTokenExpiresAt(refreshToken.getIssuedAt(), userPrincipal);
+            refreshTokenExpiredAt = OAuth2MemberMapper.getRefreshTokenExpiresAt(refreshToken.getIssuedAt(), userPrincipal);
         }
-        return Oauth2Member.builder()
+        return OAuth2Member.builder()
                 .memberId(userPrincipal.getId())
                 .email(principal.getName())
                 .oauth2Id(userPrincipal.getOauth2Id())

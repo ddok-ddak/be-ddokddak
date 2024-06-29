@@ -1,6 +1,8 @@
 package com.ddokddak.usecase;
 
 import com.ddokddak.auth.domain.dto.SigningRequest;
+import com.ddokddak.common.exception.CustomApiException;
+import com.ddokddak.common.exception.type.MemberException;
 import com.ddokddak.member.service.MemberWriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,7 +20,7 @@ public class CheckAuthUsecase {
     private final MemberWriteService memberWriteService;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    @Transactional(noRollbackFor = BadCredentialsException.class)
+    @Transactional(noRollbackFor = {BadCredentialsException.class, CustomApiException.class})
     public Authentication getAuthentication(SigningRequest signingRequest) {
         Authentication authentication;
         try {
@@ -26,8 +28,11 @@ public class CheckAuthUsecase {
             authentication = authenticationManagerBuilder.getObject()
                     .authenticate(new UsernamePasswordAuthenticationToken(signingRequest.email(), signingRequest.password()));
         } catch (BadCredentialsException badCredentialsException) {
-            memberWriteService.countFailedPasswordTry(signingRequest.email());
-            throw badCredentialsException;
+            int failedPasswordCount = memberWriteService.countFailedPasswordTry(signingRequest.email());
+            if (failedPasswordCount == 5) {
+                throw new CustomApiException(MemberException.LOCKED_MEMBER);
+            }
+            throw new CustomApiException(MemberException.FAILED_ID_PASSWORD);
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return authentication;
