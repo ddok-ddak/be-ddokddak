@@ -188,37 +188,41 @@ public class CategoryWriteService {
         var categories = categoryRepository.findByMemberIdAndLevel(memberId, 0);
 
         // 기존 템플릿에서 학생이면 학업, 직장이면 업무 카테고리 그룹 제거
-        var pValues = previousTemplateType.getTemplates();
-        var mainCategory = pValues.stream()
-                .filter(v->v.getParentName()==null)
-                .findFirst()
-                .orElseThrow(() -> new NotValidRequestException(BaseException.NULL_DATA));
+        if (!previousTemplateType.equals(TemplateType.UNEMPLOYED)) {
+            var pValues = previousTemplateType.getSpecificTemplates();
+            var mainCategory = pValues.stream()
+                    .filter(v->v.getParentName()==null)
+                    .findFirst()
+                    .orElseThrow(() -> new NotValidRequestException(BaseException.NULL_DATA));
 
-        categories.stream()
-                .filter(category -> !category.getIsDeleted() && category.getName() == mainCategory.getName())
-                .forEach(category-> category.deleteGroup());
+            categories.stream()
+                    .filter(category -> !category.getIsDeleted() && category.getName().equals(mainCategory.getName()))
+                    .forEach(category-> category.deleteGroup());
+        }
 
         // 학생이면 학업, 직장이면 업무 카테고리 그룹 추가
-        var newValues = req.templateType().getTemplates();
-        var newMainCategory = newValues.stream()
-                .filter(v->v.getParentName()==null)
-                .findFirst()
-                .orElseThrow(() -> new NotValidRequestException(BaseException.NULL_DATA));
+        if (!req.templateType().equals(TemplateType.UNEMPLOYED)) {
+            var newValues = req.templateType().getSpecificTemplates();
+            var newMainCategory = newValues.stream()
+                    .filter(v->v.getParentName()==null)
+                    .findFirst()
+                    .orElseThrow(() -> new NotValidRequestException(BaseException.NULL_DATA));
 
-        // 기존에 대분류가 존재했었다면(삭제 상태라면)
-        var alreadyExistsCategory = categories.stream()
-                .filter(category -> category.getName() == newMainCategory.getName())
-                .findFirst();
-        if (alreadyExistsCategory.isPresent()) {
-            alreadyExistsCategory.get().undeleteGroup();
-            return;
-        }
+            // 기존에 대분류가 존재했었다면(삭제 상태라면)
+            var alreadyExistsCategory = categories.stream()
+                    .filter(category -> category.getName().equals(newMainCategory.getName()))
+                    .findFirst();
+            if (alreadyExistsCategory.isPresent()) {
+                alreadyExistsCategory.get().undeleteGroup();
+                return;
+            }
 
-        // 대분류 카테 갯수 제한
-        if (categories.size() > 8) {
-            throw new NotValidRequestException(BaseException.UNABLE_REQUEST);
+            // 대분류 카테 갯수 제한
+            if (categories.size() > 8) {
+                throw new NotValidRequestException(BaseException.UNABLE_REQUEST);
+            }
+            categoryJdbcRepository.batchInsert(newValues, memberId);
         }
-        categoryJdbcRepository.batchInsert(newValues, memberId);
     }
 
 

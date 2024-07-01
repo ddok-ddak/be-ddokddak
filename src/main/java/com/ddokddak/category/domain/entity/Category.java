@@ -44,11 +44,10 @@ public class Category extends BaseTimeEntity {
     @JoinColumn(name="MEMBER_ID")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @ColumnDefault("1")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="CATEGORY_ICON_ID")
     private CategoryIcon iconFile;
-
 
     @Builder.Default
     @ColumnDefault("0")
