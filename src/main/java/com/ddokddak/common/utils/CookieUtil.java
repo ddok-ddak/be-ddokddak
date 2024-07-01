@@ -12,6 +12,7 @@ public class CookieUtil {
     public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
     public static final String COOKIE_REFRESH_TOKEN_KEY = "refresh";
     public static final int COOKIE_EXPIRE_SECONDS = 21600;
+    public static final int REFRESH_TOKEN_EXPIRE_MS = 604800000;
 
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();

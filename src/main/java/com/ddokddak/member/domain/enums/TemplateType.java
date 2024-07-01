@@ -19,11 +19,16 @@ public enum TemplateType {
 
     private final String code;
     private final String displayName;
-
     private final CategoryTemplate[] specificTemplates;
+
     public final List<CategoryTemplate> getTemplates() {
         return Stream.of(BaseTemplate.values(), this.specificTemplates)
                 .flatMap(Stream::of)
+                .toList();
+    }
+
+    public final List<CategoryTemplate> getSpecificTemplates() {
+        return Stream.of(this.specificTemplates)
                 .toList();
     }
 }

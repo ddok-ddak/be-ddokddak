@@ -24,6 +24,7 @@ public abstract class OAuth2UserInfo {
     return Member.builder()
             .name(tempName) // 유니크 속성을 위해 선검증 후, 중복이 있다면 난수를 붙인 값
             .nickname(getName())
+            .oauth2Id(getOauth2Id())
             .email(getEmail())
             .imageUrl(getImageUrl())
             .authProvider(getProviderType())

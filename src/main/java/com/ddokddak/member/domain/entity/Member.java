@@ -66,9 +66,6 @@ public class Member extends BaseTimeEntity {
     @Builder.Default
     private Short failedPasswordCount = 0;
 
-    @Column(length = 256)
-    private String accessToken;
-
     @Enumerated(EnumType.STRING)
     @ColumnDefault("'DEFAULT'")
     @Builder.Default
@@ -76,6 +73,9 @@ public class Member extends BaseTimeEntity {
 
     @Column(name = "oauth2_id", unique = true)
     private String oauth2Id;
+
+    @Column(length = 256)
+    private String accessToken;
 
     @PrePersist // 사용자 상태 - 수정 필요
     public void prePersist() {
@@ -89,12 +89,13 @@ public class Member extends BaseTimeEntity {
         return this;
     }
 
-    public void plusFailedPasswordTryCount() {
+    public int plusFailedPasswordTryCount() {
         if(this.failedPasswordCount == 5 && this.status == Status.NORMAL) {
             this.status = Status.PASSWORD_FAILED;
-            return;
+            return this.failedPasswordCount;
         }
         this.failedPasswordCount++;
+        return this.failedPasswordCount;
     }
 
     public String getRoleCode() {
@@ -133,5 +134,9 @@ public class Member extends BaseTimeEntity {
         var previousTemplateType = this.templateType;
         this.templateType = templateType;
         return previousTemplateType;
+    }
+
+    public void setStatusWithdrawal() {
+        this.status = Status.WITHDRAWAL;
     }
 }

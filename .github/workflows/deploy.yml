@@ -1,0 +1,21 @@
+name: docker deploy
+
+on:
+  push:
+    branches: deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Execute Server Restart through SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PASSWORD }}
+          script_stop: true
+          script: |
+            sh ${{ secrets.BACK_DEPLOY }}
