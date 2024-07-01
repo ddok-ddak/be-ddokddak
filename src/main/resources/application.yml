@@ -18,6 +18,8 @@ spring:
   jackson:
     deserialization:
       ADJUST_DATES_TO_CONTEXT_TIME_ZONE: false # 타임존 UTC로 자동 변경 해제
+    mapper:
+      accept-case-insensitive-enums: true
   datasource:
     hikari:
       data-source-properties:
@@ -181,8 +183,8 @@ spring:
       on-profile: dev-local
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: update # create
   sql:
     init:
-      mode: never
+      mode: never # always
       data-locations: classpath:data.sql
