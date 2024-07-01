@@ -21,9 +21,12 @@ public class CategoryJdbcRepository {
 
     @Transactional
     public void batchInsert(List<CategoryTemplate> list, Long memberId) {
-        var sql = "INSERT INTO category (MEMBER_ID, NAME, COLOR, HIGHLIGHT_COLOR, ICON_ID, LEVEL, PARENT_ID, IS_DELETED, CREATED_AT) " +
+        var sql = "INSERT INTO category (MEMBER_ID, NAME, COLOR, HIGHLIGHT_COLOR, CATEGORY_ICON_ID, LEVEL, PARENT_ID, IS_DELETED, CREATED_AT) " +
                 "VALUES " +
-                "( ?, ?, ?, (SELECT ID FROM CATEGORY_ICON WHERE ICON_GROUP=? AND FILENAME=?), ?, (SELECT ID FROM (SELECT ID FROM CATEGORY WHERE MEMBER_ID=? AND NAME=?) AS SUB), 0, NOW())";
+                "( ?, ?, ?, ?, " +
+                "(SELECT ID FROM category_icon WHERE ICON_GROUP=? AND FILENAME=?), ?, " +
+                "(SELECT ID FROM (SELECT ID FROM category WHERE MEMBER_ID=? AND NAME=? LIMIT 1) AS SUB), " +
+                "0, NOW())";
         try {
             jdbcTemplate.batchUpdate(
                     sql,
@@ -33,13 +36,12 @@ public class CategoryJdbcRepository {
                         ps.setLong(1, memberId);
                         ps.setString(2, arg.getName());
                         ps.setString(3, arg.getColor());
-                        ps.setString(3, arg.getHighlightColor());
-                        ps.setString(4, arg.getIconGroup());
-                        ps.setString(5, arg.getIconFilename());
-                        ps.setInt(6, arg.getParentName()==null?0:1);
-                        ps.setLong(7, memberId);
-                        ps.setString(8, arg.getParentName());
-                        //ps.setString(7, "N");
+                        ps.setString(4, arg.getHighlightColor());
+                        ps.setString(5, arg.getIconGroup());
+                        ps.setString(6, arg.getIconFilename());
+                        ps.setInt(7, arg.getParentName()==null?0:1);
+                        ps.setLong(8, memberId);
+                        ps.setString(9, arg.getParentName());
                     });
         } catch (Exception e) {
             e.printStackTrace();
