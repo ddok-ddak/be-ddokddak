@@ -3,7 +3,6 @@ package com.ddokddak.member.service;
 import com.ddokddak.auth.domain.oauth.OAuth2UserInfo;
 import com.ddokddak.category.domain.dto.CategoryTemplateRequest;
 import com.ddokddak.common.exception.CustomApiException;
-import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.MemberException;
 import com.ddokddak.member.domain.dto.MemberResponse;
 import com.ddokddak.member.domain.dto.ModifyStartDayRequest;
@@ -68,7 +67,7 @@ public class MemberWriteService {
     @Transactional
     public int countFailedPasswordTry(String email) {
         var member = memberRepository.findByEmail(email)
-                .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
+                .orElseThrow(()->new CustomApiException(MemberException.MEMBER_ID));
         int failedPasswordCount = member.plusFailedPasswordTryCount();
         return failedPasswordCount;
     }
@@ -76,28 +75,28 @@ public class MemberWriteService {
     @Transactional
     public void updateStartTime(Long memberId, ModifyStartTimeRequest req) {
         var member = memberRepository.findById(memberId)
-                .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
+                .orElseThrow(()->new CustomApiException(MemberException.MEMBER_ID));
         member.modifyStartTime(req.startTime());
     }
 
     @Transactional
     public void updateStartDay(Long memberId, ModifyStartDayRequest req) {
         var member = memberRepository.findById(memberId)
-                .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
+                .orElseThrow(()->new CustomApiException(MemberException.MEMBER_ID));
         member.modifyStartDay(req.startDay());
     }
 
     @Transactional
     public void setCategoryTemplate(Long memberId, CategoryTemplateRequest req) {
         var member = memberRepository.findById(memberId)
-                .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
+                .orElseThrow(()->new CustomApiException(MemberException.MEMBER_ID));
         member.setCategoryTemplateType(req.templateType());
     }
 
     @Transactional
     public TemplateType modifyCategoryTemplate(Long memberId, CategoryTemplateRequest req) {
         var member = memberRepository.findById(memberId)
-                .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
+                .orElseThrow(()->new CustomApiException(MemberException.MEMBER_ID));
         var previousTemplateType = member.modifyCategoryTemplateType(req.templateType());
         return previousTemplateType;
     }
@@ -106,7 +105,7 @@ public class MemberWriteService {
     public void withdraw(Long memberId) {
 
         var member = memberRepository.findById(memberId)
-                .orElseThrow(()->new NotValidRequestException(MemberException.MEMBER_ID));
+                .orElseThrow(()->new CustomApiException(MemberException.MEMBER_ID));
         member.setStatusWithdrawal();
 
         if (Objects.nonNull(member.getOauth2Id())) {
@@ -121,7 +120,7 @@ public class MemberWriteService {
     public void signOut(Long memberId) {
 
         var member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotValidRequestException(MemberException.MEMBER_ID));
+                .orElseThrow(() -> new CustomApiException(MemberException.MEMBER_ID));
 
         if (Objects.nonNull(member.getOauth2Id())) {
             var oauth2Member = oauth2MemberRepository.findByOauth2Id(member.getOauth2Id());

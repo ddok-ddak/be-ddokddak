@@ -4,7 +4,6 @@ import com.ddokddak.auth.domain.entity.EmailAuthentication;
 import com.ddokddak.auth.domain.enums.EmailAuthenticationType;
 import com.ddokddak.auth.repository.EmailAuthenticationRepository;
 import com.ddokddak.common.exception.CustomApiException;
-import com.ddokddak.common.exception.NotValidRequestException;
 import com.ddokddak.common.exception.type.EmailException;
 import com.ddokddak.auth.domain.dto.AuthenticationNumberRequest;
 import com.ddokddak.auth.domain.dto.CheckEmailAuthenticationRequest;
@@ -59,7 +58,7 @@ public class EmailAuthenticationService {
             target.initializeTransmissionCount();
         }
         if( target.isExceedingTransmissionCountOfPossible() ){
-            throw new NotValidRequestException(EmailException.EXCEEDED_TRANSMISSION_LIMIT_COUNT);
+            throw new CustomApiException(EmailException.EXCEEDED_TRANSMISSION_LIMIT_COUNT);
         }
         target.modifyAuthenticationNumber(getRandomCode());
         target.plusTransmissionCount();
@@ -106,7 +105,7 @@ public class EmailAuthenticationService {
     public boolean checkAuthenticationNumber(CheckEmailAuthenticationRequest request) {
         var searchEmail = emailAuthenticationRepository
                 .findById(request.authenticationRequestId())
-                .orElseThrow(() -> new NotValidRequestException(EmailException.NOT_VALID_ID));
+                .orElseThrow(() -> new CustomApiException(EmailException.NOT_VALID_ID));
 
         if (!searchEmail.isExceedingTimeOfPossible()) throw new CustomApiException(EmailException.EXCEEDED_TIME_LIMIT);
         if (!searchEmail.isExceedingFailCountOfPossible()) throw new CustomApiException(EmailException.EXCEEDED_RETRY_LIMIT_COUNT);
