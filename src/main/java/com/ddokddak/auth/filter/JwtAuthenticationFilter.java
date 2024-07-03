@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = parseBearerToken(request);
 
-        // todo 개발용, 제거 혹은 조건 추가
+        // 개발용 강제 로그인 설정 추가
         if (this.profiles.contains(activeProfile) &&  token == null) {
             token = jwtUtil.createAccessTokenForDev();
         }
