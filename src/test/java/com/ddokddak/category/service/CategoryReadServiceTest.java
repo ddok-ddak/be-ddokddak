@@ -3,7 +3,7 @@ package com.ddokddak.category.service;
 import com.ddokddak.category.domain.dto.CategoryReadResponse;
 import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.repository.CategoryRepository;
-import com.ddokddak.common.exception.NotValidRequestException;
+import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.member.repository.MemberRepository;
 import org.junit.jupiter.api.*;
@@ -69,7 +69,7 @@ public class CategoryReadServiceTest {
         Long memberId = 1L;
         Mockito.when(memberRepository.findMemberById(memberId)).thenReturn(Optional.empty());
 
-        assertThrows(NotValidRequestException.class, () -> {
+        assertThrows(CustomApiException.class, () -> {
             categoryReadService.readCategoriesByMemberId(memberId);
         });
     }
@@ -113,7 +113,7 @@ public class CategoryReadServiceTest {
         Long memberId = 1L;
         Mockito.when(categoryRepository.findByIdAndMemberIdAndIsDeletedFalse(categoryId, memberId)).thenReturn(Optional.empty());
 
-        assertThrows(NotValidRequestException.class, () -> {
+        assertThrows(CustomApiException.class, () -> {
             categoryReadService.findByIdAndMemberId(categoryId, memberId);
         });
     }

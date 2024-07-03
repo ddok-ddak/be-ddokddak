@@ -6,7 +6,7 @@ import com.ddokddak.activityRecord.mapper.ActivityRecordMapper;
 import com.ddokddak.activityRecord.service.ActivityRecordReadService;
 import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
 import com.ddokddak.category.service.CategoryReadService;
-import com.ddokddak.common.exception.NotValidRequestException;
+import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.type.ActivityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,16 +27,16 @@ public class CreateActivityRecordUsecase {
 
         // 시간 차가 음수인 경우, 예외 처리
         var between = (int) ChronoUnit.MINUTES.between(req.startedAt(), req.finishedAt());
-        if (between <= 0) throw new NotValidRequestException(ActivityException.WRONG_TIME_DATA);
+        if (between <= 0) throw new CustomApiException(ActivityException.WRONG_TIME_DATA);
 
         // 시간이 특정 분 단위(10, 30, 60)로 요청이 맞는지 확인 후 예외 처리
         if (!Objects.equals(between % req.timeUnit(), 0))
-            throw new NotValidRequestException(ActivityException.WRONG_TIME_DATA);
+            throw new CustomApiException(ActivityException.WRONG_TIME_DATA);
 
         // 시간 범위 내 이미 기록 데이터가 존재하는 경우, 예외 처리
         var result = activityRecordReadService.existsByMemberIdAndIsDeletedFalseAndBetweenPeriodCondition(
                 memberId, req.startedAt(), req.finishedAt());
-        if (result) throw new NotValidRequestException(ActivityException.USED_TIME_PERIOD);
+        if (result) throw new CustomApiException(ActivityException.USED_TIME_PERIOD);
 
         var category = categoryReadService.findByIdAndMemberId(req.categoryId(), memberId);
 

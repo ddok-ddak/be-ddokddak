@@ -1,4 +1,4 @@
-insert into member (template_type, created_at, modified_at) values ('STUDENT', now(), now());
+insert into member (email, password, template_type, created_at, modified_at) values ('test@example.com', '$2a$10$occ555ThRKcLZBzOi6P/IOkWsrj4zKOc.KwGDVlTQSc0q7jQVyZv6', 'STUDENT', now(), now());
 insert into member (template_type, created_at, modified_at) values ('WORKER', now(), now());
 
 -- category_icon 기본

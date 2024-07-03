@@ -5,7 +5,7 @@ import com.ddokddak.activityRecord.service.ActivityRecordReadService;
 import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
 import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.service.CategoryReadService;
-import com.ddokddak.common.exception.NotValidRequestException;
+import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.member.domain.entity.Member;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -95,7 +95,7 @@ class CreateActivityRecordUsecaseTest {
 
         // when, then
         assertThatThrownBy(()->createActivityRecordUsecase.execute(activityRecordRequest, this.member.getId()))
-                .isInstanceOf(NotValidRequestException.class)
+                .isInstanceOf(CustomApiException.class)
                 .hasMessage("Not Valid Time Data");
     }
 }

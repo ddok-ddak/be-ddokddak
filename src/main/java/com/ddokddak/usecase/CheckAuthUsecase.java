@@ -1,7 +1,7 @@
 package com.ddokddak.usecase;
 
 import com.ddokddak.auth.domain.dto.SigningRequest;
-import com.ddokddak.common.exception.CustomApiException;
+import com.ddokddak.common.exception.NoRollbackCustomApiException;
 import com.ddokddak.common.exception.type.MemberException;
 import com.ddokddak.member.service.MemberWriteService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class CheckAuthUsecase {
     private final MemberWriteService memberWriteService;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    @Transactional(noRollbackFor = {BadCredentialsException.class, CustomApiException.class})
+    @Transactional(noRollbackFor = {BadCredentialsException.class, NoRollbackCustomApiException.class})
     public Authentication getAuthentication(SigningRequest signingRequest) {
         Authentication authentication;
         try {
@@ -30,9 +30,9 @@ public class CheckAuthUsecase {
         } catch (BadCredentialsException badCredentialsException) {
             int failedPasswordCount = memberWriteService.countFailedPasswordTry(signingRequest.email());
             if (failedPasswordCount == 5) {
-                throw new CustomApiException(MemberException.LOCKED_MEMBER);
+                throw new NoRollbackCustomApiException(MemberException.LOCKED_MEMBER);
             }
-            throw new CustomApiException(MemberException.FAILED_ID_PASSWORD);
+            throw new NoRollbackCustomApiException(MemberException.FAILED_ID_PASSWORD);
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return authentication;

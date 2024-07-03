@@ -11,7 +11,7 @@ import com.ddokddak.activityRecord.service.ActivityRecordWriteService;
 import com.ddokddak.auth.filter.JwtAuthenticationFilter;
 import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.domain.entity.CategoryIcon;
-import com.ddokddak.common.exception.NotValidRequestException;
+import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.type.ActivityException;
 import com.ddokddak.member.domain.entity.Member;
 import com.ddokddak.usecase.CreateActivityRecordUsecase;
@@ -261,7 +261,7 @@ class ActivityRecordControllerTest {
         var content = objectMapper.writeValueAsString(request);
 
         // when, then
-        doThrow(new NotValidRequestException(ActivityException.WRONG_TIME_DATA))
+        doThrow(new CustomApiException(ActivityException.WRONG_TIME_DATA))
                 .when(createActivityRecordUsecase)
                 .execute(any(), any());
 
