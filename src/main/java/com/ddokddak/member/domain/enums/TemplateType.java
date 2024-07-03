@@ -22,7 +22,7 @@ public enum TemplateType {
     private final CategoryTemplate[] specificTemplates;
 
     public final List<CategoryTemplate> getTemplates() {
-        return Stream.of(BaseTemplate.values(), this.specificTemplates)
+        return Stream.of(this.specificTemplates, BaseTemplate.values())
                 .flatMap(Stream::of)
                 .toList();
     }
