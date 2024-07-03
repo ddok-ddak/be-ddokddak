@@ -55,6 +55,18 @@ public class AuthController {
     private final CheckAuthUsecase checkAuthUsecase;
     private final EmailAuthenticationService emailAuthenticationService;
 
+    @GetMapping("/lookaround")
+    public ResponseEntity<CommonResponse<SigninResponse>> lookAround(HttpServletResponse response) {
+        String accessToken = jwtUtil.createAccessTokenForDev();
+        SigninResponse signinResponse = SigninResponse.builder()
+                .email("")
+                .accessToken(accessToken)
+                .build();
+
+        return ResponseEntity.ok()
+                .body(new CommonResponse<>("Signed in for test Successfully", signinResponse));
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<CommonResponse<MemberResponse>> signUpNewUser(
             @Valid @RequestBody RegisterMemberRequest registerMemberRequest) {
@@ -110,31 +122,20 @@ public class AuthController {
                 .body(new CommonResponse<>("Signed out Successfully", null));
     }
 
-    @PostMapping(value = "/withdrawal")
+    @PostMapping(value = "/withdrawal/{authProviderType}")
     public ResponseEntity<CommonResponse> withdraw(
-            HttpServletRequest request, HttpServletResponse response,
-            @AuthenticationPrincipal UserPrincipal userPrincipal) {
-
-        memberWriteService.withdraw(userPrincipal.getId());
-        authTokenWriteService.removeAuthTokenByMemberId(userPrincipal.getId());
-        CookieUtil.deleteCookie(request, response, jwtUtil.COOKIE_REFRESH_TOKEN_KEY);
-
-        return ResponseEntity.ok()
-                .body(new CommonResponse<>("WithDrew Successfully", null));
-    }
-
-    @PostMapping(value = "/oauth2/revoke/{authProviderType}")
-    public ResponseEntity<CommonResponse> revokeOauth2User(
             HttpServletRequest request, HttpServletResponse response,
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable AuthProviderType authProviderType) {
 
-        // 서드파티 측에 연결 해제 요청 수행
-        String accessToken = oAuth2RefreshService.refreshOAuth2AccessToken(userPrincipal.getId(), authProviderType);
-        oAuth2RevokeService.requestRevokeUser(accessToken, authProviderType);
+        if (!authProviderType.equals(AuthProviderType.DEFAULT)) {
+            // 서드파티 측에 연결 해제 요청 수행
+            String accessToken = oAuth2RefreshService.refreshOAuth2AccessToken(userPrincipal.getId(), authProviderType);
+            oAuth2RevokeService.requestRevokeUser(accessToken, authProviderType);
+        }
 
-        authTokenWriteService.removeAuthTokenByMemberId(userPrincipal.getId());
         memberWriteService.withdraw(userPrincipal.getId());
+        authTokenWriteService.removeAuthTokenByMemberId(userPrincipal.getId());
         CookieUtil.deleteCookie(request, response, jwtUtil.COOKIE_REFRESH_TOKEN_KEY);
 
         return ResponseEntity.ok()
