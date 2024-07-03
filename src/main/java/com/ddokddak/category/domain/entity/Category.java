@@ -4,7 +4,6 @@ import com.ddokddak.common.entity.BaseTimeEntity;
 import com.ddokddak.member.domain.entity.Member;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.SQLDelete;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
