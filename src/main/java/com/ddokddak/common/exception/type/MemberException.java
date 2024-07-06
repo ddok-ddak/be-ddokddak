@@ -10,7 +10,9 @@ public enum MemberException implements ExceptionType{
     EMPTY_OAUTH2_EMAIL(HttpStatus.BAD_REQUEST, "Email not found from OAuth2 provider", "E_EMPTY_EMAIL"),
     MEMBER_WITHDREW(HttpStatus.UNPROCESSABLE_ENTITY, "Withdrew within 1 month", "E_MEMBER_WITHDREW"),
     FAILED_ID_PASSWORD(HttpStatus.UNPROCESSABLE_ENTITY, "Failed to authenticate with ID & PW", "E_FAILED_AUTH"),
-    LOCKED_MEMBER(HttpStatus.UNPROCESSABLE_ENTITY, "More than 5 times failure with ID & PW", "E_LOCKED_MEMBER");
+    LOCKED_MEMBER(HttpStatus.UNPROCESSABLE_ENTITY, "More than 5 times failure with ID & PW", "E_LOCKED_MEMBER"),
+    TEST_ACCOUNT(HttpStatus.BAD_REQUEST, "Impossible to withdraw test account", "E_TEST_ACCOUNT"),
+    DISABLED_MEMBER(HttpStatus.BAD_REQUEST, "Disabled member account, Not accessible", "E_DISABLED_MEMBER");
 
     private final HttpStatus status;
     private final String message;

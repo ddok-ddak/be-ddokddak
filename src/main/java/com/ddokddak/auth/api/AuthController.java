@@ -9,6 +9,7 @@ import com.ddokddak.common.dto.CommonResponse;
 import com.ddokddak.common.dto.TokenInfo;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.type.AuthTokenException;
+import com.ddokddak.common.exception.type.MemberException;
 import com.ddokddak.common.exception.type.OAuth2Exception;
 import com.ddokddak.common.props.AppProperties;
 import com.ddokddak.common.utils.CookieUtil;
@@ -127,6 +128,10 @@ public class AuthController {
             HttpServletRequest request, HttpServletResponse response,
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable AuthProviderType authProviderType) {
+
+        if (userPrincipal.getId() == 1) {
+            throw new CustomApiException(MemberException.TEST_ACCOUNT);
+        }
 
         if (!authProviderType.equals(AuthProviderType.DEFAULT)) {
             // 서드파티 측에 연결 해제 요청 수행

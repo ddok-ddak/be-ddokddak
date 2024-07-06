@@ -2,6 +2,7 @@ package com.ddokddak.auth.service;
 
 import com.ddokddak.auth.domain.oauth.UserPrincipal;
 import com.ddokddak.common.exception.CustomApiException;
+import com.ddokddak.common.exception.type.MemberException;
 import com.ddokddak.member.domain.enums.Status;
 import com.ddokddak.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                     if (user.getStatus() == Status.NORMAL) {
                         return UserPrincipal.create(user, null);
                     } else {
-                        throw new CustomApiException(email + "-> 활성화되어 있지 않습니다.");
+                        throw new CustomApiException(MemberException.DISABLED_MEMBER);
                     }
                 });
         return userPrincipal.orElseThrow(() -> new UsernameNotFoundException(email + "-> 데이터베이스에서 찾을 수 없습니다."));
