@@ -60,6 +60,9 @@ public class EmailAuthentication extends BaseTimeEntity {
     public boolean isExceedingTimeOfPossible() {
         return this.getModifiedAt().plusMinutes(3).isBefore( LocalDateTime.now() );
     }
+    public void initFailCount() {
+        this.failCount = 0;
+    }
     public void plusFailCount() {
         this.failCount++;
     }
