@@ -4,6 +4,7 @@ import com.ddokddak.auth.domain.entity.EmailAuthentication;
 import com.ddokddak.auth.domain.enums.EmailAuthenticationType;
 import com.ddokddak.auth.repository.EmailAuthenticationRepository;
 import com.ddokddak.common.exception.CustomApiException;
+import com.ddokddak.common.exception.NoRollbackCustomApiException;
 import com.ddokddak.common.exception.type.EmailException;
 import com.ddokddak.auth.domain.dto.AuthenticationNumberRequest;
 import com.ddokddak.auth.domain.dto.CheckEmailAuthenticationRequest;
@@ -22,6 +23,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -62,6 +64,7 @@ public class EmailAuthenticationService {
         }
         target.modifyAuthenticationNumber(getRandomCode());
         target.plusTransmissionCount();
+        target.initFailCount();
         return target;
     }
 
@@ -101,18 +104,21 @@ public class EmailAuthenticationService {
         return storedNumber.equals(targetNumber);
     }
 
-    @Transactional
+    @Transactional(noRollbackFor = {NoRollbackCustomApiException.class})
     public boolean checkAuthenticationNumber(CheckEmailAuthenticationRequest request) {
         var searchEmail = emailAuthenticationRepository
                 .findById(request.authenticationRequestId())
                 .orElseThrow(() -> new CustomApiException(EmailException.NOT_VALID_ID));
 
-        if (!searchEmail.isExceedingTimeOfPossible()) throw new CustomApiException(EmailException.EXCEEDED_TIME_LIMIT);
-        if (!searchEmail.isExceedingFailCountOfPossible()) throw new CustomApiException(EmailException.EXCEEDED_RETRY_LIMIT_COUNT);
+        if (searchEmail.isExceedingTimeOfPossible()) {
+            log.error("local date time : {}  >>>> modified time : {}", LocalDateTime.now(), searchEmail.getModifiedAt().plusMinutes(3));
+            throw new CustomApiException(EmailException.EXCEEDED_TIME_LIMIT);
+        }
+        if (searchEmail.isExceedingFailCountOfPossible()) throw new CustomApiException(EmailException.EXCEEDED_RETRY_LIMIT_COUNT);
 
         if (!equalsAuthCode(searchEmail.getAuthenticationNumber(), request.authenticationNumber())) {
             searchEmail.plusFailCount();
-            throw new CustomApiException(EmailException.NOT_VALID_AUTHENTICATION_NUMBER);
+            throw new NoRollbackCustomApiException(EmailException.NOT_VALID_AUTHENTICATION_NUMBER);
         }
         return Boolean.TRUE;
     }
