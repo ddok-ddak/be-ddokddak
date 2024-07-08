@@ -143,7 +143,9 @@ cors:
   maxAgeSec: 3600
 
 app:
-  baseUrl: 'https://dodonenow.com'
+  baseUrl:
+    - 'http://localhost:3000'
+    - 'https://dodonenow.com'
 
 ---
 # dev 환경
