@@ -54,7 +54,7 @@ public class SecurityConfig {
                         .antMatchers("/", "/css/**").permitAll()
                         .antMatchers("/docs/**", "/v3/api-docs", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .antMatchers("/actuator/health").permitAll()
-                        .antMatchers("/api/v1/auth/signin").permitAll()
+                        .antMatchers("/api/v1/auth/signin", "/api/v1/auth/lookaround").permitAll()
                         // TODO actuator 라이브러리 추가할지 의논해볼 필요
                         .antMatchers("/actuator/**", "/h2-console/**").hasRole(RoleType.ADMIN.name())
                         .anyRequest().authenticated()

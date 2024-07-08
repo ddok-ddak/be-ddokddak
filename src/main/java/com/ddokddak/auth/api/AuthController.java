@@ -60,7 +60,7 @@ public class AuthController {
     public ResponseEntity<CommonResponse<SigninResponse>> lookAround(HttpServletResponse response) {
         String accessToken = jwtUtil.createAccessTokenForDev();
         SigninResponse signinResponse = SigninResponse.builder()
-                .email("")
+                .email("test@example.com")
                 .accessToken(accessToken)
                 .build();
 
