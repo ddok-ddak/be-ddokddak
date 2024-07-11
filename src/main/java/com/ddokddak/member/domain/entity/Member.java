@@ -106,6 +106,10 @@ public class Member extends BaseTimeEntity {
         this.templateType = templateType;
     }
 
+    public void modifyNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public void modifyStartTime(CustomOpt.StartTime startTime) {
         this.startTime = startTime;
     }
