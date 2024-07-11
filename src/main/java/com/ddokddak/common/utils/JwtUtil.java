@@ -44,7 +44,7 @@ public class JwtUtil {
         Date validity = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_MS);
         return Jwts.builder()
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS512)
-                .setSubject("test")
+                .setSubject("test@example.com")
                 .claim("userId", 1)
                 .claim(AUTHORITIES_KEY, "ROLE_USER")
                 .setIssuer("DoDone")
