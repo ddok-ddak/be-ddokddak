@@ -5,6 +5,7 @@ import com.ddokddak.category.domain.dto.CategoryTemplateRequest;
 import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.type.MemberException;
 import com.ddokddak.member.domain.dto.MemberResponse;
+import com.ddokddak.member.domain.dto.ModifyNicknameRequest;
 import com.ddokddak.member.domain.dto.ModifyStartDayRequest;
 import com.ddokddak.member.domain.dto.ModifyStartTimeRequest;
 import com.ddokddak.auth.domain.dto.RegisterMemberRequest;
@@ -70,6 +71,13 @@ public class MemberWriteService {
                 .orElseThrow(()->new CustomApiException(MemberException.MEMBER_ID));
         int failedPasswordCount = member.plusFailedPasswordTryCount();
         return failedPasswordCount;
+    }
+
+    @Transactional
+    public void updateNickname(Long memberId, ModifyNicknameRequest req) {
+        var member = memberRepository.findById(memberId)
+                .orElseThrow(()->new CustomApiException(MemberException.MEMBER_ID));
+        member.modifyNickname(req.nickname());
     }
 
     @Transactional

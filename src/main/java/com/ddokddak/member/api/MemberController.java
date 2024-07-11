@@ -4,6 +4,7 @@ import com.ddokddak.auth.domain.oauth.UserPrincipal;
 import com.ddokddak.category.domain.dto.CategoryTemplateRequest;
 import com.ddokddak.common.dto.CommonResponse;
 import com.ddokddak.member.domain.dto.MemberResponse;
+import com.ddokddak.member.domain.dto.ModifyNicknameRequest;
 import com.ddokddak.member.domain.dto.ModifyStartDayRequest;
 import com.ddokddak.member.domain.dto.ModifyStartTimeRequest;
 import com.ddokddak.member.service.MemberReadService;
@@ -34,7 +35,6 @@ public class MemberController {
     private final CreateCategoryTemplateUsecase createCategoryTemplateUsecase;
     private final ModifyCategoryTemplateUsecase modifyCategoryTemplateUsecase;
 
-
     @GetMapping("/duplicatedEmail")
     public ResponseEntity<CommonResponse<String>> checkIfDuplicatedEmail(
             @RequestParam @Valid @Email @Size(min = 5, max = 100) String email) {
@@ -52,6 +52,16 @@ public class MemberController {
         return ResponseEntity.ok()
                 .body(new CommonResponse<>("Able to use", nickname));
     }
+
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("/nickname")
+    public ResponseEntity<CommonResponse<Boolean>> modifyNickname(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestBody ModifyNicknameRequest req) {
+        memberWriteService.updateNickname(userPrincipal.getId(), req);
+        return ResponseEntity.ok(new CommonResponse<>("Successfully Updated", Boolean.TRUE));
+    }
+
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/custom/start-time")
     public ResponseEntity<CommonResponse<Boolean>> modifyStartTime(
