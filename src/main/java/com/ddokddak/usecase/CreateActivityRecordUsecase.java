@@ -10,8 +10,10 @@ import com.ddokddak.common.exception.CustomApiException;
 import com.ddokddak.common.exception.type.ActivityException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -23,6 +25,14 @@ public class CreateActivityRecordUsecase {
     private final ActivityRecordReadService activityRecordReadService;
     private final ActivityRecordWriteService activityRecordWriteService;
 
+    @Transactional
+    public void executeList(List<CreateActivityRecordRequest> reqs, Long memberId) {
+        for (CreateActivityRecordRequest req : reqs) {
+            this.execute(req, memberId);
+        }
+    }
+
+    @Transactional
     public void execute(CreateActivityRecordRequest req, Long memberId) {
 
         // 시간 차가 음수인 경우, 예외 처리
@@ -36,19 +46,11 @@ public class CreateActivityRecordUsecase {
         // 시간 범위 내 이미 기록 데이터가 존재하는 경우, 예외 처리
         var result = activityRecordReadService.existsByMemberIdAndIsDeletedFalseAndBetweenPeriodCondition(
                 memberId, req.startedAt(), req.finishedAt());
-        if (result) throw new CustomApiException(ActivityException.USED_TIME_PERIOD);
+        if (result) throw new CustomApiException(ActivityException.USED_TIME_PERIOD, String.join("~", req.startedAt().toString(), req.finishedAt().toString()));
 
         var category = categoryReadService.findByIdAndMemberId(req.categoryId(), memberId);
 
         ActivityRecord entity = ActivityRecordMapper.toEntity(req, category);
         var saved = activityRecordWriteService.createActivityRecord(entity);
-        //return ActivityRecordMapper.toActivityRecordResponse(saved);
-
-//        int num = (int) between / req.timeUnit();
-//        List<ActivityRecord> activityRecords = IntStream.range(0, num)
-//                .mapToObj(i -> ActivityRecordMapper.toEntitySplitedByTimeUnit(i, req, category))
-//                .toList();
-//        // 벌크 인서트 수행
-//        activityRecordWriteService.saveBulkActivityRecords(activityRecords);
     }
 }
