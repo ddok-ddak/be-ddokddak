@@ -56,4 +56,9 @@ public class CategoryReadService {
         if (allByMember.size() < 1) throw new CustomApiException(BaseException.UNABLE_REQUEST);
         return allByMember;
     }
+
+    @Transactional(readOnly = true)
+    public List<Category> findByMemberIdAndLevel(Long memberId, int level) {
+        return categoryRepository.findByMemberIdAndLevel(memberId, level);
+    }
 }
