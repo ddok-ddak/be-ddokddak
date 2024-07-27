@@ -42,6 +42,21 @@ public class ActivityRecordController {
                 .body(new CommonResponse<>("Successfully Created", Boolean.TRUE));
     }
 
+    @PostMapping("/list")
+    public ResponseEntity<CommonResponse<Boolean>> createActivityRecords(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestBody List<CreateActivityRecordRequest> reqs)
+    {
+
+        createActivityRecordUsecase.executeList(reqs, userPrincipal.getId());
+        URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                .build()
+                .toUri();
+
+        return ResponseEntity.created(location)
+                .body(new CommonResponse<>("Successfully Created", Boolean.TRUE));
+    }
+
     @PutMapping
     public ResponseEntity<CommonResponse<Boolean>> modifyActivityRecord(
             @AuthenticationPrincipal UserPrincipal userPrincipal,

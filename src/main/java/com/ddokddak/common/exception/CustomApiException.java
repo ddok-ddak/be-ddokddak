@@ -17,6 +17,12 @@ public class CustomApiException extends RuntimeException {
         this.status= exceptionType.getStatus();
     }
 
+    public CustomApiException(ExceptionType exceptionType, String additionalMessage) {
+        super(String.join("|", additionalMessage, exceptionType.getMessage()));
+        this.exceptionType= exceptionType;
+        this.status= exceptionType.getStatus();
+    }
+
     public CustomApiException(String message) {
         super(message);
         this.exceptionType = BaseException.SERVER_ERROR;
