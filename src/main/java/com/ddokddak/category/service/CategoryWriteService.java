@@ -3,6 +3,7 @@ package com.ddokddak.category.service;
 import com.ddokddak.category.domain.dto.*;
 import com.ddokddak.category.domain.entity.Category;
 import com.ddokddak.category.domain.entity.CategoryIcon;
+import com.ddokddak.category.domain.enums.CategoryTemplate;
 import com.ddokddak.category.repository.CategoryIconRepository;
 import com.ddokddak.category.repository.CategoryJdbcRepository;
 import com.ddokddak.category.repository.CategoryRepository;
@@ -179,52 +180,16 @@ public class CategoryWriteService {
         categoryJdbcRepository.batchInsert(values, memberId);
     }
 
-    @Transactional
-    public void modifyCategoryTemplate(CategoryTemplateRequest req, Long memberId, TemplateType previousTemplateType) {
+    public void batchInsert(List<CategoryTemplate> newValues, Long memberId) {
+        categoryJdbcRepository.batchInsert(newValues, memberId);
+    }
 
-        // 전체 카테고리를 조회해와서 확인 후 제거 및 업데이트 수행
-        var categories = categoryRepository.findByMemberIdAndLevel(memberId, 0);
-
-        // 기존 템플릿에서 학생이면 학업, 직장이면 업무 카테고리 그룹 제거
-        if (!previousTemplateType.equals(TemplateType.UNEMPLOYED)) {
-            var pValues = previousTemplateType.getSpecificTemplates();
-            var mainCategory = pValues.stream()
-                    .filter(v->v.getParentName()==null)
-                    .findFirst()
-                    .orElseThrow(() -> new CustomApiException(BaseException.NULL_DATA));
-
-            categories.stream()
-                    .filter(category -> !category.getIsDeleted() && category.getName().equals(mainCategory.getName()))
-                    .forEach(category-> category.deleteGroup());
-        }
-
-        // 학생이면 학업, 직장이면 업무 카테고리 그룹 추가
-        if (!req.templateType().equals(TemplateType.UNEMPLOYED)) {
-            var newValues = req.templateType().getSpecificTemplates();
-            var newMainCategory = newValues.stream()
-                    .filter(v->v.getParentName()==null)
-                    .findFirst()
-                    .orElseThrow(() -> new CustomApiException(BaseException.NULL_DATA));
-
-            // 기존에 대분류가 존재했었다면(삭제 상태라면)
-            var alreadyExistsCategory = categories.stream()
-                    .filter(category -> category.getName().equals(newMainCategory.getName()))
-                    .findFirst();
-            if (alreadyExistsCategory.isPresent()) {
-                alreadyExistsCategory.get().undeleteGroup();
-                return;
-            }
-
-            // 대분류 카테 갯수 제한
-            if (categories.size() > 8) {
-                throw new CustomApiException(BaseException.UNABLE_REQUEST);
-            }
-            categoryJdbcRepository.batchInsert(newValues, memberId);
-        }
+    public void undeleteCategoryGroup(Category MainCategory) {
+        MainCategory.undeleteGroup();
     }
 
 
-    // 아래는 사용 없는 코드 - 제거 예정
+    // 아래는 사용 없는 코드
     /**
      * 카테고리의 관계, 레벨만을 변경하고자 하는 경우
      *
@@ -345,4 +310,5 @@ public class CategoryWriteService {
     public void deleteAllByMainCategory(Category category) {
         categoryRepository.deleteAllByMainCategory(category);
     }
+
 }

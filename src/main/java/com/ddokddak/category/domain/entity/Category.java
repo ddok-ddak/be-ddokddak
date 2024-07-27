@@ -78,9 +78,9 @@ public class Category extends BaseTimeEntity {
     }
 
     public void deleteGroup() {
-        this.isDeleted = Boolean.TRUE;
         this.getSubCategories()
                 .forEach(category -> category.delete());
+        this.isDeleted = Boolean.TRUE;
     }
 
     private void undelete() {
