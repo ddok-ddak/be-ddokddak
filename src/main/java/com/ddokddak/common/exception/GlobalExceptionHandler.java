@@ -24,14 +24,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleCustomApiException(CustomApiException e, WebRequest request) {
 
         HttpHeaders headers = new HttpHeaders();
-        return handleExceptionInternal(e, new CommonErrorResponse(e.getMessage(), e.getExceptionType()), headers, e.getStatus(), request);
+        return handleExceptionInternal(e, new CommonErrorResponse(e.getMessage(), e.getExceptionType()),
+                headers, e.getStatus(), request);
     }
 
     @ExceptionHandler(value = {ValidationException.class})
     protected ResponseEntity<Object> handleValidationException(ValidationException e, WebRequest request) {
 
         HttpHeaders headers = new HttpHeaders();
-        return handleExceptionInternal(e, new CommonErrorResponse(e.getMessage(), BaseException.INVALID_INPUT), headers, HttpStatus.BAD_REQUEST, request);
+        return handleExceptionInternal(e, new CommonErrorResponse(e.getMessage(), BaseException.INVALID_INPUT),
+                headers, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(Throwable.class)
+    public ResponseEntity<Object> internalServerError(Exception ex, WebRequest request) {
+
+        HttpHeaders headers = new HttpHeaders();
+        return handleExceptionInternal(ex, new CommonErrorResponse(ex.getMessage(), BaseException.SERVER_ERROR),
+                headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
     // 나머지 예외 처리는 오버라이드해서 커스텀할 수 있다.

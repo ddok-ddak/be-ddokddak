@@ -37,7 +37,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final JwtUtil jwtUtil;
     private final AuthTokenWriteService authTokenWriteService;
     private final AuthTokenReadService authTokenReadService;
-    private final OAuth2CookieAuthorizationRequestRepository OAuth2AuthorizationRequestWithCookieRepository;
+    private final OAuth2CookieAuthorizationRequestRepository oAuth2AuthorizationRequestWithCookieRepository;
 
 
     @Override
@@ -49,7 +49,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             logger.debug("Response has been committed. Unable to redirect to " + targetUrl);
             return;
         }
-        clearAuthenticationAttributes(request, response);
+        oAuth2AuthorizationRequestWithCookieRepository.removeAuthorizationRequestCookies(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
@@ -58,11 +58,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) {
+
         String redirectUri = CookieUtil.getCookie(
-                request, OAuth2AuthorizationRequestWithCookieRepository.REDIRECT_URI_COOKIE_NAME)
+                        request, oAuth2AuthorizationRequestWithCookieRepository.REDIRECT_URI_COOKIE_NAME)
                 .map(Cookie::getValue)
                 .orElse(appProperties.getBaseUrl() + "/signin/redirect");
-        if(!isAuthorizedRedirectUri(redirectUri)) {
+        if (!isAuthorizedRedirectUri(redirectUri)) {
             throw new CustomApiException("Unauthorized Redirect URI");
         }
 
@@ -77,7 +78,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             authToken = authTokenWriteService.saveTokenInfo(((UserPrincipal) authentication.getPrincipal()).getId(), refreshToken);
 
         }
-        CookieUtil.addSecureCookie(response, jwtUtil.COOKIE_REFRESH_TOKEN_KEY, authToken.getRefreshToken(), (int) (jwtUtil.REFRESH_TOKEN_EXPIRE_MS/1000));
+        CookieUtil.addSecureCookie(response, jwtUtil.COOKIE_REFRESH_TOKEN_KEY, authToken.getRefreshToken(), (int) (jwtUtil.REFRESH_TOKEN_EXPIRE_MS / 1000));
 
         return UriComponentsBuilder.fromUriString(redirectUri)
                 .queryParam("accessToken", accessToken)
@@ -101,10 +102,5 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     }
                     return false;
                 });
-    }
-
-    //인증정보를 요청한 uri 내역을 쿠키에서 삭제한다.
-    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
-        OAuth2AuthorizationRequestWithCookieRepository.removeAuthorizationRequestCookies(request, response);
     }
 }

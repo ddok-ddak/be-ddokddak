@@ -1,5 +1,6 @@
 package com.ddokddak.common.config;
 
+import com.ddokddak.auth.filter.ExceptionHandlingFilter;
 import com.ddokddak.auth.handler.JwtAccessDeniedHandler;
 import com.ddokddak.auth.handler.OAuth2AuthenticationFailureHandler;
 import com.ddokddak.auth.handler.OAuth2AuthenticationSuccessHandler;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -24,6 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final ExceptionHandlingFilter exceptionHandlingFilter;
     private final OAuth2CookieAuthorizationRequestRepository oAuth2CookieAuthorizationRequestRepository;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
@@ -50,6 +53,7 @@ public class SecurityConfig {
                 .headers().frameOptions().disable()
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlingFilter, OAuth2AuthorizationRequestRedirectFilter.class)
                 .authorizeHttpRequests(authz -> authz
                         .antMatchers("/", "/css/**").permitAll()
                         .antMatchers("/docs/**", "/v3/api-docs", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
