@@ -33,7 +33,7 @@ public class DeleteCategoryUsecase {
     @Transactional
     public void deleteCategoryAndRecords(Category category, Long memberId) {
 
-        categoryWriteService.removeCategoryByIdAndMemberId(category, memberId);
         activityRecordWriteService.removeByMemberIdAndCategory(memberId, category);
+        categoryWriteService.removeCategoryByIdAndMemberId(category, memberId);
     }
 }
