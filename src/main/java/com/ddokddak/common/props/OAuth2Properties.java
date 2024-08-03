@@ -24,9 +24,11 @@ public class OAuth2Properties {
     private String kakaoClientSecret;
 
     private String googleRefreshTokenUrl = "https://oauth2.googleapis.com/token";
-    private String kakaoRefreshTokenUrl = "https://kauth.kakao.com/oauth/token";
     private String naverRefreshTokenUrl = "https://nid.naver.com/oauth2.0/token";
+    private String kakaoRefreshTokenUrl = "https://kauth.kakao.com/oauth/token";
 
     private String googleRevokeUrl = "https://accounts.google.com/o/oauth2/revoke";
+    private final String naverRevokeUrl = "https://nid.naver.com/oauth2.0/token";
+    private final String kakaoRevokeUrl = "https://kapi.kakao.com/v1/user/unlink";
 
 }

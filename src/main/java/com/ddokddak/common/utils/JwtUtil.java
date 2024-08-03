@@ -144,9 +144,6 @@ public class JwtUtil {
             return true;
         } catch (ExpiredJwtException ex) {
             log.error("Expired JWT token");
-            // todo check if refresh token available
-            Claims claims = parseClaims(token);
-            long userId = ((Number) claims.get("userId")).longValue();
         } catch (MalformedJwtException ex) {
             log.error("Invalid JWT token");
         } catch (UnsupportedJwtException ex) {

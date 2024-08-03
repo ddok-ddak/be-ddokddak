@@ -1,5 +1,7 @@
 package com.ddokddak.auth.service;
 
+import com.ddokddak.common.exception.CustomApiException;
+import com.ddokddak.common.exception.type.MemberException;
 import com.ddokddak.member.domain.entity.OAuth2Member;
 import com.ddokddak.member.domain.enums.AuthProviderType;
 import com.ddokddak.member.mapper.OAuth2MemberMapper;
@@ -70,6 +72,8 @@ public class CustomOAuth2AuthorizedClientService implements OAuth2AuthorizedClie
                 this.updateOauth2Member(oauth2Member, authorizedClient, principal);
             } catch (SQLException ex) {
                 this.updateOauth2Member(oauth2Member, authorizedClient, principal);
+            } catch (Exception ex) {
+                throw new CustomApiException(MemberException.DISABLED_MEMBER);
             }
         }
     }
